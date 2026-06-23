@@ -8,92 +8,126 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        // 主色
-        primary: {
-          dark: '#0A0A0A',    // 深空黑
-          brand: '#B026FF',   // 全息紫
-          neon: '#FF10F0',    // 霓虹粉
+        // === Web4.0 Design System ===
+        // 深空底色
+        space: {
+          900: '#050507',
+          800: '#0a0a0f',
+          700: '#0f0f17',
+          600: '#15151f',
+          500: '#1a1a2e',
+          400: '#252535',
+          300: '#3a3a4e',
         },
-        // 辅助色
-        secondary: {
-          electric: '#00FFFF', // 电光蓝
-          gold: '#FFD700',     // 金色
-          orange: '#FAAD14',   // 橙色
-          green: '#52C41A',    // 绿色
+        // 流光金 — 品牌主色
+        gold: {
+          50: '#FFF9E0',
+          100: '#FFF0B8',
+          200: '#FFE580',
+          300: '#FFD700',
+          400: '#E6C200',
+          500: '#B89800',
+          600: '#8A7300',
         },
-        // 赛博朋克专属色
-        cyber: {
-          grid: '#B026FF20',     // 网格线颜色（低透明度）
-          glow: '#B026FF80',     // 光晕颜色
-          'deep-space': '#0a0a0f',
-          'dark-purple': '#1a1a2e',
+        // 量子蓝 — 科技强调
+        quantum: {
+          50: '#E0FAFF',
+          100: '#B0F0FF',
+          200: '#80E5FF',
+          300: '#4OD9FF',
+          400: '#00D4FF',
+          500: '#00A8CC',
+          600: '#007A99',
+          700: '#005C73',
+        },
+        // 意识紫 — 创新标记
+        consciousness: {
+          50: '#F0EBFF',
+          100: '#E0D0FF',
+          200: '#C8A0FF',
+          300: '#B078FF',
+          400: '#8B5CF6',
+          500: '#7C3AED',
+          600: '#6D28D9',
+          700: '#5B21B6',
+        },
+        // 生命绿 — 状态/成功
+        vital: {
+          400: '#34D399',
+          500: '#10B981',
+          600: '#059669',
         },
         // 文字色
-        text: {
+        ink: {
           primary: '#FFFFFF',
-          secondary: '#8C8C8C',
-          accent: '#B026FF',
+          secondary: '#A1A1AA',
+          tertiary: '#71717A',
+          muted: '#52525B',
         },
       },
       fontFamily: {
         sans: ['Inter', 'system-ui', 'sans-serif'],
-        mono: ['JetBrains Mono', 'monospace'],
-        display: ['Orbitron', 'Rajdhani', 'sans-serif'], // 未来感字体
+        serif: ['"Noto Serif SC"', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'monospace'],
+      },
+      fontSize: {
+        'hero': ['clamp(3rem, 8vw, 7rem)', { lineHeight: '1.05', letterSpacing: '-0.02em' }],
+        'display': ['clamp(2rem, 5vw, 4rem)', { lineHeight: '1.1', letterSpacing: '-0.01em' }],
+        'headline': ['clamp(1.5rem, 3vw, 2.5rem)', { lineHeight: '1.2' }],
       },
       animation: {
-        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-        'glow': 'glow 2s ease-in-out infinite alternate',
-        'fade-in': 'fadeIn 0.3s ease-out',
-        'float': 'float 3s ease-in-out infinite',
-        'grid-flow': 'gridFlow 20s linear infinite',
-        'neon-flicker': 'neonFlicker 3s ease-in-out infinite',
-        'data-stream': 'dataStream 15s linear infinite',
-        'glitch': 'glitch 0.3s ease-in-out infinite',
+        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+        'fade-in': 'fadeIn 0.6s ease-out forwards',
+        'scale-in': 'scaleIn 0.5s ease-out forwards',
+        'slide-in-right': 'slideInRight 0.6s ease-out forwards',
+        'glow-pulse': 'glowPulse 3s ease-in-out infinite',
+        'float': 'float 4s ease-in-out infinite',
+        'shimmer': 'shimmer 3s linear infinite',
+        'gradient-shift': 'gradientShift 8s ease infinite',
       },
       keyframes: {
-        glow: {
-          '0%': { 
-            boxShadow: '0 0 5px #B026FF, 0 0 10px #B026FF, 0 0 15px #B026FF' 
-          },
-          '100%': { 
-            boxShadow: '0 0 10px #B026FF, 0 0 20px #B026FF, 0 0 30px #B026FF, 0 0 40px #B026FF' 
-          },
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(30px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         fadeIn: {
-          '0%': { opacity: '0', transform: 'translateY(10px)' },
-          '100%': { opacity: '1', transform: 'translateY(0)' },
+          '0%': { opacity: '0' },
+          '100%': { opacity: '1' },
+        },
+        scaleIn: {
+          '0%': { opacity: '0', transform: 'scale(0.95)' },
+          '100%': { opacity: '1', transform: 'scale(1)' },
+        },
+        slideInRight: {
+          '0%': { opacity: '0', transform: 'translateX(40px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        glowPulse: {
+          '0%, 100%': { boxShadow: '0 0 20px rgba(255, 215, 0, 0.15)' },
+          '50%': { boxShadow: '0 0 40px rgba(255, 215, 0, 0.3)' },
         },
         float: {
           '0%, 100%': { transform: 'translateY(0)' },
-          '50%': { transform: 'translateY(-10px)' },
+          '50%': { transform: 'translateY(-12px)' },
         },
-        gridFlow: {
-          '0%': { backgroundPosition: '0 0' },
-          '100%': { backgroundPosition: '50px 50px' },
+        shimmer: {
+          '0%': { backgroundPosition: '-200% center' },
+          '100%': { backgroundPosition: '200% center' },
         },
-        neonFlicker: {
-          '0%, 19%, 21%, 23%, 25%, 54%, 56%, 100%': { opacity: '1' },
-          '20%, 24%, 55%': { opacity: '0.7' },
-        },
-        dataStream: {
-          '0%': { transform: 'translateY(-50%)' },
-          '100%': { transform: 'translateY(0)' },
-        },
-        glitch: {
-          '0%': { transform: 'translate(0)' },
-          '20%': { transform: 'translate(-2px, 2px)' },
-          '40%': { transform: 'translate(-2px, -2px)' },
-          '60%': { transform: 'translate(2px, 2px)' },
-          '80%': { transform: 'translate(2px, -2px)' },
-          '100%': { transform: 'translate(0)' },
+        gradientShift: {
+          '0%, 100%': { backgroundPosition: '0% 50%' },
+          '50%': { backgroundPosition: '100% 50%' },
         },
       },
       backgroundImage: {
-        'cyber-grid': "url('data:image/svg+xml,...')", // 将在CSS中定义
-        'holographic': 'linear-gradient(45deg, #B026FF 0%, #00FFFF 50%, #FF10F0 100%)',
+        'gold-gradient': 'linear-gradient(135deg, #FFD700 0%, #FFA500 50%, #FFD700 100%)',
+        'quantum-gradient': 'linear-gradient(135deg, #00D4FF 0%, #8B5CF6 100%)',
+        'space-gradient': 'linear-gradient(180deg, #050507 0%, #0a0a0f 50%, #0f0f17 100%)',
+        'shimmer-gold': 'linear-gradient(90deg, transparent, rgba(255,215,0,0.4), transparent)',
       },
       backdropBlur: {
         xs: '2px',
+        sm: '4px',
       },
     },
   },
