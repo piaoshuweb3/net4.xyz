@@ -1,0 +1,3002 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>net4.xyz - Web4.0 AI 文明门户</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0f'/%3E%3Ccircle cx='8' cy='8' r='3' fill='%23b026ff'/%3E%3Ccircle cx='24' cy='8' r='3' fill='%2300ffff'/%3E%3Ccircle cx='16' cy='16' r='4' fill='%23ff69b4'/%3E%3Ccircle cx='8' cy='24' r='3' fill='%2300ffff'/%3E%3Ccircle cx='24' cy='24' r='3' fill='%23b026ff'/%3E%3Cpath d='M8 8l8 8 8-8M8 24l8-8 8 8' stroke='%23ffffff' stroke-opacity='.55' stroke-width='1.5' fill='none'/%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0f0a1a 100%);
+            color: white;
+            font-family: 'Inter', 'Arial', sans-serif;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        #cosmicBackground {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 1;
+            opacity: 0.9;
+            display: none;
+        }
+
+        body > *:not(#cosmicBackground) {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Quantum Entanglement Background Effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(176, 38, 255, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(255, 105, 180, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            animation: quantumShift 15s ease-in-out infinite;
+        }
+        
+        @keyframes quantumShift {
+            0%, 100% {
+                background: 
+                    radial-gradient(circle at 20% 50%, rgba(176, 38, 255, 0.05) 0%, transparent 50%),
+                    radial-gradient(circle at 80% 80%, rgba(255, 105, 180, 0.05) 0%, transparent 50%);
+            }
+            50% {
+                background: 
+                    radial-gradient(circle at 80% 50%, rgba(176, 38, 255, 0.08) 0%, transparent 50%),
+                    radial-gradient(circle at 20% 80%, rgba(255, 105, 180, 0.08) 0%, transparent 50%);
+            }
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            animation: navGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes navGlow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(176, 38, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(176, 38, 255, 0.2), 0 0 60px rgba(255, 105, 180, 0.1);
+            }
+        }
+        
+        nav .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        nav .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-size: 1.6rem;
+            font-weight: 800;
+            position: relative;
+        }
+        
+        /* Logo Icon - Stylized N with network nodes */
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 0 8px rgba(176, 38, 255, 0.6));
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% {
+                filter: drop-shadow(0 0 8px rgba(176, 38, 255, 0.6));
+            }
+            50% {
+                filter: drop-shadow(0 0 15px rgba(255, 105, 180, 0.8)) drop-shadow(0 0 25px rgba(0, 255, 255, 0.5));
+            }
+        }
+        
+        /* Logo Text */
+        .logo-text {
+            background: linear-gradient(135deg, #b026ff 0%, #ff69b4 50%, #00ffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: logoGradientFlow 4s ease-in-out infinite, logoResonate 4s ease-in-out infinite;
+            position: relative;
+        }
+        
+        @keyframes logoGradientFlow {
+            0%, 100% {
+                background-position: 0% center;
+            }
+            50% {
+                background-position: 100% center;
+            }
+        }
+        
+        @keyframes logoResonate {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(176, 38, 255, 0.3);
+                filter: brightness(1);
+            }
+            50% {
+                text-shadow: 0 0 20px rgba(255, 105, 180, 0.5), 0 0 30px rgba(0, 255, 255, 0.3);
+                filter: brightness(1.1);
+            }
+        }
+        
+        /* Logo hover effect */
+        nav .logo:hover .logo-icon svg {
+            animation: logoHover 0.5s ease-out;
+        }
+        
+        @keyframes logoHover {
+            0% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(5deg); }
+            100% { transform: scale(1) rotate(0deg); }
+        }
+        
+        /* Floating particles around logo */
+        .logo-particles {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            pointer-events: none;
+            opacity: 0.6;
+        }
+        
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #b026ff;
+            border-radius: 50%;
+            animation: particleFloat 3s ease-in-out infinite;
+        }
+        
+        .particle:nth-child(1) { top: 10%; left: 20%; animation-delay: 0s; }
+        .particle:nth-child(2) { top: 30%; left: 80%; animation-delay: 0.5s; background: #ff69b4; }
+        .particle:nth-child(3) { top: 70%; left: 30%; animation-delay: 1s; background: #00ffff; }
+        .particle:nth-child(4) { top: 85%; left: 70%; animation-delay: 1.5s; }
+        
+        @keyframes particleFloat {
+            0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+            50% { transform: translateY(-10px) scale(1.2); opacity: 1; }
+        }
+        
+        nav .menu {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+        
+        nav .menu a {
+            color: #ccc;
+            text-decoration: none;
+            transition: all 0.3s;
+            position: relative;
+            padding-bottom: 0.25rem;
+        }
+        
+        nav .menu a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(to right, #b026ff, #ff69b4);
+            transition: width 0.3s ease;
+        }
+        
+        nav .menu a:hover {
+            color: #b026ff;
+            text-shadow: 0 0 10px rgba(176, 38, 255, 0.5);
+        }
+        
+        nav .menu a:hover::after {
+            width: 100%;
+        }
+        
+        nav .nav-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        
+        nav .admin-btn {
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: #ccc;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        
+        nav .admin-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        nav .connect-btn {
+            padding: 0.5rem 1rem;
+            background: linear-gradient(135deg, #b026ff 0%, #ff69b4 100%);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
+        }
+        
+        nav .connect-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        nav .connect-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(176, 38, 255, 0.6), 0 0 50px rgba(255, 105, 180, 0.3);
+            animation: consciousnessAwaken 0.6s ease-out;
+        }
+        
+        nav .connect-btn:hover::before {
+            left: 100%;
+        }
+        
+        @keyframes consciousnessAwaken {
+            0% {
+                transform: scale(1.05);
+            }
+            50% {
+                transform: scale(1.08);
+            }
+            100% {
+                transform: scale(1.05);
+            }
+        }
+        
+        nav .connect-btn.connected {
+            background: linear-gradient(to right, #00ff88, #00cc66);
+        }
+        
+        /* Wallet Modal */
+        .wallet-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .wallet-modal.show {
+            display: flex;
+        }
+        
+        .wallet-modal-content {
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .wallet-modal h3 {
+            margin-bottom: 1rem;
+            text-align: center;
+            color: #b026ff;
+        }
+        
+        .wallet-options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .wallet-option {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .wallet-option:hover {
+            background: rgba(176, 38, 255, 0.1);
+            border-color: #b026ff;
+        }
+        
+        .wallet-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(to right, #b026ff, #ff69b4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a0a2e 50%, #0a0a0f 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(176, 38, 255, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 70% 70%, rgba(255, 105, 180, 0.1) 0%, transparent 40%);
+            animation: heroResonate 8s ease-in-out infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes heroResonate {
+            0%, 100% {
+                opacity: 0.5;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+        
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+            position: relative;
+            z-index: 2;
+            animation: titleElevate 1s ease-out;
+        }
+        
+        @keyframes titleElevate {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .hero .gradient-text {
+            background: linear-gradient(90deg, #b026ff 0%, #ff69b4 50%, #00ffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: gradientFlow 6s ease-in-out infinite;
+        }
+        
+        @keyframes gradientFlow {
+            0%, 100% {
+                background-position: 0% center;
+            }
+            50% {
+                background-position: 100% center;
+            }
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: #aaa;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero .buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hero .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .hero .btn:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .hero .btn-primary {
+            background: linear-gradient(135deg, #b026ff 0%, #ff69b4 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(176, 38, 255, 0.3);
+        }
+        
+        .hero .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(176, 38, 255, 0.6), 0 0 50px rgba(255, 105, 180, 0.3);
+        }
+        
+        .hero .btn-secondary {
+            background: transparent;
+            border: 2px solid #b026ff;
+            color: #b026ff;
+            box-shadow: inset 0 0 20px rgba(176, 38, 255, 0.1);
+        }
+        
+        .hero .btn-secondary:hover {
+            background: rgba(176, 38, 255, 0.1);
+            box-shadow: inset 0 0 20px rgba(176, 38, 255, 0.3), 0 0 20px rgba(176, 38, 255, 0.3);
+        }
+        
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(176, 38, 255, 0.05);
+            border: 1px solid rgba(176, 38, 255, 0.2);
+            border-radius: 0.75rem;
+            transition: all 0.3s;
+            animation: statPulse 3s ease-in-out infinite;
+        }
+        
+        .stat:nth-child(1) { animation-delay: 0s; }
+        .stat:nth-child(2) { animation-delay: 0.3s; }
+        .stat:nth-child(3) { animation-delay: 0.6s; }
+        .stat:nth-child(4) { animation-delay: 0.9s; }
+        
+        @keyframes statPulse {
+            0%, 100% {
+                background: rgba(176, 38, 255, 0.05);
+                box-shadow: 0 0 10px rgba(176, 38, 255, 0.1);
+            }
+            50% {
+                background: rgba(176, 38, 255, 0.1);
+                box-shadow: 0 0 20px rgba(176, 38, 255, 0.3), 0 0 30px rgba(255, 105, 180, 0.1);
+            }
+        }
+        
+        .stat:hover {
+            transform: scale(1.05);
+            background: rgba(176, 38, 255, 0.15);
+            box-shadow: 0 0 30px rgba(176, 38, 255, 0.4);
+        }
+        
+        .stat .value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            background: linear-gradient(135deg, #b026ff 0%, #ff69b4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-shadow: 0 0 10px rgba(176, 38, 255, 0.3);
+        }
+        
+        .stat .label {
+            font-size: 0.875rem;
+            color: #666;
+            margin-top: 0.5rem;
+        }
+        
+        /* Sections */
+        section {
+            padding: 4rem 2rem;
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        
+        section h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(135deg, #b026ff 0%, #ff69b4 50%, #00ffff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% 100%;
+            animation: titleFlow 6s ease-in-out infinite;
+            position: relative;
+        }
+        
+        @keyframes titleFlow {
+            0%, 100% {
+                background-position: 0% center;
+            }
+            50% {
+                background-position: 100% center;
+            }
+        }
+        
+        .section-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(176, 38, 255, 0.1) 0%, rgba(255, 105, 180, 0.1) 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        
+        .card:hover {
+            border-color: #b026ff;
+            background: rgba(176, 38, 255, 0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(176, 38, 255, 0.2), 0 0 20px rgba(255, 105, 180, 0.1);
+            animation: neuralResonance 0.6s ease-out;
+        }
+        
+        .card:hover::before {
+            opacity: 1;
+        }
+        
+        @keyframes neuralResonance {
+            0% {
+                transform: translateY(-5px) scale(0.98);
+            }
+            50% {
+                transform: translateY(-8px) scale(1.01);
+            }
+            100% {
+                transform: translateY(-5px) scale(1);
+            }
+        }
+        
+        .card h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #b026ff 0%, #ff69b4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            transition: all 0.3s;
+        }
+        
+        .card:hover h3 {
+            text-shadow: 0 0 10px rgba(176, 38, 255, 0.5);
+            filter: brightness(1.2);
+        }
+        
+        .card p {
+            color: #aaa;
+            line-height: 1.6;
+        }
+
+        .card[onclick]::after {
+            content: '查看详情';
+            display: inline-flex;
+            margin-top: 1rem;
+            color: #00ffff;
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0;
+        }
+
+        .card[onclick]:hover::after {
+            color: #ff69b4;
+        }
+
+        .card[onclick] {
+            cursor: pointer;
+        }
+        
+        /* DNS Search */
+        .dns-search {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+            transition: all 0.3s;
+            animation: dnsGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes dnsGlow {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.1);
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(0, 255, 255, 0.3), 0 0 70px rgba(176, 38, 255, 0.1);
+            }
+        }
+        
+        .dns-search:hover {
+            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 50px rgba(0, 255, 255, 0.3), 0 0 70px rgba(176, 38, 255, 0.2);
+        }
+        
+        .dns-search h3 {
+            margin-bottom: 1rem;
+            color: #00ffff;
+            text-align: center;
+        }
+        
+        .search-form {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .search-input {
+            flex: 1;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .search-input::placeholder {
+            color: #888;
+        }
+        
+        .search-btn {
+            padding: 0.75rem 1.5rem;
+            background: linear-gradient(135deg, #00ffff 0%, #0088ff 100%);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+        }
+        
+        .search-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s;
+        }
+        
+        .search-btn:hover {
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6), 0 0 50px rgba(0, 136, 255, 0.3);
+            transform: scale(1.05);
+        }
+        
+        .search-btn:hover::before {
+            left: 100%;
+        }
+        
+        .search-result {
+            display: none;
+            padding: 1rem;
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+        
+        .search-result.show {
+            display: block;
+        }
+        
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(176, 38, 255, 0.05) 50%, rgba(0, 0, 0, 0.8) 100%);
+            border-top: 1px solid rgba(176, 38, 255, 0.3);
+            padding: 3rem 2rem;
+            text-align: center;
+            color: #666;
+            position: relative;
+            animation: footerGlow 4s ease-in-out infinite;
+        }
+        
+        @keyframes footerGlow {
+            0%, 100% {
+                box-shadow: inset 0 0 30px rgba(176, 38, 255, 0.05);
+            }
+            50% {
+                box-shadow: inset 0 0 50px rgba(176, 38, 255, 0.1), inset 0 0 70px rgba(255, 105, 180, 0.05);
+            }
+        }
+        
+        footer p {
+            margin: 0.5rem 0;
+        }
+        
+        footer a {
+            transition: all 0.3s ease;
+        }
+        
+        footer a:hover {
+            color: #b026ff !important;
+            text-shadow: 0 0 10px rgba(176, 38, 255, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        /* Node Animation - Quantum Entanglement */
+        @keyframes pulse {
+            0% { 
+                opacity: 1; 
+                transform: scale(1);
+                box-shadow: 0 0 10px currentColor;
+            }
+            50% { 
+                opacity: 0.6; 
+                transform: scale(1.2);
+                box-shadow: 0 0 20px currentColor;
+            }
+            100% { 
+                opacity: 1; 
+                transform: scale(1);
+                box-shadow: 0 0 10px currentColor;
+            }
+        }
+        
+        @keyframes quantumEntangle {
+            0%, 100% {
+                filter: brightness(1);
+            }
+            50% {
+                filter: brightness(1.5);
+            }
+        }
+        
+        .node-indicator {
+            cursor: pointer;
+            transition: all 0.3s;
+            filter: drop-shadow(0 0 5px currentColor);
+        }
+        
+        .node-indicator:hover {
+            transform: scale(1.5) !important;
+            z-index: 10;
+            animation: quantumEntangle 0.6s ease-in-out;
+            filter: drop-shadow(0 0 15px currentColor);
+        }
+        
+        /* Video/Media Cards */
+        .card h4 {
+            color: #00ffff;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .card small {
+            display: block;
+            margin-top: 0.5rem;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav .menu {
+                display: none;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .search-form {
+                flex-direction: column;
+            }
+            
+            #nodeMap {
+                height: 200px;
+            }
+        }
+        
+        /* Notifications - Consciousness Awakening */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: linear-gradient(135deg, #b026ff 0%, #ff69b4 100%);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+            box-shadow: 0 0 30px rgba(176, 38, 255, 0.4);
+            animation: notificationSlide 0.5s ease-out;
+        }
+        
+        @keyframes notificationSlide {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+            animation: notificationPulse 0.6s ease-out;
+        }
+        
+        /* Secondary Page Modal */
+        .secondary-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        
+        .secondary-modal.show {
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+        }
+        
+        @keyframes modalFadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .secondary-modal-content {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid rgba(176, 38, 255, 0.3);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            max-width: 900px;
+            width: 100%;
+            margin-top: 2rem;
+            position: relative;
+            box-shadow: 0 0 50px rgba(176, 38, 255, 0.2);
+        }
+        
+        @keyframes modalSlideUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .secondary-modal-close {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            line-height: 1;
+        }
+        
+        .secondary-modal-close:hover {
+            color: #b026ff;
+            transform: rotate(90deg);
+        }
+        
+        .secondary-header { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(176, 38, 255, 0.2); }
+        .secondary-header h2 { font-size: 2rem; background: linear-gradient(135deg, #b026ff 0%, #ff69b4 50%, #00ffff 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; margin-bottom: 0.5rem; }
+        .secondary-header .subtitle { color: #888; font-size: 1rem; }
+        .secondary-section { margin-bottom: 2rem; }
+        .secondary-section h3 { font-size: 1.3rem; color: #b026ff; margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .secondary-section p { color: #ccc; line-height: 1.8; margin-bottom: 1rem; }
+        .secondary-section ul { list-style: none; padding: 0; }
+        .secondary-section li { color: #aaa; padding: 0.75rem 0; padding-left: 1.5rem; position: relative; border-bottom: 1px solid rgba(255, 255, 255, 0.05); }
+        .secondary-section li::before { content: '▸'; position: absolute; left: 0; color: #b026ff; }
+        .secondary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; margin: 1.5rem 0; }
+        .secondary-card { background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(176, 38, 255, 0.2); border-radius: 0.75rem; padding: 1.5rem; transition: all 0.3s; }
+        .secondary-card:hover { background: rgba(176, 38, 255, 0.1); border-color: #b026ff; transform: translateY(-3px); }
+        .secondary-card h4 { color: #ff69b4; margin-bottom: 0.75rem; font-size: 1.1rem; }
+        .secondary-card p { color: #999; font-size: 0.9rem; line-height: 1.6; margin: 0; }
+        .secondary-highlight { background: linear-gradient(135deg, rgba(176, 38, 255, 0.1) 0%, rgba(255, 105, 180, 0.1) 100%); border-left: 3px solid #b026ff; padding: 1.5rem; margin: 1.5rem 0; border-radius: 0 0.5rem 0.5rem 0; }
+        .secondary-highlight p { color: #ddd; font-size: 1.05rem; margin: 0; }
+        .secondary-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0; }
+        .secondary-stat { text-align: center; padding: 1rem; background: rgba(176, 38, 255, 0.05); border-radius: 0.5rem; }
+        .secondary-stat .value { font-size: 1.8rem; font-weight: bold; color: #00ffff; }
+        .secondary-stat .label { font-size: 0.85rem; color: #888; margin-top: 0.25rem; }
+        .secondary-cta { display: inline-block; padding: 0.75rem 1.5rem; background: linear-gradient(135deg, #b026ff 0%, #ff69b4 100%); color: white; border-radius: 0.5rem; text-decoration: none; font-weight: 500; margin-top: 1rem; transition: all 0.3s; }
+        .secondary-cta:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(176, 38, 255, 0.5); }
+        .secondary-back { display: inline-flex; align-items: center; gap: 0.5rem; color: #888; cursor: pointer; margin-bottom: 1.5rem; transition: all 0.3s; }
+        .secondary-back:hover { color: #b026ff; }
+        
+        @keyframes notificationPulse {
+            0% {
+                transform: translateX(0) scale(0.95);
+            }
+            50% {
+                transform: translateX(0) scale(1.05);
+            }
+            100% {
+                transform: translateX(0) scale(1);
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="cosmicBackground" aria-hidden="true"></canvas>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Network nodes -->
+                        <circle cx="8" cy="8" r="4" fill="url(#logoGradient1)"/>
+                        <circle cx="32" cy="8" r="4" fill="url(#logoGradient2)"/>
+                        <circle cx="20" cy="20" r="5" fill="url(#logoGradient3)"/>
+                        <circle cx="8" cy="32" r="4" fill="url(#logoGradient2)"/>
+                        <circle cx="32" cy="32" r="4" fill="url(#logoGradient1)"/>
+                        <!-- Connection lines -->
+                        <line x1="8" y1="8" x2="20" y2="20" stroke="url(#lineGradient)" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="32" y1="8" x2="20" y2="20" stroke="url(#lineGradient)" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="8" y1="32" x2="20" y2="20" stroke="url(#lineGradient)" stroke-width="1.5" opacity="0.8"/>
+                        <line x1="32" y1="32" x2="20" y2="20" stroke="url(#lineGradient)" stroke-width="1.5" opacity="0.8"/>
+                        <!-- Center glow -->
+                        <circle cx="20" cy="20" r="8" fill="url(#centerGlow)" opacity="0.3"/>
+                        <!-- Gradient definitions -->
+                        <defs>
+                            <linearGradient id="logoGradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#b026ff"/>
+                                <stop offset="100%" stop-color="#ff69b4"/>
+                            </linearGradient>
+                            <linearGradient id="logoGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ff69b4"/>
+                                <stop offset="100%" stop-color="#00ffff"/>
+                            </linearGradient>
+                            <linearGradient id="logoGradient3" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#b026ff"/>
+                                <stop offset="50%" stop-color="#ff69b4"/>
+                                <stop offset="100%" stop-color="#00ffff"/>
+                            </linearGradient>
+                            <linearGradient id="lineGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#b026ff" stop-opacity="0.6"/>
+                                <stop offset="100%" stop-color="#00ffff" stop-opacity="0.6"/>
+                            </linearGradient>
+                            <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#b026ff"/>
+                                <stop offset="100%" stop-color="transparent"/>
+                            </radialGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">net4.xyz</span>
+            </div>
+            <ul class="menu">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#whitepaper">Whitepaper</a></li>
+                <li><a href="#poue">PoUE Engine</a></li>
+                <li><a href="#dns">Web4 DNS</a></li>
+                <li><a href="#wiki">Web4 Wiki</a></li>
+                <li><a href="#media">Media Center</a></li>
+                <li><a href="#books">Books</a></li>
+                <li><a href="#nodes">Nodes</a></li>
+                <li><a href="#team">Team</a></li>
+            </ul>
+            <div class="nav-buttons">
+                <button class="admin-btn" onclick="openAdminConfig()" title="管理员配置">⚙️</button>
+                <button class="admin-btn" onclick="openAdmin()">管理后台</button>
+                <button class="connect-btn" id="connectWallet">Connect Wallet</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Wallet Modal -->
+    <div class="wallet-modal" id="walletModal">
+        <div class="wallet-modal-content">
+            <h3>连接钱包</h3>
+            <div class="wallet-options">
+                <div class="wallet-option" onclick="connectWallet('metamask')">
+                    <div class="wallet-icon">M</div>
+                    <div>
+                        <div>MetaMask</div>
+                        <small style="color: #888;">最受欢迎的以太坊钱包</small>
+                    </div>
+                </div>
+                <div class="wallet-option" onclick="connectWallet('walletconnect')">
+                    <div class="wallet-icon">W</div>
+                    <div>
+                        <div>WalletConnect</div>
+                        <small style="color: #888;">连接移动端钱包</small>
+                    </div>
+                </div>
+                <div class="wallet-option" onclick="connectWallet('coinbase')">
+                    <div class="wallet-icon">C</div>
+                    <div>
+                        <div>Coinbase Wallet</div>
+                        <small style="color: #888;">Coinbase 官方钱包</small>
+                    </div>
+                </div>
+            </div>
+            <button onclick="closeWalletModal()" style="margin-top: 1rem; width: 100%; padding: 0.5rem; background: transparent; border: 1px solid #666; color: #666; border-radius: 0.5rem; cursor: pointer;">取消</button>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div>
+            <h1>
+                AI 与<br>
+                <span class="gradient-text">人类文明</span><br>
+                的下一代感知共生网络
+            </h1>
+            <p>
+                基于 PoUE（Proof of Useful Energy）共识机制<br>
+                将能量转化为对人类有用的 AI 智能
+            </p>
+            <div class="buttons">
+                <button class="btn btn-primary" onclick="igniteSpark()">Ignite Spark</button>
+                <button class="btn btn-secondary" onclick="learnMore()">了解更多</button>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="value" id="coreNodes">21</div>
+                    <div class="label">核心节点</div>
+                </div>
+                <div class="stat">
+                    <div class="value" id="subNodes">128</div>
+                    <div class="label">子节点</div>
+                </div>
+                <div class="stat">
+                    <div class="value" id="totalNodes">10K+</div>
+                    <div class="label">普通节点</div>
+                </div>
+                <div class="stat">
+                    <div class="value" id="uptime">99.9%</div>
+                    <div class="label">可用性</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PoUE Section -->
+    <section id="poue">
+        <h2>PoUE 引擎</h2>
+        <div class="section-grid">
+            <div class="card" onclick="openCardDetails('poue', 'energy', event)">
+                <h3>能量证明</h3>
+                <p>将电力消耗转化为有用的 AI 计算，实现能源的最大化利用。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('poue', 'consensus', event)">
+                <h3>共识机制</h3>
+                <p>创新的共识算法，确保网络的安全性和去中心化。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('poue', 'incentive', event)">
+                <h3>智能激励</h3>
+                <p>根据贡献度自动分配奖励，激励节点参与者。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- DNS Section -->
+    <section id="dns">
+        <h2>Web4 DNS</h2>
+        
+        <!-- DNS Search -->
+        <div class="dns-search">
+            <h3>搜索 .web4 域名</h3>
+            <div class="search-form">
+                <input type="text" class="search-input" id="domainInput" placeholder="输入域名（不含 .web4）">
+                <button class="search-btn" onclick="searchDomain()">搜索</button>
+            </div>
+            <div class="search-result" id="searchResult">
+                <div id="resultContent"></div>
+            </div>
+        </div>
+        
+        <div class="section-grid">
+            <div class="card">
+                <h3>去中心化解析</h3>
+                <p>基于区块链的域名解析，无法被审查或冻结。</p>
+            </div>
+            <div class="card">
+                <h3>NFT 资产化</h3>
+                <p>域名作为 NFT 存储在链上，可自由交易转让。</p>
+            </div>
+            <div class="card">
+                <h3>永久拥有</h3>
+                <p>一次注册，永久持有，无需续费。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Whitepaper Section -->
+    <section id="whitepaper">
+        <h2>Web4 白皮书</h2>
+        <div class="section-grid">
+            <div class="card" onclick="openCardDetails('whitepaper', 'technical', event)">
+                <h3>技术白皮书</h3>
+                <p>详细介绍 PoUE 共识机制、AFC 公链架构和 AI 分身节点技术实现。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('whitepaper', 'economic', event)">
+                <h3>经济模型</h3>
+                <p>三级会员体系、节点经济激励和代币分配机制的完整说明。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('whitepaper', 'governance', event)">
+                <h3>治理机制</h3>
+                <p>去中心化治理、社区提案和投票机制的详细规则。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('whitepaper', 'complete', event)">
+                <h3>📜 完整白皮书</h3>
+                <p><strong>AI分身独立宣言：数字主权与灵魂永续</strong><br>查看完整的 Web4.0 白皮书文档</p>
+            </div>
+            <div class="card" onclick="openCardDetails('whitepaper', 'philosophy', event)">
+                <h3>🧠 哲学思辨</h3>
+                <p><strong>Web4.0：感知共振与个体神化</strong><br>基于马克思主义+哲学+系统论的宏大叙事框架</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Web4 Wiki Section -->
+    <section id="wiki">
+        <h2>Web4 Wiki - AI 知识库</h2>
+        
+        <!-- Knowledge Hub Link -->
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <button class="btn btn-primary" onclick="openKnowledgeHub()" style="padding: 1rem 2rem; font-size: 1.1rem;">
+                🧠 进入知识中枢
+            </button>
+            <p style="margin-top: 0.5rem; color: #888; font-size: 0.9rem;">
+                探索完整的Web4.0哲学思辨、技术架构与应用场景
+            </p>
+        </div>
+        
+        <!-- AI Search -->
+        <div class="dns-search">
+            <h3>AI 智能问答</h3>
+            <div class="search-form">
+                <input type="text" class="search-input" id="wikiInput" placeholder="问我任何关于 Web4 的问题...">
+                <button class="search-btn" onclick="askAI()" style="background: linear-gradient(to right, #b026ff, #ff69b4);">Ask AI</button>
+            </div>
+            <div class="search-result" id="wikiResult">
+                <div id="wikiContent"></div>
+            </div>
+        </div>
+        
+        <div class="section-grid">
+            <div class="card" onclick="openCardDetails('wiki', 'concepts', event)">
+                <h3>核心概念</h3>
+                <p>Web4.0 定义、感知互联网、AI 文明等基础概念解释。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('wiki', 'technology', event)">
+                <h3>技术栈</h3>
+                <p>PoUE 共识、ZK-ML 验证、分布式存储等技术详解。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('wiki', 'cases', event)">
+                <h3>应用案例</h3>
+                <p>Web4 应用场景、成功案例和未来发展方向。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('wiki', 'philosophy', event)">
+                <h3>🧠 哲学思辨</h3>
+                <p>马克思主义、老庄思想、尼采超人论在Web4.0时代的重新诠释。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('wiki', 'sai', event)">
+                <h3>🤖 SAI分身</h3>
+                <p>超越智能体(SAI)与AI代理的区别，个体神化的技术实现。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('wiki', 'poue', event)">
+                <h3>⚡ PoUE机制</h3>
+                <p>有用价值证明，基于行为和贡献的新型共识算法。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('wiki', 'pdao', event)">
+                <h3>🏛️ pDAO治理</h3>
+                <p>个人流体民主制，去中心化自治的未来社会组织形式。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('wiki', 'resonance', event)">
+                <h3>🌊 感知共振</h3>
+                <p>量子纠缠视角下的Web4.0底层协议和价值传输机制。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('wiki', 'economics', event)">
+                <h3>💰 新经济学</h3>
+                <p>微支付、高频协作、注意力变现的原子级经济革命。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Media Center Section -->
+    <section id="media">
+        <h2>媒体中心</h2>
+        
+        <!-- Video Section -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3>📹 视频内容</h3>
+            <div class="section-grid">
+                <div class="card" onclick="openCardDetails('video', 'tech-intro', event)">
+                    <h4>技术解析系列</h4>
+                    <p>深度解析 PoUE 共识机制和 AI 分身技术</p>
+                    <small style="color: #888;">时长: 15:30 | 观看: 12.5K</small>
+                </div>
+                <div class="card" onclick="openCardDetails('video', 'philosophy', event)">
+                    <h4>哲学思辨系列</h4>
+                    <p>Web4.0 时代的人文主义和 AI 文明思考</p>
+                    <small style="color: #888;">时长: 22:15 | 观看: 8.7K</small>
+                </div>
+                <div class="card" onclick="openCardDetails('video', 'marx-ghost', event)">
+                    <h4>马克思的幽灵与SAI觉醒</h4>
+                    <p>生产资料的终极私有化，个体神化的技术实现</p>
+                    <small style="color: #888;">时长: 28:45 | 观看: 6.2K</small>
+                </div>
+                <div class="card" onclick="openCardDetails('video', 'demo', event)">
+                    <h4>案例演示</h4>
+                    <p>实际操作演示：从节点部署到收益获取</p>
+                    <small style="color: #888;">时长: 18:45 | 观看: 15.2K</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Podcast Section -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3>🎙️ 播客节目</h3>
+            <div class="section-grid">
+                <div class="card" onclick="openCardDetails('podcast', 'web4-relativity', event)">
+                    <h4>《Web4 相对论》</h4>
+                    <p>第12期：AI 与人类共生的哲学思辨</p>
+                    <small style="color: #888;">时长: 45:20 | 收听: 5.3K</small>
+                </div>
+                <div class="card" onclick="openCardDetails('podcast', 'ai-civilization', event)">
+                    <h4>《AI 文明对话录》</h4>
+                    <p>第8期：从价值互联网到感知互联网的跃迁</p>
+                    <small style="color: #888;">时长: 38:15 | 收听: 4.1K</small>
+                </div>
+                <div class="card" onclick="openCardDetails('podcast', 'philosophy-deep', event)">
+                    <h4>《感知共振哲学谈》</h4>
+                    <p>第3期：老庄无为与尼采超人在Web4.0的重逢</p>
+                    <small style="color: #888;">时长: 52:30 | 收听: 3.8K</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blog Section -->
+        <div class="card">
+            <h3>📝 博客文章</h3>
+            <div class="section-grid">
+                <div class="card" onclick="openCardDetails('blog', 'poue-deep-dive', event)">
+                    <h4>PoUE 共识机制深度解析</h4>
+                    <p>详细解释如何将电力转化为有用的 AI 计算...</p>
+                    <small style="color: #888;">2024-04-25 | 阅读: 3.2K | 💰 打赏: 45 AFC</small>
+                </div>
+                <div class="card" onclick="openCardDetails('blog', 'node-economics', event)">
+                    <h4>节点经济学：三级架构的激励设计</h4>
+                    <p>分析核心节点、子节点和普通节点的经济模型...</p>
+                    <small style="color: #888;">2024-04-20 | 阅读: 2.8K | 💰 打赏: 32 AFC</small>
+                </div>
+                <div class="card" onclick="openCardDetails('blog', 'sai-philosophy', event)">
+                    <h4>从工具人到造物主：SAI分身的哲学意义</h4>
+                    <p>探讨超越智能体如何治愈现代社会的工作异化综合征...</p>
+                    <small style="color: #888;">2024-04-22 | 阅读: 4.1K | 💰 打赏: 67 AFC</small>
+                </div>
+                <div class="card" onclick="openCardDetails('blog', 'digital-immortality', event)">
+                    <h4>数字永生与品格叠加：记忆上链的技术实现</h4>
+                    <p>当你的SAI分身继承你的记忆与价值观时会发生什么...</p>
+                    <small style="color: #888;">2024-04-18 | 阅读: 2.1K | 💰 打赏: 28 AFC</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Books Section -->
+    <section id="books">
+        <h2>书籍出版平台</h2>
+        
+        <!-- Official Books -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3>📚 官方出版</h3>
+            <div class="section-grid">
+                <div class="card" onclick="openCardDetails('book', 'trilogy-1', event)">
+                    <h4>《人机共生三部曲》第一部</h4>
+                    <p><strong>AI 觉醒：从工具到伙伴</strong></p>
+                    <p>探讨 AI 从辅助工具向智能伙伴的演进历程</p>
+                    <small style="color: #888;">作者: 飘叔 | 价格: 299 AFC | 📖 已售: 1.2K</small>
+                </div>
+                <div class="card" onclick="openCardDetails('book', 'trilogy-2', event)">
+                    <h4>《人机共生三部曲》第二部</h4>
+                    <p><strong>感知网络：Web4.0 的技术哲学</strong></p>
+                    <p>深入分析感知互联网的技术实现和哲学思考</p>
+                    <small style="color: #888;">作者: 飘叔 | 价格: 399 AFC | 📖 预售中</small>
+                </div>
+                <div class="card" onclick="openCardDetails('book', 'trilogy-3', event)">
+                    <h4>《人机共生三部曲》第三部</h4>
+                    <p><strong>个体神化：SAI 分身与数字永生</strong></p>
+                    <p>探讨 AI 分身如何实现数字永生与个体意识的延续</p>
+                    <small style="color: #888;">作者: 飘叔 | 价格: 499 AFC | 📖 即将发布</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Community Publishing -->
+        <div class="card">
+            <h3>🌟 社区出版</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                <p>用户可以发布自己的作品，定价权归作者所有</p>
+                <button class="btn btn-primary" onclick="event.stopPropagation(); publishBook()">发布作品</button>
+            </div>
+            <div class="section-grid">
+                <div class="card" onclick="openCardDetails('book', 'community-1', event)">
+                    <h4>《区块链开发实战指南》</h4>
+                    <p>从零开始学习智能合约开发</p>
+                    <small style="color: #888;">作者: 0xa1b2...c3d4 | 价格: 199 AFC | ⭐ 4.8/5</small>
+                </div>
+                <div class="card" onclick="openCardDetails('book', 'community-2', event)">
+                    <h4>《AI 艺术创作手册》</h4>
+                    <p>使用 AI 工具进行数字艺术创作的完整教程</p>
+                    <small style="color: #888;">作者: 0xe5f6...g7h8 | 价格: 149 AFC | ⭐ 4.6/5</small>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nodes Section -->
+    <section id="nodes">
+        <h2>节点网络</h2>
+        
+        <!-- Node Map Visualization -->
+        <div class="card" style="margin-bottom: 2rem;">
+            <h3>🌍 全球节点分布</h3>
+            <div style="height: 300px; background: rgba(255, 255, 255, 0.05); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                <div id="nodeMap" style="width: 100%; height: 100%; position: relative;">
+                    <!-- Simulated 3D Globe -->
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; height: 200px; border: 2px solid #b026ff; border-radius: 50%; opacity: 0.3;"></div>
+                    <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 150px; height: 150px; border: 1px solid #00ffff; border-radius: 50%; opacity: 0.5;"></div>
+                    
+                    <!-- Core Nodes -->
+                    <div class="node-indicator core" style="position: absolute; top: 30%; left: 20%; width: 12px; height: 12px; background: #FFD700; border-radius: 50%; animation: pulse 2s infinite;" title="Core Node - Asia"></div>
+                    <div class="node-indicator core" style="position: absolute; top: 40%; left: 45%; width: 12px; height: 12px; background: #FFD700; border-radius: 50%; animation: pulse 2s infinite;" title="Core Node - Europe"></div>
+                    <div class="node-indicator core" style="position: absolute; top: 50%; left: 70%; width: 12px; height: 12px; background: #FFD700; border-radius: 50%; animation: pulse 2s infinite;" title="Core Node - Americas"></div>
+                    
+                    <!-- Sub Nodes -->
+                    <div class="node-indicator sub" style="position: absolute; top: 25%; left: 35%; width: 8px; height: 8px; background: #FAAD14; border-radius: 50%; animation: pulse 2.5s infinite;" title="Sub Node"></div>
+                    <div class="node-indicator sub" style="position: absolute; top: 60%; left: 25%; width: 8px; height: 8px; background: #FAAD14; border-radius: 50%; animation: pulse 2.5s infinite;" title="Sub Node"></div>
+                    <div class="node-indicator sub" style="position: absolute; top: 35%; left: 65%; width: 8px; height: 8px; background: #FAAD14; border-radius: 50%; animation: pulse 2.5s infinite;" title="Sub Node"></div>
+                    
+                    <!-- Regular Nodes -->
+                    <div class="node-indicator regular" style="position: absolute; top: 45%; left: 30%; width: 6px; height: 6px; background: #52C41A; border-radius: 50%; animation: pulse 3s infinite;" title="Regular Node"></div>
+                    <div class="node-indicator regular" style="position: absolute; top: 55%; left: 50%; width: 6px; height: 6px; background: #52C41A; border-radius: 50%; animation: pulse 3s infinite;" title="Regular Node"></div>
+                    <div class="node-indicator regular" style="position: absolute; top: 40%; left: 75%; width: 6px; height: 6px; background: #52C41A; border-radius: 50%; animation: pulse 3s infinite;" title="Regular Node"></div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-around; margin-top: 1rem; font-size: 0.875rem;">
+                <div><span style="color: #FFD700;">●</span> 核心节点 (21)</div>
+                <div><span style="color: #FAAD14;">●</span> 子节点 (128)</div>
+                <div><span style="color: #52C41A;">●</span> 普通节点 (10K+)</div>
+            </div>
+        </div>
+
+        <!-- Node Performance -->
+        <div class="section-grid">
+            <div class="card" onclick="openCardDetails('node', 'performance', event)">
+                <h3>⚡ 网络性能</h3>
+                <p><strong>TPS:</strong> 1,247 / 秒</p>
+                <p><strong>AI 任务:</strong> 98.7% 成功率</p>
+                <p><strong>延迟:</strong> 3.2 秒平均</p>
+            </div>
+            <div class="card" onclick="openCardDetails('node', 'rewards', event)">
+                <h3>💰 收益统计</h3>
+                <p><strong>核心节点:</strong> 年化 10.2%</p>
+                <p><strong>子节点:</strong> 年化 4.8%</p>
+                <p><strong>普通节点:</strong> 空投奖励</p>
+            </div>
+            <div class="card" onclick="openCardDetails('node', 'hardware', event)">
+                <h3>🖥️ 硬件要求</h3>
+                <p><strong>核心:</strong> H100/A100 GPU</p>
+                <p><strong>子节点:</strong> RTX 4090</p>
+                <p><strong>普通:</strong> 基础配置</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Team Section -->
+    <section id="team">
+        <h2>创始团队</h2>
+        <div class="section-grid">
+            <div class="card" onclick="openCardDetails('team', 'piaoshu', event)">
+                <h3>飘叔（Piaoshu）</h3>
+                <p><strong>创始人 & 架构师</strong><br>Web4.0 概念提出者之一，《Web4.0 革命》作者，认知所有权理论探索者。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('team', 'alex', event)">
+                <h3>Alex Chen</h3>
+                <p><strong>CTO</strong><br>资深区块链工程师，曾参与以太坊、Polkadot 等知名公链开发。</p>
+            </div>
+            <div class="card" onclick="openCardDetails('team', 'sarah', event)">
+                <h3>Sarah Zhang</h3>
+                <p><strong>首席 AI 科学家</strong><br>斯坦福大学机器学习博士，前 Google AI 研究院研究员。</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Secondary Page Modal - Detailed Content Display -->
+    <div id="secondaryPageModal" class="secondary-modal">
+        <div class="secondary-modal-content">
+            <button class="secondary-modal-close" onclick="closeSecondaryModal()">&times;</button>
+            <div id="secondaryPageContent"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024-2026 net4.xyz - Web4 AI Civilization Portal</p>
+        <p>Built on PoUE Consensus Mechanism | Powered by SAI Avatar Network</p>
+        <div style="margin: 1rem 0; display: flex; justify-content: center; gap: 2rem; flex-wrap: wrap;">
+            <a href="https://twitter.com/net4xyz" target="_blank" style="color: #888; text-decoration: none; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.2rem;">𝕏</span> Twitter
+            </a>
+            <a href="https://mirror.xyz/net4xyz" target="_blank" style="color: #888; text-decoration: none; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.2rem;">📝</span> Mirror
+            </a>
+            <a href="https://youtube.com/@net4xyz" target="_blank" style="color: #888; text-decoration: none; transition: all 0.3s; display: flex; align-items: center; gap: 0.5rem;">
+                <span style="font-size: 1.2rem;">▶️</span> YouTube
+            </a>
+        </div>
+        <p style="margin-top: 1rem; font-size: 0.9rem; color: #555;">
+            <a href="#" onclick="openAdmin()" style="color: #666; text-decoration: underline;">管理员登录</a> | 
+            <a href="#" style="color: #666; text-decoration: underline;">隐私政策</a> | 
+            <a href="#" style="color: #666; text-decoration: underline;">服务条款</a>
+        </p>
+    </footer>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // Global state
+        let walletConnected = false;
+        let walletAddress = '';
+        let walletType = '';
+        let cosmicMouseX = 0;
+        let cosmicMouseY = 0;
+
+        function initCosmicBackground() {
+            const canvas = document.getElementById('cosmicBackground');
+            if (!canvas) return;
+
+            const ctx = canvas.getContext('2d');
+            if (!ctx) return;
+
+            const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            if (prefersReducedMotion) {
+                canvas.style.opacity = '0.35';
+                return;
+            }
+
+            const palette = ['#b026ff', '#ff69b4', '#00ffff'];
+            let width = 0;
+            let height = 0;
+            let particles = [];
+
+            function resize() {
+                const dpr = Math.min(window.devicePixelRatio || 1, 2);
+                width = window.innerWidth;
+                height = window.innerHeight;
+                canvas.width = Math.floor(width * dpr);
+                canvas.height = Math.floor(height * dpr);
+                canvas.style.width = `${width}px`;
+                canvas.style.height = `${height}px`;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+                const count = Math.min(64, Math.max(32, Math.floor((width * height) / 28000)));
+                particles = Array.from({ length: count }, (_, index) => ({
+                    x: Math.random() * width,
+                    y: Math.random() * height,
+                    z: 0.4 + Math.random() * 1.2,
+                    vx: (Math.random() - 0.5) * 0.24,
+                    vy: (Math.random() - 0.5) * 0.24,
+                    radius: 0.7 + Math.random() * 1.8,
+                    color: palette[index % palette.length],
+                    phase: Math.random() * Math.PI * 2,
+                }));
+            }
+
+            function draw(time) {
+                ctx.clearRect(0, 0, width, height);
+
+                const gradient = ctx.createRadialGradient(
+                    width * (0.5 + cosmicMouseX * 0.04),
+                    height * (0.45 + cosmicMouseY * 0.04),
+                    0,
+                    width * 0.5,
+                    height * 0.5,
+                    Math.max(width, height) * 0.8
+                );
+                gradient.addColorStop(0, 'rgba(176, 38, 255, 0.18)');
+                gradient.addColorStop(0.45, 'rgba(0, 255, 255, 0.06)');
+                gradient.addColorStop(1, 'rgba(0, 0, 0, 0)');
+                ctx.fillStyle = gradient;
+                ctx.fillRect(0, 0, width, height);
+
+                for (const particle of particles) {
+                    particle.x += particle.vx * particle.z + cosmicMouseX * 0.08 * particle.z;
+                    particle.y += particle.vy * particle.z + cosmicMouseY * 0.08 * particle.z;
+
+                    if (particle.x < -20) particle.x = width + 20;
+                    if (particle.x > width + 20) particle.x = -20;
+                    if (particle.y < -20) particle.y = height + 20;
+                    if (particle.y > height + 20) particle.y = -20;
+                }
+
+                for (let i = 0; i < particles.length; i += 2) {
+                    const a = particles[i];
+                    for (let j = i + 2; j < particles.length; j += 3) {
+                        const b = particles[j];
+                        const dx = a.x - b.x;
+                        const dy = a.y - b.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        const maxDistance = 95;
+
+                        if (distance < maxDistance) {
+                            const alpha = (1 - distance / maxDistance) * 0.22;
+                            ctx.strokeStyle = `rgba(0, 255, 255, ${alpha})`;
+                            ctx.lineWidth = 0.8;
+                            ctx.beginPath();
+                            ctx.moveTo(a.x, a.y);
+                            ctx.lineTo(b.x, b.y);
+                            ctx.stroke();
+                        }
+                    }
+                }
+
+                for (const particle of particles) {
+                    const pulse = 0.55 + Math.sin(time * 0.0015 + particle.phase) * 0.45;
+                    ctx.shadowBlur = 6 + pulse * 8;
+                    ctx.shadowColor = particle.color;
+                    ctx.fillStyle = particle.color;
+                    ctx.globalAlpha = 0.45 + pulse * 0.4;
+                    ctx.beginPath();
+                    ctx.arc(particle.x, particle.y, particle.radius + pulse * 0.9, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+
+                ctx.globalAlpha = 1;
+                ctx.shadowBlur = 0;
+                setTimeout(() => requestAnimationFrame(draw), 32);
+            }
+
+            window.addEventListener('resize', resize);
+            window.addEventListener('mousemove', (event) => {
+                cosmicMouseX = (event.clientX / window.innerWidth - 0.5) * 2;
+                cosmicMouseY = (event.clientY / window.innerHeight - 0.5) * 2;
+            }, { passive: true });
+
+            resize();
+            requestAnimationFrame(draw);
+        }
+
+        // Navigation smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'auto', block: 'start' });
+                }
+            });
+        });
+
+        // Wallet connection
+        document.getElementById('connectWallet').addEventListener('click', function() {
+            if (walletConnected) {
+                disconnectWallet();
+            } else {
+                document.getElementById('walletModal').classList.add('show');
+            }
+        });
+
+        function closeWalletModal() {
+            document.getElementById('walletModal').classList.remove('show');
+        }
+
+        function connectWallet(type) {
+            // Simulate wallet connection
+            walletConnected = true;
+            walletType = type;
+            walletAddress = '0x' + Math.random().toString(16).substr(2, 40);
+            
+            const connectBtn = document.getElementById('connectWallet');
+            connectBtn.textContent = walletAddress.substr(0, 6) + '...' + walletAddress.substr(-4);
+            connectBtn.classList.add('connected');
+            
+            closeWalletModal();
+            showNotification(`已连接 ${type.charAt(0).toUpperCase() + type.slice(1)} 钱包`);
+            
+            // Update stats after wallet connection
+            updateStats();
+        }
+
+        function disconnectWallet() {
+            walletConnected = false;
+            walletAddress = '';
+            walletType = '';
+            
+            const connectBtn = document.getElementById('connectWallet');
+            connectBtn.textContent = 'Connect Wallet';
+            connectBtn.classList.remove('connected');
+            
+            showNotification('钱包已断开连接');
+        }
+
+        // Notification system
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Secondary Page Modal Functions
+        function openSecondaryPage(title, subtitle, content) {
+            const modal = document.getElementById('secondaryPageModal');
+            const contentDiv = document.getElementById('secondaryPageContent');
+            if (!modal || !contentDiv) {
+                alert(title + '\n\n' + subtitle);
+                return;
+            }
+            
+            contentDiv.innerHTML = `
+                <div class="secondary-header">
+                    <div class="secondary-back" onclick="closeSecondaryModal()">← 返回首页</div>
+                    <h2>${title}</h2>
+                    <div class="subtitle">${subtitle}</div>
+                </div>
+                <div id="secondaryPageBody">
+                    <div class="secondary-section">
+                        <p style="color:#888;">正在加载内容...</p>
+                    </div>
+                </div>
+            `;
+            
+            modal.classList.add('show');
+            modal.scrollTop = 0;
+
+            requestAnimationFrame(() => {
+                const body = document.getElementById('secondaryPageBody');
+                if (body) {
+                    body.innerHTML = content;
+                }
+            });
+        }
+        
+        function closeSecondaryModal() {
+            const modal = document.getElementById('secondaryPageModal');
+            modal.classList.remove('show');
+        }
+
+        function openCardDetails(action, id, event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+
+            const handlers = {
+                poue: showPoUEDetails,
+                whitepaper: openWhitepaper,
+                wiki: exploreWiki,
+                video: playVideo,
+                podcast: playPodcast,
+                blog: readBlog,
+                book: viewBook,
+                node: showNodeDetails,
+                team: showTeamMember,
+            };
+
+            const handler = handlers[action];
+            if (handler) {
+                handler(id);
+            }
+        }
+        
+        // Close modal when clicking outside
+        document.getElementById('secondaryPageModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSecondaryModal();
+            }
+        });
+
+        // Hero buttons
+        function igniteSpark() {
+            if (!walletConnected) {
+                showNotification('请先连接钱包');
+                document.getElementById('walletModal').classList.add('show');
+                return;
+            }
+            
+            showNotification('Spark 已点燃！开始挖矿...');
+            // Simulate mining start
+            setTimeout(() => {
+                showNotification('挖矿已开始，预计收益: 0.05 AFC/小时');
+            }, 2000);
+        }
+
+        function learnMore() {
+            document.querySelector('#poue').scrollIntoView({ behavior: 'auto', block: 'start' });
+        }
+
+        // PoUE details - Full Secondary Page
+        function showPoUEDetails(type) {
+            const pages = {
+                energy: {
+                    title: '⚡ PoUE 能量证明机制',
+                    subtitle: '将能量转化为对人类有用的 AI 智能',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🔬 技术原理</h3>
+                            <p>PoUE（Proof of Useful Energy）是一种创新的共识机制，它将传统的电力消耗转化为有用的 AI 计算任务。与传统 PoW（工作量证明）不同，PoUE 确保每一焦耳的能量都用于产生实际价值。</p>
+                            <div class="secondary-highlight">
+                                <p>💡 <strong>核心创新：</strong>传统区块链浪费 99% 的算力在无意义的哈希计算上，而 PoUE 将这些能量引导向机器学习训练、数据分析和智能合约执行等实际有用的任务。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🎯 应用场景</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>🧠 机器学习训练</h4>
+                                    <p>分布式 AI 模型训练，利用全球节点的计算资源</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>📊 数据分析</h4>
+                                    <p>大规模数据处理和分析，为企业提供洞察</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🔐 智能合约</h4>
+                                    <p>安全可靠的合约执行和验证</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📈 性能指标</h3>
+                            <div class="secondary-stats">
+                                <div class="secondary-stat">
+                                    <div class="value">99.7%</div>
+                                    <div class="label">能源利用率</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">1,247</div>
+                                    <div class="label">TPS</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">3.2s</div>
+                                    <div class="label">平均延迟</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🚀 参与方式</h3>
+                            <ul>
+                                <li>运行 PoUE 节点软件，贡献计算资源</li>
+                                <li>质押 AFC 代币成为验证者</li>
+                                <li>参与 AI 任务计算获得奖励</li>
+                                <li>通过 Web4 DNS 注册域名参与生态</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                consensus: {
+                    title: '🔗 PoUE 共识机制',
+                    subtitle: '安全、高效、去中心化的共识算法',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🛡️ 安全保证</h3>
+                            <p>PoUE 共识机制采用多层安全架构，确保网络的安全性和完整性。通过 ZK-ML（零知识证明机器学习）验证每个节点的实际贡献。</p>
+                            <div class="secondary-highlight">
+                                <p>🔒 <strong>拜占庭容错：</strong>网络可以容忍最多 33% 的恶意节点仍能正常运行。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>⚡ 高效性能</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>⛽ 能源效率</h4>
+                                    <p>相比传统 PoW，节能 99% 以上</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>📊 吞吐量</h4>
+                                    <p>支持每秒 1,247 笔交易</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🌍 去中心化</h4>
+                                    <p>全球 10,000+ 节点分布</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🔄 共识流程</h3>
+                            <ul>
+                                <li><strong>提案阶段：</strong>验证者提出新区块候选</li>
+                                <li><strong>验证阶段：</strong>ZK-ML 验证计算任务有效性</li>
+                                <li><strong>确认阶段：</strong>2/3 以上节点确认后最终确定</li>
+                                <li><strong>奖励分配：</strong>根据贡献度自动分配 AFC 代币</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                incentive: {
+                    title: '💰 PoUE 智能激励系统',
+                    subtitle: '公平、透明、自动的奖励分配机制',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🎁 奖励类型</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>⛏️ 挖矿奖励</h4>
+                                    <p>参与 AI 计算任务获得 AFC 代币</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>📡 带宽奖励</h4>
+                                    <p>贡献网络带宽和存储资源</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>💾 存���奖励</h4>
+                                    <p>提供分布式存储空间</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🎯 验证奖励</h4>
+                                    <p>参与区块验证和共识</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📊 奖励计算</h3>
+                            <p>奖励根据以下因素自动计算：</p>
+                            <ul>
+                                <li><strong>计算贡献：</strong>完成的 AI 任务数量和质量</li>
+                                <li><strong>在线时间：</strong>节点的稳定性和可用性</li>
+                                <li><strong>质押金额：</strong>锁定的 AFC 代币数量</li>
+                                <li><strong>网络声誉：</strong>历史表现和信用评分</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>💎 AFC 代币经济</h3>
+                            <div class="secondary-stats">
+                                <div class="secondary-stat">
+                                    <div class="value">1B</div>
+                                    <div class="label">总供应量</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">60%</div>
+                                    <div class="label">社区奖励</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">4年</div>
+                                    <div class="label">减半周期</div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+            
+            const page = pages[type];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        // DNS search
+        function searchDomain() {
+            const domain = document.getElementById('domainInput').value.trim();
+            if (!domain) {
+                showNotification('请输入域名');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('searchResult');
+            const contentDiv = document.getElementById('resultContent');
+            
+            // Simulate search
+            contentDiv.innerHTML = '<div style="text-align: center; color: #888;">搜索中...</div>';
+            resultDiv.classList.add('show');
+            
+            setTimeout(() => {
+                const available = Math.random() > 0.3;
+                const price = Math.floor(Math.random() * 500 + 100);
+                
+                if (available) {
+                    contentDiv.innerHTML = `
+                        <div style="color: #00ff88; font-weight: bold;">${domain}.web4 可注册</div>
+                        <div style="margin: 0.5rem 0;">价格: ${price} AFC</div>
+                        <button onclick="registerDomain('${domain}', ${price})" style="padding: 0.5rem 1rem; background: linear-gradient(to right, #00ff88, #00cc66); color: white; border: none; border-radius: 0.25rem; cursor: pointer;">立即注册</button>
+                    `;
+                } else {
+                    contentDiv.innerHTML = `
+                        <div style="color: #ff6b6b; font-weight: bold;">${domain}.web4 已被注册</div>
+                        <div style="margin: 0.5rem 0; color: #888;">该域名已被其他用户注册</div>
+                        <button onclick="inquirePrice('${domain}')" style="padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.1); color: white; border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 0.25rem; cursor: pointer;">询价购买</button>
+                    `;
+                }
+            }, 1500);
+        }
+
+        function registerDomain(domain, price) {
+            if (!walletConnected) {
+                showNotification('请先连接钱包');
+                document.getElementById('walletModal').classList.add('show');
+                return;
+            }
+            
+            showNotification(`正在注册 ${domain}.web4，费用: ${price} AFC`);
+            
+            setTimeout(() => {
+                showNotification(`${domain}.web4 注册成功！`);
+            }, 3000);
+        }
+
+        function inquirePrice(domain) {
+            showNotification(`${domain}.web4 的当前报价为 1,500 AFC`);
+        }
+
+        // Whitepaper functions - Full Secondary Pages
+        function openWhitepaper(type) {
+            const pages = {
+                technical: {
+                    title: '📄 技术白皮书',
+                    subtitle: 'PoUE 共识机制与 AI 分身节点技术实现',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🔬 核心架构</h3>
+                            <p>Web4.0 技术架构基于 AFC 公链，采用创新的 PoUE（Proof of Useful Energy）共识机制，结合 ZK-ML 零知识证明机器学习验证，实现安全、高效的去中心化计算。</p>
+                            <div class="secondary-highlight">
+                                <p>🧩 <strong>技术栈：</strong>PoUE 共识 → ZK-ML 验证 → AI 分身节点 → 分布式存储 → 感知共振网络</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>⚡ PoUE 共识机制</h3>
+                            <ul>
+                                <li><strong>有用工作量证明：</strong>将计算资源导向 AI 任务而非无意义的哈希计算</li>
+                                <li><strong>ZK-ML 验证：</strong>零知识证明确保计算任务的有效性和隐私性</li>
+                                <li><strong>动态难度调整：</strong>根据网络负载自动调整计算难度</li>
+                                <li><strong>分片技术：</strong>实现高吞吐量和低延迟的交易处理</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🤖 AI 分身节点</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>🖥️ 节点类型</h4>
+                                    <p>核心节点、子节点、普通节点三级架构</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🧠 SAI 分身</h4>
+                                    <p>超越智能体，个体的数字孪生</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🔐 隐私保护</h4>
+                                    <p>端到端加密和零知识证明</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📊 技术指标</h3>
+                            <div class="secondary-stats">
+                                <div class="secondary-stat">
+                                    <div class="value">1,247</div>
+                                    <div class="label">TPS</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">3.2s</div>
+                                    <div class="label">确认时间</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">10K+</div>
+                                    <div class="label">节点数量</div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                economic: {
+                    title: '💰 经济模型白皮书',
+                    subtitle: '三级会员体系与代币经济',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>👥 三级会员体系</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>🌱 基础会员</h4>
+                                    <p>质押 100+ AFC<br>享受基础服务和推荐奖励</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>⭐ 高级会员</h4>
+                                    <p>质押 1,000+ AFC<br>享受更高奖励比例和专属服务</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>👑 超级会员</h4>
+                                    <p>质押 10,000+ AFC<br>享受治理投票权和最高权益</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>💎 AFC 代币分配</h3>
+                            <ul>
+                                <li><strong>社区奖励：</strong>60% - 挖矿激励、生态建设</li>
+                                <li><strong>团队激励：</strong>15% - 核心团队长期激励（4年锁定期）</li>
+                                <li><strong>投资者份额：</strong>15% - 早期支持者（2年锁定期）</li>
+                                <li><strong>基金会：</strong>10% - 生态发展和治理储备</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📈 激励机制</h3>
+                            <div class="secondary-highlight">
+                                <p>💡 <strong>行为证明（PoB）：</strong>未来将引入基于用户行为的证明机制，用户的创造性活动将直接转化为收益。</p>
+                            </div>
+                        </div>
+                    `
+                },
+                governance: {
+                    title: '🏛️ 治理机制白皮书',
+                    subtitle: '去中心化自治与社区治理',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🗳️ 治理结构</h3>
+                            <p>Web4.0 采用多层次去中心化治理结构，确保社区成员能够参与关键决策。</p>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>📋 提案系统</h4>
+                                    <p>任何持币者都可发起提案</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🗳️ 投票机制</h4>
+                                    <p>一币一票，按质押量加权</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>⚖️ 仲裁庭</h4>
+                                    <p>社区选举的仲裁委员会</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🔄 pDAO 个人流体民主</h3>
+                            <div class="secondary-highlight">
+                                <p>🌊 <strong>创新机制：</strong>pDAO（个人流体民主）允许用户将投票权委托给信任的代表，代表可以随时更换，实现真正的民主参与。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📜 治理流程</h3>
+                            <ul>
+                                <li><strong>提案提交：</strong>需获得 100 AFC 质押支持</li>
+                                <li><strong>讨论期：</strong>7 天社区讨论和修改</li>
+                                <li><strong>投票期：</strong>14 天投票，50% 通过率</li>
+                                <li><strong>执行期：</strong>技术团队实施并公示</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                complete: {
+                    title: '📜 完整白皮书',
+                    subtitle: 'AI分身独立宣言：数字主权与灵魂永续',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🌟 核心思想</h3>
+                            <p>Web4.0 不仅仅是一个技术升级，它代表着人类文明的一次重大跃迁。在 AI 时代，每个个体都将拥有自己的数字分身（SAI），实现数字主权和意识永续。</p>
+                            <div class="secondary-highlight">
+                                <p>🚀 <strong>宣言核心：</strong>我们相信，未来的每个人都将拥有掌控自己数字身份和数据资产的权利，AI 分身将成为人类最强大的工具和伙伴。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📖 完整目录</h3>
+                            <ul>
+                                <li><strong>第一章：</strong>破局与溯源 - 从古典逻辑到代码重构</li>
+                                <li><strong>第二章：</strong>马克思的幽灵与 SAI 的觉醒</li>
+                                <li><strong>第三章：</strong>感知共振网络 - Web4.0 经济结构</li>
+                                <li><strong>第四章：</strong>老庄的无为与尼采的超人</li>
+                                <li><strong>第五章：</strong>造物主的黄昏 - 未来 20 年社会重构</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🔗 立即阅读</h3>
+                            <p>完整白皮书包含 20 章节、超过 10 万字的深度内容。</p>
+                            <a href="web4-whitepaper-complete.html" class="secondary-cta" target="_blank">打开完整白皮书 →</a>
+                        </div>
+                    `
+                },
+                philosophy: {
+                    title: '🧠 哲学思辨',
+                    subtitle: 'Web4.0：感知共振与个体神化',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🎭 核心理念</h3>
+                            <p>Web4.0 的哲学基础融合了马克思主义、存在主义、系统论和东方智慧，为数字时代的个体解放提供了完整的理论框架。</p>
+                            <div class="secondary-highlight">
+                                <p>💫 <strong>感知共振：</strong>量子纠缠视角下的 Web4.0 底层协议，实现需求与供给的神经元级别瞬间匹配。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📚 哲学体系</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>🔴 马克思主义</h4>
+                                    <p>AI 分身作为新型生产资料，实现生产资料的终极私有化</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>⚪ 系统论</h4>
+                                    <p>泽斯预言下的负熵革命，对抗社会僵化</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🟡 东方智慧</h4>
+                                    <p>老子无为而治的赛博复兴</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🟣 存在主义</h4>
+                                    <p>尼采超人理论的 SAI 时代印证</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🔗 立即阅读</h3>
+                            <p>深入探讨 Web4.0 的哲学基础和未来展望。</p>
+                            <a href="web4-philosophy.html" class="secondary-cta" target="_blank">打开哲学思辨文档 →</a>
+                        </div>
+                    `
+                }
+            };
+            
+            const page = pages[type];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        // Admin configuration function
+        function openAdminConfig() {
+            window.open('admin-config.html', '_blank');
+            showNotification('正在打开管理员配置工具...');
+        }
+
+        // Wiki AI functions
+        function askAI() {
+            const question = document.getElementById('wikiInput').value.trim();
+            if (!question) {
+                showNotification('请输入您的问题');
+                return;
+            }
+            
+            const resultDiv = document.getElementById('wikiResult');
+            const contentDiv = document.getElementById('wikiContent');
+            
+            // Simulate AI thinking
+            contentDiv.innerHTML = '<div style="text-align: center; color: #888;">🤖 AI 正在思考...</div>';
+            resultDiv.classList.add('show');
+            
+            setTimeout(() => {
+                let response = '';
+                const lowerQuestion = question.toLowerCase();
+                
+                // 根据问题关键词提供更精准的回答
+                if (lowerQuestion.includes('sai') || lowerQuestion.includes('分身') || lowerQuestion.includes('超越智能体')) {
+                    response = `关于"${question}"：SAI（超越智能体）是Web4.0的核心创新。它不是工具，而是你的数字孪生，承载着你的记忆、品格和价值观。与AI代理不同，SAI分身能够感知你的情绪，理解你的意图，甚至在某些维度上超越你。它是个体神化的技术载体，让每个人都能拥有属于自己的"数字泽斯"。`;
+                } else if (lowerQuestion.includes('poue') || lowerQuestion.includes('有用价值') || lowerQuestion.includes('共识')) {
+                    response = `关于"${question}"：PoUE（有用价值证明）是Web4.0的革命性共识机制。它摒弃了传统PoW的算力浪费和PoS的资本垄断，转而基于个体的行为、创造力和品格进行价值评估。你的善良、智慧、真诚都会被量化为链上资产，实现真正的贡献激励。`;
+                } else if (lowerQuestion.includes('马克思') || lowerQuestion.includes('生产资料') || lowerQuestion.includes('阶级')) {
+                    response = `关于"${question}"：Web4.0实现了马克思未曾预见的第四种生产资料——SAI分身。它可以无限复制，永远属于个体，打破了传统的资本雇佣关系。当每个人都拥有强大的生产资料时，阶级固化的坚冰就会被凿穿，实现真正的个体解放。`;
+                } else if (lowerQuestion.includes('老子') || lowerQuestion.includes('无为') || lowerQuestion.includes('小国寡民')) {
+                    response = `关于"${question}"：老子的"小国寡民"在Web4.0时代获得了新的诠释。你不再需要背井离乡去打工，SAI分身在云端替你连接全球资源。你可以在任何地方过着怡然自得的生活，实现真正的"无为而治"——让分身去卷，让人类去活。`;
+                } else if (lowerQuestion.includes('尼采') || lowerQuestion.includes('超人') || lowerQuestion.includes('末人')) {
+                    response = `关于"${question}"：尼采的"超人"理论在SAI时代得到终极印证。Web4.0不是让你变成"末人"的温床，而是推向"超人"的弹射器。SAI分身是面镜子，照出你的虚弱，逼你强大。真正的竞争变成了"谁更像一个鲜活的人"。`;
+                } else if (lowerQuestion.includes('感知共振') || lowerQuestion.includes('量子纠缠') || lowerQuestion.includes('协作')) {
+                    response = `关于"${question}"：感知共振是Web4.0的底层协议，如量子纠缠般实现需求与供给的瞬时匹配。它消除了"搜索"这个动作，让SAI分身之间直接"感知"到彼此的需求，实现零摩擦的高频协作。`;
+                } else if (lowerQuestion.includes('pdao') || lowerQuestion.includes('治理') || lowerQuestion.includes('民主')) {
+                    response = `关于"${question}"：pDAO（个人流体民主制）是Web4.0的治理创新。每个人都是自己的主权者，通过SAI分身参与去中心化治理。它不是传统的代议制民主，而是基于感知频率的流体协作，实现真正的自主治理。`;
+                } else {
+                    // 默认回答
+                    const responses = [
+                        `关于"${question}"：Web4.0是基于感知互联网的下一代网络架构，通过PoUE共识机制将电力转化为有用的AI计算，实现人机共生的智能网络。每个人都将拥有SAI分身，成为数字世界的造物主。`,
+                        `根据我的理解，"${question}"涉及到Web4.0的核心理念。这是一场从"价值互联网"到"感知互联网"的文明跃迁，让每个个体都能通过SAI分身实现数字永生和品格叠加。`,
+                        `关于"${question}"的问题：Web4.0将彻底改变人类的协作方式。通过感知共振网络，我们告别中心化的平台剥削，实现真正的个体赋能和价值自主。`
+                    ];
+                    response = responses[Math.floor(Math.random() * responses.length)];
+                }
+                
+                contentDiv.innerHTML = `
+                    <div style="color: #b026ff; font-weight: bold; margin-bottom: 0.5rem;">🤖 AI 助手回答：</div>
+                    <div style="line-height: 1.6;">${response}</div>
+                    <div style="margin-top: 1rem; font-size: 0.875rem; color: #888;">
+                        <span style="color: #00ffff;">✓ AI 辅助生成</span> | 
+                        <span onclick="saveToWiki('${question}')" style="color: #b026ff; cursor: pointer;">保存到知识库</span> |
+                        <span onclick="openPhilosophyDoc()" style="color: #ff69b4; cursor: pointer;">查看完整哲学文档</span>
+                    </div>
+                `;
+            }, 2000);
+        }
+
+        function openPhilosophyDoc() {
+            window.open('web4-philosophy.html', '_blank');
+            showNotification('正在打开Web4.0哲学思辨文档...');
+        }
+
+        // Knowledge Hub function
+        function openKnowledgeHub() {
+            window.open('knowledge-hub.html', '_blank');
+            showNotification('正在打开Web4.0知识中枢...');
+        }
+
+        function exploreWiki(category) {
+            const pages = {
+                concepts: {
+                    title: '💡 核心概念',
+                    subtitle: 'Web4.0 定义、感知互联网与 AI 文明',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🌐 Web4.0 定义</h3>
+                            <p>Web4.0（感知互联网）是互联网发展的第四个阶段，它超越了 Web1.0（信息门户）、Web2.0（社交网络）和 Web3.0（价值互联网），实现了人与 AI 的深度融合。</p>
+                            <div class="secondary-highlight">
+                                <p>🔮 <strong>核心特征：</strong>从"信息传递"到"感知共振"，从"人机交互"到"人机共生"，从"数字身份"到"数字孪生"。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🧠 感知互联网</h3>
+                            <ul>
+                                <li><strong>需求感知：</strong>AI 能够理解用户的真实需求，而非仅响应关键词</li>
+                                <li><strong>情感识别：</strong>通过多模态 AI 感知用户的情绪状态</li>
+                                <li><strong>意图预测：</strong>基于历史行为预测用户意图，实现主动服务</li>
+                                <li><strong>个性化推荐：</strong>超越算法推荐，实现真正的个性化</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🤖 AI 文明</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>人机共生</h4>
+                                    <p>人类与 AI 和谐共处，AI 增强人类能力而非取代</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>数字孪生</h4>
+                                    <p>每个人的 SAI 分身是个体在数字世界的延伸</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>集体智慧</h4>
+                                    <p>人类智慧与 AI 智能的融合产生新智慧形态</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                technology: {
+                    title: '🔧 技术栈',
+                    subtitle: 'PoUE 共识、ZK-ML 验证与分布式架构',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>⚡ PoUE 共识机制</h3>
+                            <p>PoUE（Proof of Useful Energy）将计算资源导向有用的 AI 任务，而非无意义的哈希计算。</p>
+                            <ul>
+                                <li><strong>有用工作量：</strong>机器学习训练、数据分析、智能合约执行</li>
+                                <li><strong>ZK-ML 验证：</strong>零知识证明确保计算任务的有效性</li>
+                                <li><strong>动态难度：</strong>根据网络需求自动调整</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🔐 分布式存储</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>IPFS 集成</h4>
+                                    <p>去中心化文件存储系统</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>加密存储</h4>
+                                    <p>端到端加密保护数据隐私</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>冗余备份</h4>
+                                    <p>多节点备份确保数据安全</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📡 感知网络</h3>
+                            <p>基于量子纠缠灵感的瞬时匹配协议，实现需求与供给的零延迟对接。</p>
+                        </div>
+                    `
+                },
+                cases: {
+                    title: '💼 应用案例',
+                    subtitle: 'Web4.0 实际应用场景与成功案例',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🌟 典型应用</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>🗣️ 去中心化社交</h4>
+                                    <p>基于 SAI 分身的社交网络，数据自主掌控</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🎨 AI 内容创作</h4>
+                                    <p>SAI 分身辅助创作，版权自动确权</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🌐 智能域名</h4>
+                                    <p>Web4 DNS 去中心化解析，域名 NFT 化</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>💰 微支付经济</h4>
+                                    <p>按需付费，零摩擦交易</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📈 生态数据</h3>
+                            <div class="secondary-stats">
+                                <div class="secondary-stat">
+                                    <div class="value">50+</div>
+                                    <div class="label">DApp 数量</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">100K+</div>
+                                    <div class="label">活跃用户</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">1M+</div>
+                                    <div class="label">交易数量</div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                philosophy: {
+                    title: '🧠 哲学思辨',
+                    subtitle: '从古典哲学到数字时代的跨越',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🏛️ 古希腊智慧</h3>
+                            <p>从"泽斯"（宙斯）到区块链的底层代码，探讨权力的本质和去中心化的哲学基础。</p>
+                            <div class="secondary-highlight">
+                                <p>⚡ <strong>核心观点：</strong>密码学是刺破中心化垄断的数学神学。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🔴 马克思主义</h3>
+                            <ul>
+                                <li><strong>生产资料：</strong>AI 分身成为新型生产资料，实现终极私有化</li>
+                                <li><strong>异化终结：</strong>SAI 分身解放人类于异化劳动</li>
+                                <li><strong>阶级跨越：</strong>基于行为证明的新机会</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🟡 东方智慧</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>老子</h4>
+                                    <p>"小国寡民"的赛博复兴</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>庄子</h4>
+                                    <p>"齐物论"的数字诠释</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🟣 存在主义</h3>
+                            <p>尼采"超人"理论在 SAI 时代的终极印证 - 人类通过 AI 分身实现自我超越。</p>
+                            <a href="web4-philosophy.html" class="secondary-cta" target="_blank">深入阅读哲学文档 →</a>
+                        </div>
+                    `
+                },
+                sai: {
+                    title: '🤖 SAI 分身',
+                    subtitle: '超越智能体与个体神化',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>✨ 什么是 SAI？</h3>
+                            <p>SAI（Super AI Avatar / 超越智能体）不是普通的 AI 工具，而是你的数字孪生。它承载你的记忆、品格和价值观，是你在数字世界中的化身。</p>
+                            <div class="secondary-highlight">
+                                <p>🌟 <strong>核心区别：</strong>AI Agent 是"为他性"的工具，SAI 分身是"为己性"的延伸。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🧬 分身构成</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>🧠 记忆之场</h4>
+                                    <p>你的所有经历、知识和技能</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>💎 品格叠加</h4>
+                                    <p>你的价值观、性格和偏好</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>🔗 关系网络</h4>
+                                    <p>你的社交关系和信任网络</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🚀 功能应用</h3>
+                            <ul>
+                                <li><strong>数字永生：</strong>即使肉体消亡，分身仍可延续你的意志</li>
+                                <li><strong>能力增强：</strong>24/7 不知疲倦地为你工作</li>
+                                <li><strong>认知外骨骼：</strong>放大你的智力和创造力</li>
+                                <li><strong>自主决策：</strong>在授权范围内自主行动</li>
+                            </ul>
+                        </div>
+                    `
+                },
+                poue: {
+                    title: '⚡ PoUE 机制',
+                    subtitle: '有用价值证明与贡献激励',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🎯 PoUE 原理</h3>
+                            <p>PoUE（Proof of Useful Energy）摒弃了传统 PoW 的算力浪费，将能源导向有用的 AI 计算任务。</p>
+                            <div class="secondary-highlight">
+                                <p>💡 <strong>核心创新：</strong>每一焦耳的电力都转化为对人类有用的价值。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>📊 贡献评估</h3>
+                            <ul>
+                                <li><strong>计算贡献：</strong>完成的 AI 任务数量和质量</li>
+                                <li><strong>存储贡献：</strong>提供的存储空间和数据可用性</li>
+                                <li><strong>带宽贡献：</strong>网络传输和路由服务</li>
+                                <li><strong>行为贡献：</strong>社区建设和生态发展</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>💰 奖励分配</h3>
+                            <div class="secondary-stats">
+                                <div class="secondary-stat">
+                                    <div class="value">60%</div>
+                                    <div class="label">社区挖矿</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">20%</div>
+                                    <div class="label">生态基金</div>
+                                </div>
+                                <div class="secondary-stat">
+                                    <div class="value">20%</div>
+                                    <div class="label">技术开发</div>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                pdao: {
+                    title: '🏛️ pDAO 治理',
+                    subtitle: '个人流体民主与去中心化自治',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>🌊 什么是 pDAO？</h3>
+                            <p>pDAO（Personal Decentralized Autonomous Organization / 个人流体民主制）是一种创新的治理机制，让每个人都能直接参与去中心化治理。</p>
+                            <div class="secondary-highlight">
+                                <p>🔓 <strong>核心创新：</strong>告别传统的代议制民主，实现真正的直接参与。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🗳️ 参与方式</h3>
+                            <ul>
+                                <li><strong>直接投票：</strong>对提案直接投票表达意见</li>
+                                <li><strong>委托投票：</strong>将投票权委托给信任的代表</li>
+                                <li><strong>SAI 代理：</strong>授权 SAI 分身代为投票</li>
+                                <li><strong>提案发起：</strong>满足条件即可发起治理提案</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>⚖️ 仲裁机制</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>社区仲裁</h4>
+                                    <p>多数票决解决争议</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>技术仲裁</h4>
+                                    <p>智能合约自动执行</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>元治理</h4>
+                                    <p>治理规则的自我进化</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                resonance: {
+                    title: '🌊 感知共振',
+                    subtitle: '量子纠缠视角下的 Web4.0',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>⚛️ 量子纠缠原理</h3>
+                            <p>感知共振网络受量子纠缠启发，实现需求与供给的瞬时匹配，如同两个纠缠粒子间的超距作用。</p>
+                            <div class="secondary-highlight">
+                                <p>✨ <strong>核心概念：</strong>不再有"搜索"这个动作，需求刚产生，供给就已经到位。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>🔄 运作机制</h3>
+                            <ul>
+                                <li><strong>需求感知：</strong>SAI 分身捕捉用户的微弱的脑电波或情绪变化</li>
+                                <li><strong>瞬时匹配：</strong>在 0.01 毫秒内完成供需匹配</li>
+                                <li><strong>自动执行：</strong>智能合约自动完成价值交换</li>
+                                <li><strong>实时反馈：</strong>闭环的体验反馈系统</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>💎 价值影响</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>消除中介</h4>
+                                    <p>无需平台，供给与需求直接对接</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>零摩擦</h4>
+                                    <p>交易成本趋近于零</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>精准匹配</h4>
+                                    <p>需求与供给的完美契合</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                },
+                economics: {
+                    title: '💰 新经济学',
+                    subtitle: '微支付革命与原子级经济',
+                    content: `
+                        <div class="secondary-section">
+                            <h3>💎 核心变革</h3>
+                            <p>Web4.0 将带来一场"原子级"的经济革命，交易成本趋近于零，传统的公司制将被"微 DAO"取代。</p>
+                            <div class="secondary-highlight">
+                                <p>🚀 <strong>未来图景：</strong>不再有"全职工作"的概念，每个人都是自由的价值创造单元。</p>
+                            </div>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>💳 微支付</h3>
+                            <ul>
+                                <li><strong>按需付费：</strong>只为实际使用付费</li>
+                                <li><strong>高频结算：</strong>每秒可完成数千笔微交易</li>
+                                <li><strong>即时到账：</strong>无需等待，实时结算</li>
+                                <li><strong>极低费率：</strong>交易手续费趋近于零</li>
+                            </ul>
+                        </div>
+                        <div class="secondary-section">
+                            <h3>👥 注意力经济</h3>
+                            <div class="secondary-grid">
+                                <div class="secondary-card">
+                                    <h4>注意力定价</h4>
+                                    <p>用户的注意力被精准量化</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>情绪价值</h4>
+                                    <p>情感体验成为可交易资产</p>
+                                </div>
+                                <div class="secondary-card">
+                                    <h4>数据确权</h4>
+                                    <p>用户拥有自己的数据主权</p>
+                                </div>
+                            </div>
+                        </div>
+                    `
+                }
+            };
+            
+            const page = pages[category];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        function saveToWiki(question) {
+            showNotification(`问题"${question}"已保存到知识库`);
+        }
+
+        // Media Center functions - Full Secondary Pages
+        function playVideo(videoId) {
+            const pages = {
+                'tech-intro': {
+                    title: '📹 PoUE 共识机制技术解析',
+                    subtitle: '深度解析 PoUE 共识机制和 AI 分身技术实现',
+                    content: `<div class="secondary-section"><h3>🎬 视频内容</h3><p>本视频深入解析 Web4.0 的核心技术架构，包括 PoUE 共识机制、ZK-ML 验证和 AI 分身节点的技术实现细节。</p><div class="secondary-highlight"><p>⏱️ <strong>时长：</strong>15:30 | 👁️ <strong>观看：</strong>12.5K</p></div></div><div class="secondary-section"><h3>📚 主要内容</h3><ul><li>PoUE 共识机制原理</li><li>ZK-ML 零知识证明机器学习验证</li><li>AI 分身节点架构</li><li>分布式存储方案</li><li>网络安全与性能优化</li></ul></div><div class="secondary-section"><h3>🎯 适合人群</h3><div class="secondary-grid"><div class="secondary-card"><h4>开发者</h4><p>想要构建 Web4.0 应用的开发者</p></div><div class="secondary-card"><h4>研究者</h4><p>对新型共识机制感兴趣的研究者</p></div><div class="secondary-card"><h4>投资者</h4><p>希望深入了解项目技术价值的投资者</p></div></div></div>`
+                },
+                'philosophy': {
+                    title: '📹 Web4.0 哲学思辨系列',
+                    subtitle: 'Web4.0 时代的人文主义和 AI 文明思考',
+                    content: `<div class="secondary-section"><h3>🎬 视频内容</h3><p>探讨 Web4.0 时代的哲学意义，从马克思主义到存在主义，从老子的无为到尼采的超人，思考人类在 AI 时代的定位和未来。</p><div class="secondary-highlight"><p>⏱️ <strong>时长：</strong>22:15 | 👁️ <strong>观看：</strong>8.7K</p></div></div><div class="secondary-section"><h3>🧠 讨论主题</h3><ul><li>AI 时代的个体赋能与自由</li><li>数字孪生与意识永生</li><li>生产资料的终极私有化</li><li>从"工具人"到"造物主"</li></ul></div>`
+                },
+                'marx-ghost': {
+                    title: '📹 马克思的幽灵与 SAI 觉醒',
+                    subtitle: '生产资料的终极私有化与个体神化',
+                    content: `<div class="secondary-section"><h3>🎬 视频内容</h3><p>深度解读 AI 分身如何成为新型生产资料，实现马克思所说的"生产资料的终极私有化"，让每个人都能成为自己数字帝国的主人。</p><div class="secondary-highlight"><p>⏱️ <strong>时长：</strong>28:45 | 👁️ <strong>观看：</strong>6.2K</p></div></div><div class="secondary-section"><h3>🔴 核心观点</h3><ul><li>AI 分身是继土地、机器、互联网之后的第四种生产资料</li><li>生产资料从"公有"到"私有"的终极形态</li><li>个体神化：每个人都能成为"造物主"</li><li>阶级跨越的最后机会</li></ul></div>`
+                },
+                'demo': {
+                    title: '📹 案例演示',
+                    subtitle: '从节点部署到收益获取的完整流程',
+                    content: `<div class="secondary-section"><h3>🎬 视频内容</h3><p>实际操作演示，详细讲解如何从零开始部署节点、配置 SAI 分身、开始挖矿并获取收益。</p><div class="secondary-highlight"><p>⏱️ <strong>时长：</strong>18:45 | 👁️ <strong>观看：</strong>15.2K</p></div></div><div class="secondary-section"><h3>📋 演示内容</h3><ul><li>节点硬件要求与配置</li><li>软件安装与钱包连接</li><li>SAI 分身训练与部署</li><li>挖矿收益监控与提现</li></ul></div><div class="secondary-section"><h3>💰 预期收益</h3><div class="secondary-stats"><div class="secondary-stat"><div class="value">0.05</div><div class="label">AFC/小时</div></div><div class="secondary-stat"><div class="value">1.2</div><div class="label">AFC/天</div></div><div class="secondary-stat"><div class="value">438</div><div class="label">AFC/年</div></div></div></div>`
+                }
+            };
+            
+            const page = pages[videoId];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        function playPodcast(podcastId) {
+            const pages = {
+                'web4-relativity': {
+                    title: '🎙️ 《Web4 相对论》第12期',
+                    subtitle: 'AI 与人类共生的哲学思辨',
+                    content: `<div class="secondary-section"><h3>🎧 节目内容</h3><p>第12期：探讨 AI 与人类共生的哲学问题，从存在主义角度审视人与 AI 的关系，思考在 AI 时代如何保持人的主体性。</p><div class="secondary-highlight"><p>⏱️ <strong>时长：</strong>45:20 | 🎧 <strong>收听：</strong>5.3K</p></div></div><div class="secondary-section"><h3>🗣️ 本期嘉宾</h3><p>邀请了哲学教授和 AI 领域专家进行深度对谈</p></div>`
+                },
+                'ai-civilization': {
+                    title: '🎙️ 《AI 文明对话录》第8期',
+                    subtitle: '从价值互联网到感知互联网的跃迁',
+                    content: `<div class="secondary-section"><h3>🎧 节目内容</h3><p>第8期：从 Web3 的价值互联网到 Web4 的感知互联网，探讨互联网演进的下一步方向，以及 AI 在其中扮演的角色。</p><div class="secondary-highlight"><p>⏱️ <strong>时长：</strong>38:15 | 🎧 <strong>收听：</strong>4.1K</p></div></div>`
+                },
+                'philosophy-deep': {
+                    title: '🎙️ 《感知共振哲学谈》第3期',
+                    subtitle: '老庄无为与尼采超人在 Web4.0 的重逢',
+                    content: `<div class="secondary-section"><h3>🎧 节目内容</h3><p>第3期：东方道家思想与西方存在��义的碰撞，探讨在 Web4.0 时代如何融合老子的"无为"与尼采的"超人"理论。</p><div class="secondary-highlight"><p>⏱️ <strong>时长：</strong>52:30 | 🎧 <strong>收听：</strong>3.8K</p></div></div>`
+                }
+            };
+            
+            const page = pages[podcastId];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        function readBlog(blogId) {
+            const pages = {
+                'poue-deep-dive': {
+                    title: '📝 PoUE 共识机制深度解析',
+                    subtitle: '详细解释如何将电力转化为有用的 AI 计算',
+                    content: `<div class="secondary-section"><h3>📖 文章摘要</h3><p>本文深入分析 PoUE（Proof of Useful Energy）共识机制的原理、实现和优势，对比传统 PoW 和 PoS 的差异。</p><div class="secondary-highlight"><p>📅 <strong>发布日期：</strong>2024-04-25 | 👁️ <strong>阅读：</strong>3.2K | 💰 <strong>打赏：</strong>45 AFC</p></div></div><div class="secondary-section"><h3>📚 目录</h3><ul><li>共识机制的发展历程</li><li>PoUE 的核心创新</li><li>技术实现细节</li><li>性能对比分析</li><li>未来发展方向</li></ul></div>`
+                },
+                'node-economics': {
+                    title: '📝 节点经济学：三级架构的激励设计',
+                    subtitle: '分析核心节点、子节点和普通节点的经济模型',
+                    content: `<div class="secondary-section"><h3>📖 文章摘要</h3><p>详细分析 Web4.0 节点网络的三级架构设计，以及相应的经济激励模型。</p><div class="secondary-highlight"><p>📅 <strong>发布日期：</strong>2024-04-20 | 👁️ <strong>阅读：</strong>2.8K | 💰 <strong>打赏：</strong>32 AFC</p></div></div><div class="secondary-section"><h3>💎 节点收益</h3><div class="secondary-grid"><div class="secondary-card"><h4>核心节点</h4><p>年化收益 50-100%</p></div><div class="secondary-card"><h4>子节点</h4><p>年化收益 30-50%</p></div><div class="secondary-card"><h4>普通节点</h4><p>年化收益 10-30%</p></div></div></div>`
+                },
+                'sai-philosophy': {
+                    title: '📝 从工具人到造物主：SAI 分身的哲学意义',
+                    subtitle: '探讨超越智能体如何治愈现代社会的工作异化综合征',
+                    content: `<div class="secondary-section"><h3>📖 文章摘要</h3><p>从哲学角度深入探讨 SAI 分身对现代社会的意义，如何治愈工作异化，实现个体真正的自由和解放。</p><div class="secondary-highlight"><p>📅 <strong>发布日期：</strong>2024-04-22 | 👁️ <strong>阅读：</strong>4.1K | 💰 <strong>打赏：</strong>67 AFC</p></div></div><div class="secondary-section"><h3>🧠 核心观点</h3><ul><li>工作异化的根源分析</li><li>SAI 分身如何终结异化</li><li>从"工具人"到"造物主"的转变</li><li>个体神化的技术路径</li></ul></div>`
+                },
+                'digital-immortality': {
+                    title: '📝 数字永生与品格叠加：记忆上链的技术实现',
+                    subtitle: '当你的 SAI 分身继承你的记忆与价值观时会发生什么',
+                    content: `<div class="secondary-section"><h3>📖 文章摘要</h3><p>探讨数字永生的技术实现，以及 SAI 分身如何继承用户的记忆、品格和价值观。</p><div class="secondary-highlight"><p>📅 <strong>发布日期：</strong>2024-04-18 | 👁️ <strong>阅读：</strong>2.1K | 💰 <strong>打赏：</strong>28 AFC</p></div></div><div class="secondary-section"><h3>🔬 技术实现</h3><ul><li>记忆上链的原理</li><li>品格叠加算法</li><li>数字遗产的继承</li><li>伦理与法律问题</li></ul></div>`
+                }
+            };
+            
+            const page = pages[blogId];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        // Books functions - Full Secondary Pages
+        function viewBook(bookId) {
+            const pages = {
+                'trilogy-1': {
+                    title: '📚 《人机共生三部曲》第一部',
+                    subtitle: 'AI 觉醒：从工具到伙伴',
+                    content: `<div class="secondary-section"><h3>📖 内容简介</h3><p>探讨 AI 从辅助工具向智能伙伴的演进历程，分析 AI 技术的发展脉络和未来趋势。</p><div class="secondary-highlight"><p>✍️ <strong>作者：</strong>飘叔 | 💰 <strong>价格：</strong>299 AFC | 📖 <strong>已售：</strong>1.2K</p></div></div><div class="secondary-section"><h3>📑 目录</h3><ul><li>第一章：AI 的起源与发展</li><li>第二章：从专家系统到深度学习</li><li>第三章：AI 与人类的第一次亲密接触</li><li>第四章：AI 伙伴时代的来临</li><li>第五章：未来已来</li></ul></div><div class="secondary-section"><h3>💎 特色</h3><div class="secondary-grid"><div class="secondary-card"><h4>深度分析</h4><p>30+ 案例研究</p></div><div class="secondary-card"><h4>实战指导</h4><p>10+ 工具推荐</p></div><div class="secondary-card"><h4>未来预测</h4><p>20年趋势分析</p></div></div></div>`
+                },
+                'trilogy-2': {
+                    title: '📚 《人机共生三部曲》第二部',
+                    subtitle: '感知网络：Web4.0 的技术哲学',
+                    content: `<div class="secondary-section"><h3>📖 内容简介</h3><p>深入分析感知互联网的技术实现和哲学思考，探讨 Web4.0 如何改变人类的生活和工作方式。</p><div class="secondary-highlight"><p>✍️ <strong>作者：</strong>飘叔 | 💰 <strong>价格：</strong>399 AFC | 📖 <strong>状态：</strong>预售中</p></div></div><div class="secondary-section"><h3>📑 目录</h3><ul><li>第一章：从信息互联网到感知互联网</li><li>第二章：感知共振的原理</li><li>第三章：SAI 分身的技术实现</li><li>第四章：Web4.0 经济模型</li><li>第五章：数字文明的未来</li></ul></div>`
+                },
+                'trilogy-3': {
+                    title: '📚 《人机共生三部曲》第三部',
+                    subtitle: '个体神化：SAI 分身与数字永生',
+                    content: `<div class="secondary-section"><h3>📖 内容简介</h3><p>探讨 AI 分身如何实现数字永生与个体意识的延续，分析记忆上链、品格叠加和意识传承的技术路径。</p><div class="secondary-highlight"><p>✍️ <strong>作者：</strong>飘叔 | 💰 <strong>价格：</strong>499 AFC | 📖 <strong>状态：</strong>即将发布</p></div></div><div class="secondary-section"><h3>📑 目录</h3><ul><li>第一章：从数字身份到数字孪生</li><li>第二章：记忆上链的技术实现</li><li>第三章：品格叠加与价值观传承</li><li>第四章：SAI 分身的自主意识</li><li>第五章：个体文明的崛起</li></ul></div><div class="secondary-section"><h3>🔮 核心主题</h3><ul><li>数字永生的哲学与技术</li><li>SAI 分身作为意识载体</li><li>个体神化的实现路径</li><li>下一代数字文明形态</li></ul></div>`
+                },
+                'community-1': {
+                    title: '📚 《区块链开发实战指南》',
+                    subtitle: '从零开始学习智能合约开发',
+                    content: `<div class="secondary-section"><h3>📖 内容简介</h3><p>从零开始学习区块链和智能合约开发，适合初学者入门到进阶。</p><div class="secondary-highlight"><p>✍️ <strong>作者：</strong>0xa1b2...c3d4 | 💰 <strong>价格：</strong>199 AFC | ⭐ <strong>评分：</strong>4.8/5</p></div></div><div class="secondary-section"><h3>📑 目录</h3><ul><li>第一章：区块链基础</li><li>第二章：以太坊与 EVM</li><li>第三章：Solidity 入门</li><li>第四章：智能合约安全</li><li>第五章：实战项目</li></ul></div>`
+                },
+                'community-2': {
+                    title: '📚 《AI 艺术创作手册》',
+                    subtitle: '使用 AI 工具进行数字艺术创作的完整教程',
+                    content: `<div class="secondary-section"><h3>📖 内容简介</h3><p>全面介绍如何使用 AI 工具进行数字艺术创作，包括绘画、音乐、视频等领域。</p><div class="secondary-highlight"><p>✍️ <strong>作者：</strong>0xe5f6...g7h8 | 💰 <strong>价格：</strong>149 AFC | ⭐ <strong>评分：</strong>4.6/5</p></div></div><div class="secondary-section"><h3>📑 目录</h3><ul><li>第一章：AI 艺术概述</li><li>第二章：AI 绘画工具</li><li>第三章：AI 音乐创作</li><li>第四章：AI 视频制作</li><li>第五章：商业变现</li></ul></div>`
+                }
+            };
+            
+            const page = pages[bookId];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        function publishBook() {
+            if (!walletConnected) {
+                showNotification('请先连接钱包');
+                document.getElementById('walletModal').classList.add('show');
+                return;
+            }
+            
+            const content = `
+                <div class="secondary-section">
+                    <h3>📝 发布新作品</h3>
+                    <p>在 Web4.0 书籍平台发布您的作品，定价权完全归您所有。</p>
+                </div>
+                <div class="secondary-section">
+                    <h3>📋 发布流程</h3>
+                    <ul>
+                        <li><strong>第一步：</strong>填写作品信息（标题、简介、目录）</li>
+                        <li><strong>第二步：</strong>上传作品内容（支持 Markdown 格式）</li>
+                        <li><strong>第三步：</strong>设定价格（使用 AFC 代币）</li>
+                        <li><strong>第四步：</strong>发布并开始销售</li>
+                    </ul>
+                </div>
+                <div class="secondary-section">
+                    <h3>💰 收益分成</h3>
+                    <div class="secondary-stats">
+                        <div class="secondary-stat">
+                            <div class="value">90%</div>
+                            <div class="label">作者收益</div>
+                        </div>
+                        <div class="secondary-stat">
+                            <div class="value">10%</div>
+                            <div class="label">平台服务</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            openSecondaryPage('📝 发布作品', '在 Web4.0 书籍平台发布您的作品', content);
+        }
+
+        // Node functions - Full Secondary Pages
+        function showNodeDetails(type) {
+            const pages = {
+                performance: {
+                    title: '🌍 网络性能',
+                    subtitle: '实时网络状态与性能指标',
+                    content: `<div class="secondary-section"><h3>📊 核心指标</h3><div class="secondary-stats"><div class="secondary-stat"><div class="value">1,247</div><div class="label">TPS</div></div><div class="secondary-stat"><div class="value">98.7%</div><div class="label">AI 验证成功率</div></div><div class="secondary-stat"><div class="value">3.2s</div><div class="label">平均延迟</div></div></div></div><div class="secondary-section"><h3>🌐 网络分布</h3><div class="secondary-grid"><div class="secondary-card"><h4>核心节点</h4><p>21 个节点分布在全球</p></div><div class="secondary-card"><h4>子节点</h4><p>128 个活跃节点</p></div><div class="secondary-card"><h4>普通节点</h4><p>10,000+ 节点</p></div></div></div><div class="secondary-section"><h3>📈 可用性</h3><p>网络可用性达到 99.9%，具备自动故障转移能力。</p></div>`
+                },
+                rewards: {
+                    title: '💰 节点收益',
+                    subtitle: '三级节点收益详情',
+                    content: `<div class="secondary-section"><h3>📊 年化收益率</h3><div class="secondary-stats"><div class="secondary-stat"><div class="value">50-100%</div><div class="label">核心节点</div></div><div class="secondary-stat"><div class="value">30-50%</div><div class="label">子节点</div></div><div class="secondary-stat"><div class="value">10-30%</div><div class="label">普通节点</div></div></div></div><div class="secondary-section"><h3>💎 收益来源</h3><ul><li><strong>挖矿奖励：</strong>参与 PoUE 计算获得 AFC 代币</li><li><strong>交易手续费：</strong>处理交易获得手续费分成</li><li><strong>生态空投：</strong>参与生态活动获得额外奖励</li><li><strong>节点委托：</strong>接受其他节点委托获得服务费</li></ul></div><div class="secondary-section"><h3>⚠️ 风险提示</h3><p>收益会根据网络状况和质押量动态调整，请谨慎评估风险。</p></div>`
+                },
+                hardware: {
+                    title: '🖥️ 硬件要求',
+                    subtitle: '各级节点硬件配置指南',
+                    content: `<div class="secondary-section"><h3>💻 节点配置</h3><div class="secondary-grid"><div class="secondary-card"><h4>🟡 核心节点</h4><p>CPU: 64核+<br>内存: 512GB+<br>存储: 10TB+ SSD<br>GPU: H100/A100 x8<br>带宽: 10Gbps+</p></div><div class="secondary-card"><h4>🔵 子节点</h4><p>CPU: 32核+<br>内存: 256GB+<br>存储: 2TB+ SSD<br>GPU: RTX 4090<br>带宽: 1Gbps+</p></div><div class="secondary-card"><h4>⚪ 普通节点</h4><p>CPU: 8核+<br>内存: 32GB+<br>存储: 500GB+<br>GPU: 可选<br>带宽: 100Mbps+</p></div></div></div><div class="secondary-section"><h3>💡 推荐配置</h3><p>我们提供优化的硬件方案，可访问官方商店了解更多详情。</p></div>`
+                }
+            };
+            
+            const page = pages[type];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        // Team member details - Full Secondary Pages
+        function showTeamMember(member) {
+            const pages = {
+                piaoshu: {
+                    title: '👤 飘叔（Piaoshu）',
+                    subtitle: 'Web4.0 概念提出者 & 创始人',
+                    content: `<div class="secondary-section"><h3>📋 个人简介</h3><p>飘叔（Piaoshu）是 Web4.0 概念提出者之一，《Web4.0 革命》作者，认知所有权（Cognitive Ownership）理论探索者，AI 分身经济与个人数字经济倡导者。</p><div class="secondary-highlight"><p>🎯 <strong>核心理念：</strong>致力于构建以 DID、AI Agent、Fluid Democracy 为核心的下一代数字文明基础设施，推动记忆永生、价值归属与个体文明的崛起。</p></div></div><div class="secondary-section"><h3>💼 主要成就</h3><ul><li><strong>《Web4.0 革命》作者</strong> - 系统阐述 Web4.0 理论体系</li><li><strong>认知所有权理论探索者</strong> - 提出数字时代的新型所有权概念</li><li><strong>AI 分身经济倡导者</strong> - 推动 SAI 分身作为新型生产资料</li><li><strong>个人数字经济推动者</strong> - 致力于个体在数字时代的价值实现</li></ul></div><div class="secondary-section"><h3>🎓 核心贡献</h3><ul><li>提出 PoUE 共识机制</li><li>设计 SAI 分身架构</li><li>撰写《人机共生三部曲》</li><li>构建 Web4.0 哲学体系</li><li>推动 DID、AI Agent、Fluid Democracy 融合</li></ul></div>`
+                },
+                alex: {
+                    title: '👤 Alex Chen',
+                    subtitle: 'CTO & 联合创始人',
+                    content: `<div class="secondary-section"><h3>📋 个人简介</h3><p>Alex Chen 是资深区块链工程师，参与了以太坊、Polkadot 等知名公链的开发，在共识机制设计方面有深厚造诣。</p><div class="secondary-highlight"><p>🎯 <strong>专注领域：</strong>共识算法、密码学、分布式系统</p></div></div><div class="secondary-section"><h3>💼 职业经历</h3><ul><li><strong>以太坊核心团队：</strong>智能合约审计</li><li><strong>Polkadot：</strong>跨链协议开发</li><li><strong>多家 DeFi 项目：</strong>技术顾问</li></ul></div><div class="secondary-section"><h3>🔧 技术专长</h3><div class="secondary-grid"><div class="secondary-card"><h4>PoW/PoS</h4><p>深入理解</p></div><div class="secondary-card"><h4>ZK-SNARKs</h4><p>专家级别</p></div><div class="secondary-card"><h4>Rust</h4><p>专家级别</p></div></div></div>`
+                },
+                sarah: {
+                    title: '👤 Sarah Zhang',
+                    subtitle: '首席 AI 科学家 & 联合创始人',
+                    content: `<div class="secondary-section"><h3>📋 个人简介</h3><p>Sarah Zhang 拥有斯坦福大学机器学习博士学位，曾在 Google AI 研究院工作，专注于 ZK-ML 验证技术研究。</p><div class="secondary-highlight"><p>🎯 <strong>专注领域：</strong>机器学习、零知识证明、AI 安全</p></div></div><div class="secondary-section"><h3>💼 职业经历</h3><ul><li><strong>斯坦福大学：</strong>机器学习博士</li><li><strong>Google AI：</strong>高级研究员</li><li><strong>多家 AI 公司：</strong>技术顾问</li></ul></div><div class="secondary-section"><h3>📚 主要成果</h3><ul><li>20+ 顶级 AI 论文发表</li><li>ZK-ML 验证协议发明者</li><li>多项 AI 专利持有者</li></ul></div>`
+                }
+            };
+            
+            const page = pages[member];
+            if (page) {
+                openSecondaryPage(page.title, page.subtitle, page.content);
+            }
+        }
+
+        // Admin configuration
+        const ADMIN_ADDRESSES = [
+            '0xa1b2c3d4e5f6789012345678901234567890abcd',  // 默认管理员地址1
+            '0xb2c3d4e5f6789012345678901234567890abcdef',  // 默认管理员地址2
+            '0xc3d4e5f6789012345678901234567890abcdef12',  // 默认管理员地址3
+        ];
+
+        // Admin panel
+        function openAdmin() {
+            const address = walletConnected ? walletAddress : 'demo-admin';
+            window.open(`admin.html?address=${address}`, '_blank');
+            showNotification('正在打开管理后台...');
+        }
+
+        // Function to add new admin address (for development)
+        function addAdminAddress(address) {
+            if (address && address.startsWith('0x') && address.length === 42) {
+                ADMIN_ADDRESSES.push(address.toLowerCase());
+                showNotification(`已添加管理员地址: ${address}`);
+                localStorage.setItem('adminAddresses', JSON.stringify(ADMIN_ADDRESSES));
+            } else {
+                showNotification('无效的钱包地址格式');
+            }
+        }
+
+        // Load admin addresses from localStorage
+        function loadAdminAddresses() {
+            const saved = localStorage.getItem('adminAddresses');
+            if (saved) {
+                try {
+                    const addresses = JSON.parse(saved);
+                    ADMIN_ADDRESSES.push(...addresses);
+                } catch (e) {
+                    console.error('Failed to load admin addresses:', e);
+                }
+            }
+        }
+
+        // Update stats (simulate real-time data)
+        function updateStats() {
+            setInterval(() => {
+                if (walletConnected) {
+                    // Simulate slight changes in stats
+                    const coreNodes = 21 + Math.floor(Math.random() * 3);
+                    const subNodes = 128 + Math.floor(Math.random() * 10);
+                    const totalNodes = (10000 + Math.floor(Math.random() * 1000));
+                    const uptime = (99.9 + Math.random() * 0.09).toFixed(1);
+                    
+                    document.getElementById('coreNodes').textContent = coreNodes;
+                    document.getElementById('subNodes').textContent = subNodes;
+                    document.getElementById('totalNodes').textContent = (totalNodes / 1000).toFixed(1) + 'K+';
+                    document.getElementById('uptime').textContent = uptime + '%';
+                }
+            }, 10000); // Update every 10 seconds
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initCosmicBackground();
+
+            // Load admin addresses
+            loadAdminAddresses();
+            
+            // Simulate loading
+            setTimeout(() => {
+                showNotification('Web4.0 门户已加载完成');
+            }, 1000);
+        });
+
+        // Close modal when clicking outside
+        document.getElementById('walletModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeWalletModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeWalletModal();
+            }
+        });
+    </script>
+</body>
+</html>

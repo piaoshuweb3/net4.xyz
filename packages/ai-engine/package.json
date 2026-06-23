@@ -1,0 +1,21 @@
+{
+  "name": "@net4xyz/ai-engine",
+  "version": "1.0.0",
+  "description": "net4.xyz AI 引擎 - Python + LangChain + Ollama",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "python -m uvicorn src.main:app --reload",
+    "start": "python -m uvicorn src.main:app --host 0.0.0.0 --port 8000",
+    "test": "pytest",
+    "test:cov": "pytest --cov",
+    "lint": "ruff check .",
+    "format": "ruff format .",
+    "clean": "rm -rf __pycache__ .pytest_cache .coverage dist"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0",
+    "python": ">=3.10"
+  }
+}

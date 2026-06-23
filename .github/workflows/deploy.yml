@@ -1,0 +1,158 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main, develop]
+  release:
+    types: [published]
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
+
+jobs:
+  # Preview deployment for develop branch
+  deploy-preview:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: cd packages/frontend && pnpm install --frozen-lockfile
+      
+      - name: Build
+        run: cd packages/frontend && pnpm build
+      
+      - name: Deploy to Vercel (Preview)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prebuilt'
+        env:
+          VERCEL_DEPLOYMENT_PR_TITLE: ${{ github.event.head_commit.message }}
+          VERCEL_DEPLOYMENT_PR_COMMENT: false
+
+  # Production deployment for main branch
+  deploy-frontend:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: cd packages/frontend && pnpm install --frozen-lockfile
+      
+      - name: Build
+        run: cd packages/frontend && pnpm build
+      
+      - name: Deploy to Vercel (Production)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod --prebuilt'
+
+  # Deploy contracts on release
+  deploy-contracts:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'release'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: cd packages/contracts && pnpm install --frozen-lockfile
+      
+      - name: Compile contracts
+        run: cd packages/contracts && pnpm build
+      
+      - name: Deploy to Base Mainnet
+        run: |
+          cd packages/contracts
+          forge script script/Deploy.s.sol:DeployScript --rpc-url ${{ secrets.BASE_RPC_URL }} --private-key ${{ secrets.DEPLOYER_PRIVATE_KEY }} --broadcast --verify
+        env:
+          ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+      
+      - name: Verify contracts
+        run: |
+          cd packages/contracts
+          forge verify-contract <CONTRACT_ADDRESS> <CONTRACT_NAME> --etherscan-api-key ${{ secrets.ETHERSCAN_API_KEY }}
+
+  # Deploy backend to production
+  deploy-backend:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: |
+          cd packages/shared && pnpm install --frozen-lockfile
+          cd packages/backend && pnpm install --frozen-lockfile
+      
+      - name: Build
+        run: |
+          cd packages/shared && pnpm build
+          cd packages/backend && pnpm build
+      
+      - name: Deploy to Render/Railway/Render
+        uses: jakejarvis/heroku-deploy-action@master
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_BACKEND_APP }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+        env:
+          DEPLOY: "true"

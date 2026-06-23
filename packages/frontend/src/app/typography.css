@@ -1,0 +1,317 @@
+/* ============ 赛博朋克排版系统 v2.0 ============ */
+/* 基于 8-point grid 设计，优化文字协调性 */
+
+/* ============ 1. 排版层级系统 ============ */
+/* 
+ * 标题层级：
+ * H1: 48px/3rem - Hero 主标题
+ * H2: 36px/2.25rem - Section 标题
+ * H3: 24px/1.5rem - Card 标题
+ * H4: 20px/1.25rem - 小标题
+ */
+
+/* 主标题 H1 */
+.text-h1 {
+  font-family: 'Orbitron', 'Rajdhani', system-ui, sans-serif;
+  font-size: 3rem;          /* 48px */
+  font-weight: 900;
+  line-height: 1.2;         /* 优化行高 */
+  letter-spacing: 0.05em;  /* 增加字间距提升未来感 */
+  text-shadow: 
+    0 0 10px rgba(176, 38, 255, 0.6),
+    0 0 20px rgba(176, 38, 255, 0.4),
+    0 0 30px rgba(176, 38, 255, 0.2);
+}
+
+/* Section 标题 H2 */
+.text-h2 {
+  font-family: 'Orbitron', 'Rajdhani', system-ui, sans-serif;
+  font-size: 2.25rem;      /* 36px */
+  font-weight: 700;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  text-shadow: 
+    0 0 8px rgba(176, 38, 255, 0.5),
+    0 0 16px rgba(176, 38, 255, 0.3);
+}
+
+/* 卡片标题 H3 */
+.text-h3 {
+  font-family: 'Orbitron', 'Rajdhani', system-ui, sans-serif;
+  font-size: 1.5rem;       /* 24px */
+  font-weight: 700;
+  line-height: 1.4;
+  letter-spacing: 0.03em;
+  text-shadow: 0 0 6px rgba(176, 38, 255, 0.4);
+}
+
+/* 卡片标题 H4 - 优化：减小字号适配卡片 */
+.text-h4 {
+  font-family: 'Orbitron', 'Rajdhani', system-ui, sans-serif;
+  font-size: 1.125rem;    /* 18px - 减小从 20px */
+  font-weight: 600;
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+}
+
+/* Stats 数字 - 新增：用于统计数据 */
+.text-stat {
+  font-family: 'Orbitron', 'Rajdhani', system-ui, sans-serif;
+  font-size: 2.25rem;    /* 36px - Stats 数字需要突出 */
+  font-weight: 900;
+  line-height: 1.2;
+  letter-spacing: 0.05em;
+  color: #FFFFFF;
+  text-shadow: 
+    0 0 10px rgba(176, 38, 255, 0.8),
+    0 0 20px rgba(176, 38, 255, 0.6),
+    0 0 30px rgba(176, 38, 255, 0.4);
+  will-change: text-shadow;
+  transform: translateZ(0);
+}
+
+/* 响应式：Stats 数字在手机端缩小 */
+@media (max-width: 640px) {
+  .text-stat {
+    font-size: 1.875rem;  /* 30px */
+  }
+}
+
+/* ============ 2. 正文排版系统 ============ */
+/* 
+ * 大正文: 18px/1.125rem - Lead 段落
+ * 正文: 16px/1rem - 标准正文
+ * 小正文: 14px/0.875rem - 辅助文字
+ * 说明文字: 12px/0.75rem - 标签、备注
+ */
+
+/* 大正文（Lead） */
+.text-lead {
+  font-size: 1.125rem;     /* 18px */
+  line-height: 1.8;        /* 增加行高提升可读性 */
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+/* 标准正文 */
+.text-body {
+  font-size: 1rem;         /* 16px */
+  line-height: 1.75;       /* 优化行高：1.75 = 28px */
+  letter-spacing: 0.015em; /* 微调字间距 */
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* 小正文（辅助文字）- 优化：增大行高改善中文排版 */
+.text-small {
+  font-size: 0.875rem;     /* 14px */
+  line-height: 2;           /* 优化：从 1.6 提升到 2.0 */
+  letter-spacing: 0.01em;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* 说明文字（标签、备注） */
+.text-caption {
+  font-size: 0.75rem;     /* 12px */
+  line-height: 1.5;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+/* ============ 3. 间距系统（8-point grid） ============ */
+/* 
+ * 基于 8px 倍数：8, 16, 24, 32, 48, 64, 96, 128
+ * 用于：margin, padding, gap
+ */
+
+/* 段落间距 */
+.space-section {
+  margin-bottom: 4rem;     /* 64px - Section 之间 */
+}
+
+.space-block {
+  margin-bottom: 2rem;     /* 32px - 内容块之间 */
+}
+
+.space-element {
+  margin-bottom: 1rem;     /* 16px - 元素之间 */
+}
+
+.space-tight {
+  margin-bottom: 0.5rem;   /* 8px - 紧凑间距 */
+}
+
+/* 内边距规范 */
+.pad-section {
+  padding: 4rem 2rem;     /* 64px 32px */
+}
+
+.pad-card {
+  padding: 2rem;           /* 32px */
+}
+
+.pad-element {
+  padding: 1rem;           /* 16px */
+}
+
+/* ============ 4. 内容布局系统 ============ */
+
+/* Section 容器 */
+.section-container {
+  max-width: 1200px;       /* 统一最大宽度 */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 2rem;      /* 32px */
+  padding-right: 2rem;
+}
+
+/* 内容居中对齐 */
+.content-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* 网格布局规范 */
+.grid-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;               /* 32px */
+}
+
+.grid-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;             /* 24px */
+}
+
+/* ============ 5. 视觉引导元素 ============ */
+
+/* 分隔线 */
+.divider-glow {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(176, 38, 255, 0.5) 50%,
+    transparent 100%
+  );
+  margin: 3rem 0;          /* 48px */
+  box-shadow: 0 0 8px rgba(176, 38, 255, 0.3);
+}
+
+/* 装饰性箭头/引导 */
+.scroll-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+  color: rgba(176, 38, 255, 0.6);
+  font-size: 0.875rem;
+  animation: float 3s ease-in-out infinite;
+}
+
+/* ============ 6. 响应式排版 ============ */
+
+/* 大屏幕优化：限制 Hero H1 字号 */
+@media (min-width: 1280px) {
+  .text-h1 {
+    font-size: 3.5rem;     /* 56px - 限制最大字号 */
+  }
+}
+
+/* 平板适配 */
+@media (max-width: 1024px) {
+  .text-h1 {
+    font-size: 2.5rem;     /* 40px */
+  }
+  
+  .text-h2 {
+    font-size: 2rem;       /* 32px */
+  }
+  
+  .section-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+/* 手机适配 */
+@media (max-width: 640px) {
+  .text-h1 {
+    font-size: 2rem;       /* 32px */
+    line-height: 1.2;
+  }
+  
+  .text-h2 {
+    font-size: 1.5rem;     /* 24px */
+  }
+  
+  .text-body {
+    font-size: 0.938rem;   /* 15px - 手机端略微缩小 */
+    line-height: 1.7;
+  }
+  
+  .section-container {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .grid-features {
+    grid-template-columns: 1fr;  /* 手机端单列 */
+  }
+}
+
+/* ============ 7. 性能优化 ============ */
+.text-h1,
+.text-h2,
+.text-h3,
+.text-h4 {
+  will-change: text-shadow;
+  transform: translateZ(0);  /* GPU 加速 */
+}
+
+/* ============ 8. 无障碍优化 ============ */
+@media (prefers-reduced-motion: reduce) {
+  .text-h1,
+  .text-h2,
+  .text-h3 {
+    text-shadow: none !important;
+  }
+  
+  .scroll-hint {
+    animation: none !important;
+  }
+}
+
+/* ============ 9. 中英文混排优化 ============ */
+.text-body,
+.text-lead,
+.text-small {
+  /* 优化中文排版 */
+  text-align: justify;
+  text-justify: inter-ideograph;
+  
+  /* 避免寡字孤行 */
+  orphans: 2;
+  widows: 2;
+}
+
+/* ============ 10. 应用示例 ============ */
+/*
+ * 使用方法：
+ * 
+ * <h1 className="text-h1">主标题</h1>
+ * <p className="text-lead">引导段落</p>
+ * <p className="text-body">正文内容</p>
+ * <p className="text-small">辅助说明</p>
+ * 
+ * <div className="section-container space-section">
+ *   <h2 className="text-h2">Section 标题</h2>
+ *   <div className="grid-features">
+ *     <!-- 卡片内容 -->
+ *   </div>
+ * </div>
+ */

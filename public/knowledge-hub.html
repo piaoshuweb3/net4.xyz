@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web4.0 知识中枢 - net4.xyz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0f;
+            color: white;
+            font-family: 'Inter', 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            background: linear-gradient(to right, #b026ff, #ff69b4, #00ffff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            color: #aaa;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            color: #ccc;
+        }
+        
+        .nav-tab:hover, .nav-tab.active {
+            background: rgba(176, 38, 255, 0.2);
+            border-color: #b026ff;
+            color: white;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+        }
+        
+        .knowledge-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .knowledge-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .knowledge-card:hover {
+            border-color: #b026ff;
+            background: rgba(176, 38, 255, 0.1);
+            transform: translateY(-5px);
+        }
+        
+        .knowledge-card h3 {
+            color: #b026ff;
+            margin-bottom: 1rem;
+            font-size: 1.25rem;
+        }
+        
+        .knowledge-card p {
+            color: #aaa;
+            margin-bottom: 1rem;
+        }
+        
+        .knowledge-card .meta {
+            font-size: 0.875rem;
+            color: #666;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .tag {
+            background: rgba(176, 38, 255, 0.2);
+            color: #b026ff;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+        }
+        
+        .back-btn {
+            position: fixed;
+            top: 2rem;
+            left: 2rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .back-btn:hover {
+            background: rgba(176, 38, 255, 0.2);
+            border-color: #b026ff;
+        }
+        
+        .search-box {
+            max-width: 600px;
+            margin: 0 auto 3rem;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .search-input::placeholder {
+            color: #888;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .nav-tabs {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .knowledge-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="/" class="back-btn">← 返回主页</a>
+    
+    <div class="container">
+        <div class="header">
+            <h1>Web4.0 知识中枢</h1>
+            <p>探索感知共振时代的哲学思辨、技术架构与未来愿景</p>
+        </div>
+        
+        <div class="search-box">
+            <input type="text" class="search-input" id="searchInput" placeholder="搜索知识内容...">
+        </div>
+        
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="showSection('philosophy')">🧠 哲学思辨</div>
+            <div class="nav-tab" onclick="showSection('technology')">⚡ 技术架构</div>
+            <div class="nav-tab" onclick="showSection('economics')">💰 经济模型</div>
+            <div class="nav-tab" onclick="showSection('governance')">🏛️ 治理机制</div>
+            <div class="nav-tab" onclick="showSection('applications')">🚀 应用场景</div>
+        </div>
+        
+        <!-- 哲学思辨部分 -->
+        <div id="philosophy" class="content-section active">
+            <div class="knowledge-grid">
+                <div class="knowledge-card" onclick="openDocument('/web4-philosophy.html')">
+                    <h3>🧠 感知共振与个体神化</h3>
+                    <p>基于马克思主义+哲学+系统论的宏大叙事框架，探讨Web4.0时代的人文精神与个体解放。</p>
+                    <div class="meta">
+                        <span class="tag">完整文档</span>
+                        <span>5章节 | 深度阅读</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('sai')">
+                    <h3>🤖 SAI分身：超越智能体</h3>
+                    <p>区别于AI代理的个人数字孪生，承载记忆、品格和价值观的技术载体。</p>
+                    <div class="meta">
+                        <span class="tag">核心概念</span>
+                        <span>个体神化</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('marx')">
+                    <h3>👻 马克思的幽灵与第四种生产资料</h3>
+                    <p>SAI分身作为可无限复制的私有生产资料，打破传统资本雇佣关系。</p>
+                    <div class="meta">
+                        <span class="tag">经济哲学</span>
+                        <span>阶级跨越</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('laozi')">
+                    <h3>🌿 老子的无为与小国寡民</h3>
+                    <p>Web4.0时代的"小国寡民"赛博复兴，让分身去卷，让人类去活。</p>
+                    <div class="meta">
+                        <span class="tag">东方哲学</span>
+                        <span>无为而治</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('nietzsche')">
+                    <h3>⚡ 尼采的超人与末人陷阱</h3>
+                    <p>SAI分身是推向"超人"的弹射器，而非变成"末人"的温床。</p>
+                    <div class="meta">
+                        <span class="tag">西方哲学</span>
+                        <span>个体超越</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('immortality')">
+                    <h3>♾️ 数字永生与品格叠加</h3>
+                    <p>记忆上链与品格哈希，实现真正的数字永生和灵魂传承。</p>
+                    <div class="meta">
+                        <span class="tag">未来愿景</span>
+                        <span>永生技术</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 技术架构部分 -->
+        <div id="technology" class="content-section">
+            <div class="knowledge-grid">
+                <div class="knowledge-card" onclick="showConcept('poue')">
+                    <h3>⚡ PoUE共识机制</h3>
+                    <p>有用价值证明，将电力转化为对人类有用的AI计算，摒弃算力浪费。</p>
+                    <div class="meta">
+                        <span class="tag">核心技术</span>
+                        <span>共识算法</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('resonance')">
+                    <h3>🌊 感知共振网络</h3>
+                    <p>如量子纠缠般的瞬时匹配，实现需求与供给的零摩擦对接。</p>
+                    <div class="meta">
+                        <span class="tag">网络协议</span>
+                        <span>量子启发</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('zkml')">
+                    <h3>🔐 ZK-ML验证</h3>
+                    <p>零知识机器学习验证，确保AI计算的真实性而不暴露数据。</p>
+                    <div class="meta">
+                        <span class="tag">隐私技术</span>
+                        <span>零知识证明</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('nodes')">
+                    <h3>🌐 三级节点架构</h3>
+                    <p>21个核心节点、128个子节点、1万个普通节点的分层治理体系。</p>
+                    <div class="meta">
+                        <span class="tag">网络架构</span>
+                        <span>去中心化</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 经济模型部分 -->
+        <div id="economics" class="content-section">
+            <div class="knowledge-grid">
+                <div class="knowledge-card" onclick="showConcept('micropayment')">
+                    <h3>💸 微支付革命</h3>
+                    <p>原子级经济交易，高频协作，瓦解传统企业的科层制结构。</p>
+                    <div class="meta">
+                        <span class="tag">新经济</span>
+                        <span>微观交易</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('attention')">
+                    <h3>👁️ 注意力经济</h3>
+                    <p>注意力变现与情绪定价，人类体验成为最昂贵的交易标的。</p>
+                    <div class="meta">
+                        <span class="tag">价值重构</span>
+                        <span>情绪资产</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('membership')">
+                    <h3>🎫 三级会员体系</h3>
+                    <p>初级($99)、中级($999)、高级($9999)的年费制会员权益设计。</p>
+                    <div class="meta">
+                        <span class="tag">商业模式</span>
+                        <span>会员制</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 治理机制部分 -->
+        <div id="governance" class="content-section">
+            <div class="knowledge-grid">
+                <div class="knowledge-card" onclick="showConcept('pdao')">
+                    <h3>🏛️ pDAO个人流体民主</h3>
+                    <p>每个人都是自己的主权者，通过SAI分身参与去中心化治理。</p>
+                    <div class="meta">
+                        <span class="tag">治理创新</span>
+                        <span>流体民主</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('sai-judge')">
+                    <h3>⚖️ SAI法官系统</h3>
+                    <p>代码即法律，SAI即法官，实现德治与法治的完美结合。</p>
+                    <div class="meta">
+                        <span class="tag">司法系统</span>
+                        <span>AI治理</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('community')">
+                    <h3>🌍 感知社区</h3>
+                    <p>基于感知频率的新型社会契约，国家边界的模糊与社区崛起。</p>
+                    <div class="meta">
+                        <span class="tag">社会重构</span>
+                        <span>社区治理</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 应用场景部分 -->
+        <div id="applications" class="content-section">
+            <div class="knowledge-grid">
+                <div class="knowledge-card" onclick="showConcept('dns')">
+                    <h3>🌐 Web4 DNS系统</h3>
+                    <p>去中心化域名解析，.web4域名的NFT化与永久拥有。</p>
+                    <div class="meta">
+                        <span class="tag">基础设施</span>
+                        <span>域名系统</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('social')">
+                    <h3>💬 分布式社交</h3>
+                    <p>Mirrome.me平台，基于DID的端到端加密社交应用。</p>
+                    <div class="meta">
+                        <span class="tag">社交应用</span>
+                        <span>隐私保护</span>
+                    </div>
+                </div>
+                
+                <div class="knowledge-card" onclick="showConcept('publishing')">
+                    <h3>📚 去中心化出版</h3>
+                    <p>书籍平台的版权NFT化，创作者获得完整的价值分配权。</p>
+                    <div class="meta">
+                        <span class="tag">内容创作</span>
+                        <span>版权保护</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function showSection(sectionId) {
+            // 隐藏所有内容区域
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // 移除所有标签的激活状态
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // 显示选中的内容区域
+            document.getElementById(sectionId).classList.add('active');
+            
+            // 激活对应的标签
+            event.target.classList.add('active');
+        }
+        
+        function openDocument(url) {
+            window.open(url, '_blank');
+        }
+        
+        function showConcept(conceptId) {
+            const concepts = {
+                sai: 'SAI（超越智能体）是Web4.0的核心创新，它不是工具而是你的数字孪生，承载着记忆、品格和价值观。',
+                marx: '马克思未曾预见的第四种生产资料——SAI分身，可无限复制且永远属于个体，打破资本雇佣关系。',
+                laozi: '老子的"小国寡民"在Web4.0时代获得新诠释：SAI分身连接全球资源，个体可在任何地方实现无为而治。',
+                nietzsche: '尼采的"超人"理论在SAI时代得到终极印证，SAI分身是推向超人的弹射器而非末人的温床。',
+                immortality: '通过记忆上链与品格哈希，实现真正的数字永生，让品格和智慧得以永续传承。',
+                poue: 'PoUE（有用价值证明）摒弃算力浪费，基于行为、创造力和品格进行价值评估。',
+                resonance: '感知共振网络如量子纠缠般实现需求与供给的瞬时匹配，消除搜索和中介。',
+                zkml: 'ZK-ML验证确保AI计算真实性的同时保护数据隐私，防止节点作弊。',
+                nodes: '三级节点架构：21个核心节点、128个子节点、1万个普通节点，形成去中心化治理体系。',
+                micropayment: '微支付革命实现原子级经济交易，瓦解传统企业的科层制结构。',
+                attention: '注意力变现与情绪定价，人类的体验和情感成为最昂贵的交易标的。',
+                membership: '三级会员体系：初级$99、中级$999、高级$9999，提供不同层次的权益和服务。',
+                pdao: 'pDAO（个人流体民主制）让每个人都是自己的主权者，通过SAI分身参与治理。',
+                'sai-judge': 'SAI法官系统实现"代码即法律，SAI即法官"，结合德治与法治。',
+                community: '基于感知频率的新型社会契约，国家边界模糊，感知社区崛起。',
+                dns: 'Web4 DNS系统提供去中心化域名解析，.web4域名NFT化实现永久拥有。',
+                social: 'Mirrome.me分布式社交平台，基于DID的端到端加密通信。',
+                publishing: '去中心化出版平台，版权NFT化让创作者获得完整的价值分配权。'
+            };
+            
+            alert(concepts[conceptId] || '概念详情正在完善中...');
+        }
+        
+        // 搜索功能
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const cards = document.querySelectorAll('.knowledge-card');
+            
+            cards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const content = card.querySelector('p').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || content.includes(searchTerm)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = searchTerm ? 'none' : 'block';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

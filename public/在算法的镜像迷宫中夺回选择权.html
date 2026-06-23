@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web 4.0 分身社交：在算法的镜像迷宫中夺回选择权</title>
+    
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入 Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    
+    <!-- 字体配置 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        cyber: {
+                            black: '#050505',
+                            dark: '#0a0a0f',
+                            panel: '#121218',
+                            cyan: '#00f3ff',
+                            pink: '#ff00ff',
+                            amber: '#ffaa00',
+                            dim: '#8892b0'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 2s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            'from': { boxShadow: '0 0 10px -10px #00f3ff' },
+                            'to': { boxShadow: '0 0 20px 5px #00f3ff' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            overflow-x: hidden;
+        }
+
+        /* 滚动条美化 */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0a0a0f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #00f3ff;
+        }
+
+        /* 玻璃拟态卡片 */
+        .glass-panel {
+            background: rgba(18, 18, 24, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        /* 代码块样式 */
+        .code-block {
+            background: #0d0d12;
+            border-left: 3px solid #ff00ff;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            color: #a5b4fc;
+            overflow-x: auto;
+        }
+
+        /* 文字高亮 */
+        .highlight-cyan { color: #00f3ff; text-shadow: 0 0 5px rgba(0, 243, 255, 0.5); }
+        .highlight-pink { color: #ff00ff; text-shadow: 0 0 5px rgba(255, 0, 255, 0.5); }
+        .highlight-amber { color: #ffaa00; text-shadow: 0 0 5px rgba(255, 170, 0, 0.5); }
+
+        /* 滚动显现动画 */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* 3D 背景容器 */
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            pointer-events: all; /* 允许拖拽交互 */
+        }
+        
+        /* 进度条 */
+        #progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #00f3ff, #ff00ff);
+            width: 0%;
+            z-index: 100;
+            box-shadow: 0 0 10px rgba(255, 0, 255, 0.7);
+        }
+    </style>
+</head>
+<body class="antialiased selection:bg-cyber-cyan selection:text-black">
+
+    <!-- 3D 背景 -->
+    <div id="canvas-container"></div>
+    
+    <!-- 阅读进度条 -->
+    <div id="progress-bar"></div>
+
+    <!-- 导航浮层 -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b-0 border-b-white/5 px-6 py-4 flex justify-between items-center transition-all duration-300" id="navbar">
+        <div class="text-cyber-cyan font-mono font-bold text-lg tracking-tighter">WEB_4.0 // AVATAR_PROTOCOL</div>
+        <div class="hidden md:flex space-x-6 text-sm font-medium text-cyber-dim">
+            <a href="#intro" class="hover:text-white transition-colors">引言</a>
+            <a href="#ch1" class="hover:text-cyber-pink transition-colors">神经解剖</a>
+            <a href="#ch2" class="hover:text-cyber-amber transition-colors">认知伪装</a>
+            <a href="#ch3" class="hover:text-red-500 transition-colors">操纵升级</a>
+            <a href="#ch4" class="hover:text-cyber-cyan transition-colors">觉醒之路</a>
+            <a href="#ch5" class="hover:text-green-400 transition-colors">实操指南</a>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="relative z-10 pt-20 pb-20 px-4 md:px-8 max-w-5xl mx-auto space-y-32">
+
+        <!-- Hero Section -->
+        <section id="intro" class="min-h-[90vh] flex flex-col justify-center items-start pt-10">
+            <div class="reveal active inline-block mb-4 px-3 py-1 border border-cyber-cyan/30 rounded-full bg-cyber-cyan/10 text-cyber-cyan text-xs font-mono tracking-widest">
+                神经科学的 Web 4.0 时代
+            </div>
+            <h1 class="reveal active text-5xl md:text-7xl font-extrabold tracking-tight mb-6 leading-tight">
+                Web 4.0 分身社交：<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan via-white to-cyber-pink">
+                    在算法的镜像迷宫中夺回选择权
+                </span>
+            </h1>
+            <p class="reveal active text-xl md:text-2xl text-cyber-dim max-w-3xl font-light leading-relaxed mb-10">
+                当“我”不再唯一。我们探讨了数字分身背后的基因算法与硅基算法的剧烈碰撞，以及在虚实共生中夺回“本体性自由”的终极路径。
+            </p>
+            <div class="reveal active flex gap-4">
+                <button onclick="document.getElementById('ch1').scrollIntoView({behavior: 'smooth'})" class="group relative px-8 py-3 bg-cyber-cyan text-black font-bold font-mono uppercase overflow-hidden">
+                    <span class="relative z-10 group-hover:text-white transition-colors duration-300">开始潜入</span>
+                    <div class="absolute inset-0 bg-black transform scale-x-0 origin-left group-hover:scale-x-100 transition-transform duration-300 ease-out"></div>
+                </button>
+                <button onclick="document.getElementById('ch5').scrollIntoView({behavior: 'smooth'})" class="px-8 py-3 border border-white/20 hover:border-cyber-cyan text-white font-mono uppercase transition-all hover:text-cyber-cyan">
+                    实操指南
+                </button>
+            </div>
+        </section>
+
+        <!-- Chapter 1 -->
+        <section id="ch1" class="reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="text-6xl font-black text-white/5 select-none">01</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">颅骨里的“大脑公司”<br><span class="text-cyber-pink text-xl md:text-2xl font-normal">Web 4.0 的神经解剖学</span></h2>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Dopamine -->
+                <div class="glass-panel p-6 rounded-xl hover:border-cyber-pink/50 transition-all duration-300 group hover:-translate-y-2">
+                    <div class="h-1 w-12 bg-cyber-pink mb-4 group-hover:w-full transition-all duration-500"></div>
+                    <h3 class="text-xl font-bold mb-2 text-white group-hover:text-cyber-pink transition-colors">多巴胺 (Dopamine)</h3>
+                    <p class="text-sm font-mono text-cyber-pink mb-4 uppercase">激情推销员 / 增长黑客</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        在 Web 4.0 中，多巴胺找到了完美的宿主。它不再只负责“期待”，而是通过 Token、NFT 和虚拟地产的暴涨直接兑现这种期待。
+                    </p>
+                </div>
+
+                <!-- Amygdala -->
+                <div class="glass-panel p-6 rounded-xl hover:border-cyber-amber/50 transition-all duration-300 group hover:-translate-y-2">
+                    <div class="h-1 w-12 bg-cyber-amber mb-4 group-hover:w-full transition-all duration-500"></div>
+                    <h3 class="text-xl font-bold mb-2 text-white group-hover:text-cyber-amber transition-colors">杏仁核</h3>
+                    <p class="text-sm font-mono text-cyber-amber mb-4 uppercase">风控保安 / 随身报警器</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        面对“永久性数字记录”和“社会性死亡”的威胁，杏仁核无法分辨物理死亡和数字声誉受损。它释放皮质醇，迫使我们不断维护脆弱的数字人设。
+                    </p>
+                </div>
+
+                <!-- Prefrontal Cortex -->
+                <div class="glass-panel p-6 rounded-xl hover:border-cyber-cyan/50 transition-all duration-300 group hover:-translate-y-2">
+                    <div class="h-1 w-12 bg-cyber-cyan mb-4 group-hover:w-full transition-all duration-500"></div>
+                    <h3 class="text-xl font-bold mb-2 text-white group-hover:text-cyber-cyan transition-colors">前额叶 (PFC)</h3>
+                    <p class="text-sm font-mono text-cyber-cyan mb-4 uppercase">理性 CEO / 决策中枢</p>
+                    <p class="text-gray-400 text-sm leading-relaxed">
+                        试图同时驾驶十辆赛车（管理多个分身）。当理性疲劳时，CEO 下班了，分身开始失控。
+                    </p>
+                </div>
+            </div>
+
+            <div class="mt-12 glass-panel p-6 rounded-lg">
+                <p class="mb-4 text-gray-300">
+                    <strong class="text-white">技术映射：</strong> 变比率强化程序
+                </p>
+                <div class="code-block p-4 rounded">
+<pre>
+class DopamineAgent:
+    def check_rewards(self):
+        # 算法核心：不可预测的奖励频率
+        if self.wallet.has_new_transaction() or self.social_graph.has_new_mention():
+            reward_multiplier = random.uniform(1.0, 3.0)
+            self.release_dopamine(reward_multiplier) # 刺激前额叶，产生“我掌控一切”的错觉
+            self.lower_risk_aversion() # 副作用：降低对风险的感知阈值
+</pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 2 -->
+        <section id="ch2" class="reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="text-6xl font-black text-white/5 select-none">02</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">虚实共生中的认知伪装<br><span class="text-cyber-amber text-xl md:text-2xl font-normal">14 种切片在镜像世界重演</span></h2>
+            </div>
+
+            <p class="text-lg text-gray-300 mb-8">
+                我们以为自己是理性的数字公民，实则大多是戴着 VR 眼镜的原始人。贪婪常以“怕错过（FOMO）”的恐惧面孔出现，恐惧则常披着“追求极致（完美主义）”的贪婪外衣。
+            </p>
+
+            <div class="space-y-8">
+                <!-- Slice A -->
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-cyber-pink to-cyber-amber rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative glass-panel p-8 rounded-lg">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-white mb-2">切片 A：贪婪戴着恐惧的面具</h3>
+                                <h4 class="text-xl text-cyber-pink font-mono mb-4">“NFT 囤积症”</h4>
+                                <p class="text-gray-300 leading-relaxed">
+                                    你声称买 NFT 是因为“怕通货膨胀”。听起来是理性的避险，实则是贪婪驱动的 FOMO。你并非真的怕没钱，而是怕在这个数字贵族圈层里没有位置。你贪婪地想要占有那个 JPEG 图片，因为它象征着你“没有被时代抛弃”。
+                                </p>
+                            </div>
+                            <div class="flex-1 border-l border-white/10 pl-0 md:pl-6">
+                                <div class="text-xs font-mono text-gray-500 mb-2">ANALYSIS_LOG</div>
+                                <ul class="space-y-2 text-sm text-gray-300">
+                                    <li class="flex items-start"><span class="text-cyber-pink mr-2">>></span> 行为表象：疯狂囤积</li>
+                                    <li class="flex items-start"><span class="text-cyber-pink mr-2">>></span> 伪装词汇：“价值投资”</li>
+                                    <li class="flex items-start"><span class="text-cyber-pink mr-2">>></span> 真实动机：恐惧被时代抛弃</li>
+                                    <li class="flex items-start"><span class="text-cyber-pink mr-2">>></span> 哲学隐喻：狐狸吃不到葡萄说葡萄酸的逆向版——怕饿死所以疯狂囤积葡萄。
+                                </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Slice B -->
+                <div class="relative group">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-cyber-amber to-cyber-cyan rounded-lg blur opacity-25 group-hover:opacity-75 transition duration-1000 group-hover:duration-200"></div>
+                    <div class="relative glass-panel p-8 rounded-lg">
+                        <div class="flex flex-col md:flex-row gap-6">
+                            <div class="flex-1">
+                                <h3 class="text-2xl font-bold text-white mb-2">切片 B：恐惧戴着贪婪的面具</h3>
+                                <h4 class="text-xl text-cyber-amber font-mono mb-4">“算法讨好型人格”</h4>
+                                <p class="text-gray-300 leading-relaxed">
+                                    KOL 们声称每天发几十条动态是为了“传播价值”。这听起来很贪婪。但真相往往是恐惧。是“表演型加班”的数字变种。深层恐惧的是“不被看见”。他们的贪婪只是表层，深层是躲在屏幕后、瑟瑟发抖的杏仁核在尖叫：“别不理我！”
+                                </p>
+                            </div>
+                            <div class="flex-1 border-l border-white/10 pl-0 md:pl-6">
+                                <div class="text-xs font-mono text-gray-500 mb-2">ALGORITHM_FEEDBACK</div>
+                                <ul class="space-y-2 text-sm text-gray-300">
+                                    <li class="flex items-start"><span class="text-cyber-amber mr-2">>></span> 驱动机制：离线即灭亡</li>
+                                    <li class="flex items-start"><span class="text-cyber-amber mr-2">>></span> 行为表象：高频发推</li>
+                                    <li class="flex items-start"><span class="text-cyber-amber mr-2">>></span> 真实动机：恐惧被遗忘</li>
+                                    <li class="flex items-start"><span class="text-cyber-amber mr-2">>></span> 终极后果：分身越是表现得无所畏惧，往往内心越是充满了对孤独的恐惧。
+                                </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 3 -->
+        <section id="ch3" class="reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="text-6xl font-black text-white/5 select-none">03</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">操纵的升级<br><span class="text-red-500 text-xl md:text-2xl font-normal">从消费主义到“存在主义营销”</span></h2>
+            </div>
+
+            <div class="glass-panel border-red-500/30 p-1 rounded-xl mb-8">
+                <div class="bg-black/40 p-8 rounded-lg">
+                    <h3 class="text-xl font-bold text-red-400 mb-4">FOMO 2.0：数字生命的倒计时</h3>
+                    <p class="text-gray-300 mb-6">
+                        平台不再满足于掏空你的钱包，它们要殖民你的存在感。“限时 24 小时 Mint”“仅剩最后 100 个名额”。如果你不在链上，你就是“数字难民”。这种恐惧直接对应了“社会排斥焦虑”。
+                    </p>
+                    
+                    <div class="code-block p-4 rounded border-red-500">
+<pre>
+contract SocialCreditSystem {
+    mapping(address => uint256) public reputation;
+    
+    // 恐惧触发器：一旦声誉低于阈值
+    modifier onlyHighReputation() {
+        require(reputation[msg.sender] >= 60, "ERROR: Reputation too low. Access denied.");
+        _;
+    }
+    
+    function penalize(address user) external {
+        reputation[user] -= 20;
+        if (reputation[user] < 40) {
+            // 触发杏仁核：社会性死亡
+            emit SocialDeath(user);
+        }
+    }
+}
+</pre>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="text-center text-gray-400 italic">
+                “我们在替算法推一块永远推不到山顶的石头。” —— 西西弗斯的算力版
+            </p>
+        </section>
+
+        <!-- Chapter 4 -->
+        <section id="ch4" class="reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="text-6xl font-black text-white/5 select-none">04</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">镜像迷宫中的两条分岔路<br><span class="text-white/60 text-xl md:text-2xl font-normal">觉醒还是操纵？</span></h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-stretch">
+                <!-- Path A -->
+                <div class="glass-panel p-8 rounded-xl border-t-4 border-t-cyber-pink flex flex-col h-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <svg class="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-cyber-pink mb-2">路径 A：硅基代理人</h3>
+                    <p class="text-sm font-mono text-gray-400 mb-6 uppercase">以毒攻毒 / 工具性共情</p>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        熟读神经科学与行为经济学。他们把“大脑公司”的员工变成手下，利用算法收割他人注意力。他们拥有无数分身，控制庞大流量，但失去了“感受”的能力。
+                    </p>
+                    <div class="bg-cyber-pink/10 p-4 rounded border border-cyber-pink/20">
+                        <div class="text-xs text-cyber-pink font-bold uppercase mb-1">终局</div>
+                        <div class="text-white font-bold">意义真空</div>
+                        <div class="text-xs text-gray-400 mt-1">成了算法的一部分，是连接用户与服务器的管道。</div>
+                    </div>
+                </div>
+
+                <!-- Path B -->
+                <div class="glass-panel p-8 rounded-xl border-t-4 border-t-cyber-cyan flex flex-col h-full relative overflow-hidden">
+                    <div class="absolute top-0 right-0 p-4 opacity-10">
+                        <svg class="w-32 h-32 text-white" fill="currentColor" viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
+                    </div>
+                    <h3 class="text-2xl font-bold text-cyber-cyan mb-2">路径 B：数字修行者</h3>
+                    <p class="text-sm font-mono text-gray-400 mb-6 uppercase">逆流而上 / 慈悲扩展</p>
+                    <p class="text-gray-300 mb-6 flex-grow">
+                        将数字分身视为“冥想实验室”。利用分身去体验各种人生，但从不执着。他们观察内心的波动，练习“数字无常观”。他们驾驭了技术，而没有被技术吞噬。
+                    </p>
+                    <div class="bg-cyber-cyan/10 p-4 rounded border border-cyber-cyan/20">
+                        <div class="text-xs text-cyber-cyan font-bold uppercase mb-1">终局</div>
+                        <div class="text-white font-bold">本体性自由</div>
+                        <div class="text-xs text-gray-400 mt-1">无论是在虚拟世界拥有岛屿，还是身无分文，内心都保持同等平静。</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Chapter 5 -->
+        <section id="ch5" class="reveal">
+            <div class="flex items-center gap-4 mb-8">
+                <span class="text-6xl font-black text-white/5 select-none">05</span>
+                <h2 class="text-3xl md:text-4xl font-bold text-white">夺回权柄<br><span class="text-green-400 text-xl md:text-2xl font-normal">Web 4.0 时代的“反操控”实操指南</span></h2>
+            </div>
+
+            <div class="space-y-8">
+                <!-- Guide 1 -->
+                <div class="flex gap-6 items-start">
+                    <div class="flex-shrink-0 w-16 h-16 rounded-full border border-green-500/50 flex items-center justify-center text-green-500 font-mono font-bold text-xl bg-green-900/20">
+                        01
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">生理防护：给 CEO 放假</h3>
+                        <p class="text-gray-300 mb-4">前额叶极易疲劳。连续盯着屏幕会导致理性下线。</p>
+                        <div class="bg-black/40 p-4 rounded-lg border-l-2 border-green-500">
+                            <p class="text-green-400 font-mono text-sm mb-1">ACTION // 单线程生存法则</p>
+                            <p class="text-gray-400 text-sm">设定“深度工作块”，物理隔离手机。每周设定“数字安息日”。这不是逃避，这是为了让 CEO 恢复体力。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guide 2 -->
+                <div class="flex gap-6 items-start">
+                    <div class="flex-shrink-0 w-16 h-16 rounded-full border border-cyber-cyan/50 flex items-center justify-center text-cyber-cyan font-mono font-bold text-xl bg-cyber-cyan/10">
+                        02
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">认知防火墙：15 分钟熔断机制</h3>
+                        <p class="text-gray-300 mb-4">当分身想要冲动购买或发出攻击性言论时，启动熔断。</p>
+                        <div class="bg-black/40 p-4 rounded-lg border-l-2 border-cyber-cyan">
+                            <p class="text-cyber-cyan font-mono text-sm mb-1">ACTION // 离开屏幕 15 分钟</p>
+                            <p class="text-gray-400 text-sm">这是留给多巴胺消退的时间。利用这段时间问自己：“我是真的需要它（贪婪），还是我只是怕错过（恐惧）？”</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Guide 3 -->
+                <div class="flex gap-6 items-start">
+                    <div class="flex-shrink-0 w-16 h-16 rounded-full border border-purple-500/50 flex items-center justify-center text-purple-400 font-mono font-bold text-xl bg-purple-900/20">
+                        03
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white mb-2">灵性锚点：斯多葛消极想象</h3>
+                        <p class="text-gray-300 mb-4">Web 4.0 时代顶级的修行。</p>
+                        <div class="bg-black/40 p-4 rounded-lg border-l-2 border-purple-500">
+                            <p class="text-purple-400 font-mono text-sm mb-1">ACTION // 私钥丢失冥想</p>
+                            <p class="text-gray-400 text-sm">每晚睡前，想象所有数字资产归零，分身被封杀。深呼吸，告诉自己：“我还是我。我的德行、记忆、肉体依然存在。”</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Conclusion -->
+        <section id="ch6" class="reveal min-h-[80vh] flex flex-col justify-center items-center text-center">
+            <h2 class="text-4xl md:text-6xl font-bold mb-8 tracking-tight">人之所以为人</h2>
+            <p class="text-xl md:text-2xl text-gray-300 max-w-3xl leading-relaxed mb-12">
+                真正的自由，不是在元宇宙里买下多少土地，而是当你的分身因为币价暴跌而惊恐万状时，你依然可以坐在窗前，喝一杯茶，看着夕阳，微笑着对自己说：
+            </p>
+            <div class="glass-panel px-10 py-8 rounded-2xl border border-white/20 max-w-2xl mx-auto relative">
+                <div class="absolute -top-4 -left-4 w-8 h-8 border-t-2 border-l-2 border-cyber-cyan"></div>
+                <div class="absolute -bottom-4 -right-4 w-8 h-8 border-b-2 border-r-2 border-cyber-pink"></div>
+                <p class="text-2xl md:text-3xl font-light text-white italic font-serif">
+                    “我知道那是杏仁核在尖叫，但我还在。”
+                </p>
+            </div>
+            <p class="mt-16 text-sm text-gray-500 font-mono">
+                END OF DOCUMENT // SYSTEM SHUTDOWN INITIATED
+            </p>
+        </section>
+
+    </main>
+
+    <footer class="relative z-10 py-8 text-center text-gray-600 text-sm border-t border-white/5 bg-black/80 backdrop-blur">
+        <p>Based on "The Web 4.0 Avatar Social: Reclaiming Choice in the Labyrinth of Algorithms"</p>
+        <p class="mt-2 font-mono text-xs opacity-50">RENDERED BY ZAI_AI // FRONTEND_ENGINEER_V1</p>
+    </footer>
+
+    <!-- 交互脚本 -->
+    <script>
+        // --- Three.js 背景动画逻辑 ---
+        const initThreeJS = () => {
+            const container = document.getElementById('canvas-container');
+            const scene = new THREE.Scene();
+            // 添加环境雾气，增强深邃感
+            scene.fog = new THREE.FogExp2(0x050505, 0.002);
+
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 30;
+
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // 创建主体：神经网格球体
+            const geometry = new THREE.IcosahedronGeometry(10, 2);
+            const wireframeMaterial = new THREE.MeshBasicMaterial({ 
+                color: 0x00f3ff, 
+                wireframe: true, 
+                transparent: true, 
+                opacity: 0.15 
+            });
+            const sphere = new THREE.Mesh(geometry, wireframeMaterial);
+            scene.add(sphere);
+
+            // 创建核心：不稳定的能量核
+            const coreGeometry = new THREE.IcosahedronGeometry(6, 1);
+            const coreMaterial = new THREE.MeshBasicMaterial({
+                color: 0xff00ff,
+                wireframe: true,
+                transparent: true,
+                opacity: 0.1
+            });
+            const core = new THREE.Mesh(coreGeometry, coreMaterial);
+            scene.add(core);
+
+            // 创建粒子系统：代表碎片化的自我
+            const particlesGeometry = new THREE.BufferGeometry();
+            const particlesCount = 1000;
+            const posArray = new Float32Array(particlesCount * 3);
+
+            for(let i = 0; i < particlesCount * 3; i++) {
+                // 随机分布在球体周围
+                posArray[i] = (Math.random() - 0.5) * 80;
+            }
+
+            particlesGeometry.setAttribute('position', new THREE.BufferAttribute(posArray, 3));
+            const particlesMaterial = new THREE.PointsMaterial({
+                size: 0.15,
+                color: 0xffaa00,
+                transparent: true,
+                opacity: 0.6,
+                blending: THREE.AdditiveBlending
+            });
+            const particlesMesh = new THREE.Points(particlesGeometry, particlesMaterial);
+            scene.add(particlesMesh);
+
+            // 鼠标交互变量
+            let mouseX = 0;
+            let mouseY = 0;
+            let targetX = 0;
+            let targetY = 0;
+
+            const windowHalfX = window.innerWidth / 2;
+            const windowHalfY = window.innerHeight / 2;
+
+            document.addEventListener('mousemove', (event) => {
+                mouseX = (event.clientX - windowHalfX);
+                mouseY = (event.clientY - windowHalfY);
+            });
+
+            // 动画循环
+            const clock = new THREE.Clock();
+
+            const animate = () => {
+                requestAnimationFrame(animate);
+
+                const elapsedTime = clock.getElapsedTime();
+
+                targetX = mouseX * 0.001;
+                targetY = mouseY * 0.001;
+
+                // 旋转逻辑
+                sphere.rotation.y += 0.002;
+                sphere.rotation.x += 0.001;
+                
+                core.rotation.y -= 0.003; // 核心反向旋转
+                core.rotation.z += 0.001;
+
+                // 鼠标交互带来的倾斜
+                sphere.rotation.y += 0.05 * (targetX - sphere.rotation.y);
+                sphere.rotation.x += 0.05 * (targetY - sphere.rotation.x);
+
+                // 粒子波动效果
+                particlesMesh.rotation.y = elapsedTime * 0.05;
+                particlesMesh.rotation.x = mouseY * 0.0001;
+
+                // 呼吸效果
+                const scale = 1 + Math.sin(elapsedTime * 0.5) * 0.05;
+                sphere.scale.set(scale, scale, scale);
+
+                renderer.render(scene, camera);
+            };
+
+            animate();
+
+            // 窗口大小调整
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        };
+
+        // --- 页面逻辑 ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initThreeJS();
+
+            // 滚动显现效果
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: "0px 0px -50px 0px"
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+            // 阅读进度条
+            window.addEventListener('scroll', () => {
+                const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+                const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+                const progress = (scrollTop / scrollHeight) * 100;
+                document.getElementById('progress-bar').style.width = `${progress}%`;
+            });
+
+            // 导航栏背景模糊切换
+            const navbar = document.getElementById('navbar');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 50) {
+                    navbar.classList.add('shadow-lg');
+                    navbar.classList.replace('py-4', 'py-2');
+                } else {
+                    navbar.classList.remove('shadow-lg');
+                    navbar.classList.replace('py-2', 'py-4');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

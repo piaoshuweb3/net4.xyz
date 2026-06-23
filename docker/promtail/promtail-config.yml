@@ -1,0 +1,141 @@
+# net4.xyz Promtail Configuration
+# Log aggregation and forwarding to Loki
+
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /var/log/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+    tenant_id: net4xyz
+
+scrape_configs:
+  # Parse backend logs
+  - job_name: backend
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: backend
+          service: net4xyz-backend
+          environment: production
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z)\s+(?P<level>(INFO|WARN|ERROR|DEBUG))\s+(?P<service>\w+)\s+-\s+(?P<message>.*)$'
+      - labels:
+          level:
+          service:
+      - timestamp:
+          source: timestamp
+          format: '2006-01-02T15:04:05.999Z'
+
+  # Parse nginx access logs
+  - job_name: nginx-access
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx-access
+          service: nginx
+          environment: production
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<remote_addr>\S+)\s+-\s+(?P<remote_user>\S+)\s+\[(?P<timestamp>[^\]]+)\]\s+"(?P<request>[^"]+)"\s+(?P<status>\d+)\s+(?P<body_bytes_sent>\d+)\s+"(?P<http_referer>[^"]*)"\s+"(?P<http_user_agent>[^"]*)"'
+      - labels:
+          status:
+          request:
+      - timestamp:
+          source: timestamp
+          format: '02/Jan/2006:15:04:05 -0700'
+      - metrics:
+          http_requests_total:
+            type: Counter
+            config:
+              source: status
+              map:
+                2xx: "200"
+                3xx: "300"
+                4xx: "400"
+                5xx: "500"
+
+  # Parse nginx error logs
+  - job_name: nginx-error
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: nginx-error
+          service: nginx
+          environment: production
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<timestamp>\d{4}/\d{2}/\d{2}\s+\d{2}:\d{2}:\d{2})\s+\[(?P<level>\w+)\]\s+(?P<message>.*)$'
+      - labels:
+          level:
+      - timestamp:
+          source: timestamp
+          format: '2006/01/02 15:04:05'
+
+  # Parse MongoDB logs
+  - job_name: mongodb
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: mongodb
+          service: mongodb
+          environment: production
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<timestamp>\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}\+\d{4})\s+(?P<severity>\w)\s+(?P<component>\w+)\s+\[(?P<context>\w+)\]\s+(?P<message>.*)$'
+      - labels:
+          severity:
+          component:
+          context:
+      - timestamp:
+          source: timestamp
+          format: '2006-01-02T15:04:05.999Z0700'
+
+  # Parse Docker container logs
+  - job_name: containers
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: containers
+          service: docker
+          environment: production
+    pipeline_stages:
+      - json:
+          expressions:
+            log: log
+            stream: stream
+            time: time
+      - labels:
+          stream:
+      - timestamp:
+          source: time
+          format: 'RFC3339Nano'
+
+  # Parse system logs
+  - job_name: system
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: system
+          service: system
+          environment: production
+    pipeline_stages:
+      - regex:
+          expression: '^(?P<timestamp>...\s+\d+\s+\d{2}:\d{2}:\d{2})\s+(?P<hostname>\S+)\s+(?P<service>\w+)\[(?P<pid>\d+)\]:\s+(?P<message>.*)$'
+      - labels:
+          hostname:
+          service:
+          pid:
+      - timestamp:
+          source: timestamp
+          format: 'Jan  2 15:04:05'

@@ -1,0 +1,38 @@
+{
+  "name": "@net4xyz/contracts",
+  "version": "1.0.0",
+  "description": "net4.xyz 智能合约 - AFC Token, Spark NFT, PoUE Consensus 等核心合约",
+  "private": true,
+  "main": "index.ts",
+  "scripts": {
+    "build": "hardhat compile",
+    "test": "hardhat test",
+    "test:forge": "forge test",
+    "lint": "solhint 'contracts/**/*.sol'",
+    "clean": "hardhat clean && rm -rf out/",
+    "node": "hardhat node",
+    "deploy:sepolia": "hardhat run scripts/deploy.ts --network sepolia",
+    "deploy:base": "hardhat run scripts/deploy.ts --network base",
+    "deploy:baseSepolia": "hardhat run scripts/deploy.ts --network baseSepolia",
+    "deploy:mainnet": "hardhat run scripts/deploy-mainnet.ts --network base",
+    "postdeploy:mainnet": "hardhat run scripts/post-deployment.ts --network base"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^4.9.5",
+    "dotenv": "^16.3.1"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.0",
+    "hardhat": "^2.19.0",
+    "solhint": "^4.1.1",
+    "chai": "^4.4.1"
+  },
+  "keywords": [
+    "solidity",
+    "ethereum",
+    "smart-contracts",
+    "hardhat",
+    "foundry"
+  ]
+}

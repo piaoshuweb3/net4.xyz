@@ -1,0 +1,262 @@
+version: '3.8'
+
+# net4.xyz Development Environment Docker Compose
+# Usage: docker-compose -f docker/docker-compose.dev.yml up
+
+services:
+  # ===================
+  # Database Services
+  # ===================
+  
+  mongodb:
+    image: mongo:7.0
+    container_name: net4xyz-mongodb-dev
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-net4xyz}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-net4xyz123}
+      MONGO_INITDB_DATABASE: net4xyz
+    volumes:
+      - mongodb_data:/data/db
+      - ./docker/mongodb/mongod.conf:/etc/mongo/mongod.conf
+    ports:
+      - "27017:27017"
+    networks:
+      - net4xyz-dev
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: net4xyz-redis-dev
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    networks:
+      - net4xyz-dev
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ===================
+  # Storage Services
+  # ===================
+
+  ipfs:
+    image: ipfs/kubo:v0.24.0
+    container_name: net4xyz-ipfs-dev
+    restart: unless-stopped
+    environment:
+      - IPFS_PROFILE=server
+    volumes:
+      - ipfs_data:/data/ipfs
+    ports:
+      - "5001:5001"
+      - "8080:8080"
+    networks:
+      - net4xyz-dev
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5001/api/v0/version"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ===================
+  # Blockchain Services
+  # ===================
+
+  hardhat-node:
+    image: node:18-alpine
+    container_name: net4xyz-hardhat-dev
+    working_dir: /app
+    restart: unless-stopped
+    environment:
+      - HARDHAT_CHAIN_ID=31337
+    volumes:
+      - ./packages/contracts:/app
+      - ./docker/hardhat:/data
+    ports:
+      - "8545:8545"
+      - "8546:8546"
+    networks:
+      - net4xyz-dev
+    command: >
+      sh -c "npm install && npx hardhat node"
+    depends_on:
+      - ipfs
+
+  # ===================
+  # AI Services
+  # ===================
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: net4xyz-ollama-dev
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+      - ./docker/ollama:/models
+    ports:
+      - "11434:11434"
+    networks:
+      - net4xyz-dev
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    deploy:
+      resources:
+        limits:
+          # GPUs: 1
+          memory: 16G
+        reservations:
+          memory: 4G
+
+  # ===================
+  # Backend Services
+  # ===================
+
+  backend:
+    build:
+      context: ..
+      dockerfile: packages/backend/Dockerfile
+      target: development
+    container_name: net4xyz-backend-dev
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=mongodb://${MONGO_USER:-net4xyz}:${MONGO_PASSWORD:-net4xyz123}@mongodb:27017/net4xyz
+      - REDIS_URL=redis://redis:6379
+      - JWT_SECRET=${JWT_SECRET:-dev-secret-change-in-production}
+      - IPFS_URL=http://ipfs:5001
+      - HARDHAT_RPC_URL=http://hardhat-node:8545
+    volumes:
+      - ../packages/backend:/app
+      - /app/node_modules
+    ports:
+      - "3001:3001"
+    networks:
+      - net4xyz-dev
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      hardhat-node:
+        condition: service_started
+
+  # ===================
+  # Frontend Services
+  # ===================
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: packages/frontend/Dockerfile
+      target: development
+    container_name: net4xyz-frontend-dev
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - NEXT_PUBLIC_IPFS_GATEWAY=http://localhost:8080/ipfs/
+      - NEXT_PUBLIC_HARDHAT_RPC_URL=http://localhost:8545
+    volumes:
+      - ../packages/frontend:/app
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"
+    networks:
+      - net4xyz-dev
+    depends_on:
+      - backend
+
+  # ===================
+  # Monitoring Services
+  # ===================
+
+  prometheus:
+    image: prom/prometheus:v2.48.0
+    container_name: net4xyz-prometheus-dev
+    restart: unless-stopped
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.console.libraries=/usr/share/prometheus/console_libraries'
+      - '--web.console.templates=/usr/share/prometheus/consoles'
+    ports:
+      - "9090:9090"
+    networks:
+      - net4xyz-dev
+
+  grafana:
+    image: grafana/grafana:10.2.0
+    container_name: net4xyz-grafana-dev
+    restart: unless-stopped
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning
+    ports:
+      - "3002:3000"
+    networks:
+      - net4xyz-dev
+    depends_on:
+      - prometheus
+
+  # ===================
+  # Utility Services
+  # ===================
+
+  localstack:
+    image: localstack/localstack:3.0
+    container_name: net4xyz-localstack-dev
+    restart: unless-stopped
+    environment:
+      - SERVICES=s3,lambda,dynamodb
+      - DEBUG=1
+      - DEFAULT_REGION=us-east-1
+      - LAMBDA_EXECUTOR=local
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "4566:4566"
+    networks:
+      - net4xyz-dev
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    container_name: net4xyz-mailhog-dev
+    restart: unless-stopped
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+    networks:
+      - net4xyz-dev
+
+volumes:
+  mongodb_data:
+  redis_data:
+  ipfs_data:
+  ollama_data:
+  prometheus_data:
+  grafana_data:
+  localstack_data:
+
+networks:
+  net4xyz-dev:
+    driver: bridge

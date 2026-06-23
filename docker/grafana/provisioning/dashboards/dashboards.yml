@@ -1,0 +1,15 @@
+# net4.xyz Grafana Dashboards Configuration
+
+apiVersion: 1
+
+providers:
+  - name: 'net4xyz Dashboards'
+    orgId: 1
+    folder: 'net4.xyz'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
+      foldersFromFilesStructure: true

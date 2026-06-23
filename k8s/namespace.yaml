@@ -1,0 +1,76 @@
+# net4.xyz Kubernetes Namespace and Secrets
+
+# Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: net4xyz
+  labels:
+    name: net4xyz
+    environment: production
+---
+# Secrets
+apiVersion: v1
+kind: Secret
+metadata:
+  name: net4xyz-secrets
+  namespace: net4xyz
+type: Opaque
+stringData:
+  database-url: mongodb://net4xyz_prod:PASSWORD@mongodb-primary:27017,mongodb-secondary-1:27017,mongodb-secondary-2:27017/net4xyz?replicaSet=rs0
+  jwt-secret: your_jwt_secret_here
+  grafana-user: admin
+  grafana-password: change_me
+  smtp-password: your_smtp_password
+  slack-webhook-url: https://hooks.slack.com/services/...
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: net4xyz-config
+  namespace: net4xyz
+data:
+  NODE_ENV: "production"
+  IPFS_URL: "http://ipfs:5001"
+  REDIS_URL: "redis://redis:6379"
+  LOG_LEVEL: "info"
+---
+# Service Account
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: net4xyz
+  namespace: net4xyz
+---
+# RBAC Role
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: net4xyz
+  namespace: net4xyz
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "services", "configmaps", "secrets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+  - apiGroups: ["autoscaling"]
+    resources: ["horizontalpodautoscalers"]
+    verbs: ["get", "list", "watch", "create", "update", "patch", "delete"]
+---
+# RBAC RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: net4xyz
+  namespace: net4xyz
+subjects:
+  - kind: ServiceAccount
+    name: net4xyz
+    namespace: net4xyz
+roleRef:
+  kind: Role
+  name: net4xyz
+  apiGroup: rbac.authorization.k8s.io

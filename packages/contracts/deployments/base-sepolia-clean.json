@@ -1,0 +1,132 @@
+{
+    "network":  "base-sepolia",
+    "chainId":  84532,
+    "deploymentType":  "clean-reference",
+    "deployedAt":  "2026-06-20T17:21:51.3945153Z",
+    "deployer":  "0x17359Bd3de77aD7c3D7836448Ad4eD7c600BBA98",
+    "canonicalIdentity":  {
+                              "ens":  "piaoshu.eth",
+                              "address":  "0x10687368eF1be3f178de0fCCf5EdfF49e1C258B1"
+                          },
+    "roles":  {
+                  "owner":  "0x10687368eF1be3f178de0fCCf5EdfF49e1C258B1",
+                  "payer":  "0x10687368eF1be3f178de0fCCf5EdfF49e1C258B1",
+                  "payee":  "0x10687368eF1be3f178de0fCCf5EdfF49e1C258B1",
+                  "oracle":  "0x10687368eF1be3f178de0fCCf5EdfF49e1C258B1",
+                  "fdeac":  "0x10687368eF1be3f178de0fCCf5EdfF49e1C258B1"
+              },
+    "contracts":  {
+                      "ShadowAFC":  "0x2dF7a295650e890fe2A48B3aa58BB38d36E89E42",
+                      "BudgetFence":  "0xdb970DE65f90C9447a700C9b06ae6F591a9d9a55",
+                      "AP2Escrow":  "0xFd553E5989834DF76f6C790021FDDBfEB9dc2972",
+                      "TDPO_Pool":  "0x684FF81da3b9ac92D0f75037f7D3E6C7a792EC8f"
+                  },
+    "defaults":  {
+                     "scope":  "legal",
+                     "scopeHash":  "0x585f0ffac4590ed956ef7d99c1177e00c7f240a28094f8eaffb94c5a559815a3",
+                     "target":  "XDP_Protocol_Genesis_Clean",
+                     "targetHash":  "0x3bfc253b785c17341b8af30129b3dd92e0f4a19d29b9758f2cd387b7ccb9d32c",
+                     "dailyCap":  "1000000000000000000000",
+                     "payerMintAmount":  "1000000000000000000000",
+                     "baseAmount":  "100000000000000000000",
+                     "optionAmount":  "10000000000000000000",
+                     "durationSeconds":  1,
+                     "qualityScore":  90,
+                     "tdpoDurationSeconds":  2592000,
+                     "evolutionFactor":  10
+                 },
+    "transactions":  {
+                         "deploy":  [
+                                        {
+                                            "contract":  "ShadowAFC",
+                                            "tx":  "0x801cdbbb390b423d463f3f3bf104df2ff040c4c5697fb51b51b80f20dd848e13"
+                                        },
+                                        {
+                                            "contract":  "TDPO_Pool",
+                                            "tx":  "0x41b46c7329124087da220d87925b24ec21530642fd4a5f6e625bdd03215bcfed"
+                                        },
+                                        {
+                                            "contract":  "BudgetFence",
+                                            "tx":  "0xa93bd343a628e252e9d20eb8d8329a9fad20ad4614380166f363c4d465f84d92"
+                                        },
+                                        {
+                                            "contract":  "AP2Escrow",
+                                            "tx":  "0x6a4005efb856b0a4450959f926ec76f4fee62f7b49880dda05981341278f0f31"
+                                        }
+                                    ],
+                         "setup":  [
+                                       {
+                                           "action":  "setEscrow",
+                                           "tx":  "0x0d55adee071a78dc9bab4a9175f54ebe7ed25e11f4f38acce4b136276fa9cce9"
+                                       },
+                                       {
+                                           "action":  "setOracle",
+                                           "tx":  "0x15550b1ad464d4fb6fa5a740562e86a4a457f60db85ee45c69ec1b82ac457878"
+                                       },
+                                       {
+                                           "action":  "setFDEAC",
+                                           "tx":  "0xdc2ac7f1cb402a8556d7e36aabfa799a0e5c3c752470fac2edbaf683e5895fa8"
+                                       },
+                                       {
+                                           "action":  "setTDPOPool",
+                                           "tx":  "0x134c091e38299dc33ea393a3d752519f20d1cfc5bc8dd5fac208377a13c492d7"
+                                       },
+                                       {
+                                           "action":  "transferShadowAFCOwnership",
+                                           "tx":  "0x3fd212c71ceb0865984f918a46d0786d2b00975f5ac1aa1a7b9dcc3eb1d76f4c"
+                                       },
+                                       {
+                                           "action":  "transferTDPOOwnership",
+                                           "tx":  "0xf56bc0021b0024cfea0b1d98296df8008e6ff80cd87e34cd50caeda2ccabbdbc"
+                                       },
+                                       {
+                                           "action":  "transferBudgetFenceOwnership",
+                                           "tx":  "0xbe14331f02980bce1696991584e9a6bbdb29693e05de5b1068f0ba25946f7d70"
+                                       },
+                                       {
+                                           "action":  "transferAP2EscrowOwnership",
+                                           "tx":  "0xddf54c9957b9ba60bb14951b1e63c2e3ab32724d93a8aedabb39da8eaf623d1f"
+                                       }
+                                   ],
+                         "configure":  [
+
+                                       ],
+                         "verify":  [
+                                        {
+                                            "contract":  "ShadowAFC",
+                                            "status":  "verified",
+                                            "guid":  "xxu5futgeewi5kht8ky8fnqde3l2xguxerqxrz6ry2g7ra9mte",
+                                            "url":  "https://sepolia.basescan.org/address/0x2df7a295650e890fe2a48b3aa58bb38d36e89e42"
+                                        },
+                                        {
+                                            "contract":  "BudgetFence",
+                                            "status":  "verified",
+                                            "guid":  "2diqvb7rqc8rjplxeekj2ze7ad7jm5uq9iffnfvpr1iuiyitkt",
+                                            "url":  "https://sepolia.basescan.org/address/0xdb970de65f90c9447a700c9b06ae6f591a9d9a55"
+                                        },
+                                        {
+                                            "contract":  "TDPO_Pool",
+                                            "status":  "verified",
+                                            "guid":  "xw19dtycfsup4lijh18vaqjxt1rkpcjdquyqpzvnhcz3ktxwbz",
+                                            "url":  "https://sepolia.basescan.org/address/0x684ff81da3b9ac92d0f75037f7d3e6c7a792ec8f"
+                                        },
+                                        {
+                                            "contract":  "AP2Escrow",
+                                            "status":  "verified",
+                                            "guid":  "gikpi7lwfcbeddygyaetmiwjeyqgcs4ujqm2uabreujjcdznv5",
+                                            "url":  "https://sepolia.basescan.org/address/0xfd553e5989834df76f6c790021fddbfeb9dc2972"
+                                        }
+                                    ]
+                     },
+    "explorer":  {
+                     "ShadowAFC":  "https://sepolia.basescan.org/address/0x2dF7a295650e890fe2A48B3aa58BB38d36E89E42",
+                     "BudgetFence":  "https://sepolia.basescan.org/address/0xdb970DE65f90C9447a700C9b06ae6F591a9d9a55",
+                     "AP2Escrow":  "https://sepolia.basescan.org/address/0xFd553E5989834DF76f6C790021FDDBfEB9dc2972",
+                     "TDPO_Pool":  "https://sepolia.basescan.org/address/0x684FF81da3b9ac92D0f75037f7D3E6C7a792EC8f"
+                 },
+    "notes":  [
+                  "Clean reference deployment for website /api/v1 Base Sepolia integration.",
+                  "Owner, payer, payee, oracle, and FDEAC are set to piaoshu.eth for clean testnet bootstrap.",
+                  "Owner-only configuration and minting now require piaoshu.eth to sign transactions."
+              ]
+}

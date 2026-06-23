@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>net4.xyz 管理后台</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0f'/%3E%3Cpath d='M9 15h14v11H9z' fill='%23b026ff' fill-opacity='.35' stroke='%23ff69b4' stroke-width='1.5'/%3E%3Cpath d='M12 15v-3a4 4 0 0 1 8 0v3' stroke='%2300ffff' stroke-width='2' fill='none'/%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0f;
+            color: white;
+            font-family: 'Inter', 'Arial', sans-serif;
+        }
+        
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            background: linear-gradient(to right, #b026ff, #ff69b4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 80px;
+            bottom: 0;
+            width: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 2rem 0;
+        }
+        
+        .sidebar-item {
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            background: rgba(176, 38, 255, 0.1);
+            border-left-color: #b026ff;
+        }
+        
+        .main-content {
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+        
+        .card h3 {
+            color: #b026ff;
+            margin-bottom: 1rem;
+        }
+        
+        .stat-card {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 1rem 0;
+        }
+        
+        .stat-label {
+            color: #888;
+            font-size: 0.875rem;
+        }
+        
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+        
+        .table th,
+        .table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .table th {
+            background: rgba(255, 255, 255, 0.05);
+            color: #b026ff;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #b026ff, #ff69b4);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b026ff;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .form-input::placeholder {
+            color: #888;
+        }
+        
+        .status-online {
+            color: #00ff88;
+        }
+        
+        .status-offline {
+            color: #ff6b6b;
+        }
+        
+        .status-warning {
+            color: #ffaa00;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: #1a1a2e;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="logo">net4.xyz 管理后台</div>
+        <div class="user-info">
+            <span id="adminAddress">0xa1b2...c3d4</span>
+            <button class="btn btn-secondary" onclick="logout()">退出</button>
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-item active" onclick="showSection('dashboard')">
+            <div>📊 仪表板</div>
+        </div>
+        <div class="sidebar-item" onclick="showSection('nodes')">
+            <div>🖥️ 节点管理</div>
+        </div>
+        <div class="sidebar-item" onclick="showSection('users')">
+            <div>👥 用户管理</div>
+        </div>
+        <div class="sidebar-item" onclick="showSection('domains')">
+            <div>🌐 域名管理</div>
+        </div>
+        <div class="sidebar-item" onclick="showSection('tokens')">
+            <div>💰 代币管理</div>
+        </div>
+        <div class="sidebar-item" onclick="showSection('settings')">
+            <div>⚙️ 系统设置</div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Dashboard Section -->
+        <div id="dashboard" class="section">
+            <h2>系统概览</h2>
+            <div class="dashboard-grid">
+                <div class="card stat-card">
+                    <h3>总节点数</h3>
+                    <div class="stat-value status-online" id="totalNodes">10,149</div>
+                    <div class="stat-label">在线节点: <span id="onlineNodes">9,987</span></div>
+                </div>
+                <div class="card stat-card">
+                    <h3>总用户数</h3>
+                    <div class="stat-value" id="totalUsers">45,672</div>
+                    <div class="stat-label">活跃用户: <span id="activeUsers">12,345</span></div>
+                </div>
+                <div class="card stat-card">
+                    <h3>域名注册</h3>
+                    <div class="stat-value" id="totalDomains">8,234</div>
+                    <div class="stat-label">今日新增: <span id="newDomains">127</span></div>
+                </div>
+                <div class="card stat-card">
+                    <h3>AFC 流通量</h3>
+                    <div class="stat-value" id="totalAFC">2.1M</div>
+                    <div class="stat-label">24h 交易量: <span id="dailyVolume">156K</span></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>系统状态</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>服务</th>
+                            <th>状态</th>
+                            <th>CPU</th>
+                            <th>内存</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>PoUE 引擎</td>
+                            <td><span class="status-online">● 运行中</span></td>
+                            <td>45%</td>
+                            <td>2.1GB</td>
+                            <td><button class="btn btn-secondary">重启</button></td>
+                        </tr>
+                        <tr>
+                            <td>DNS 服务</td>
+                            <td><span class="status-online">● 运行中</span></td>
+                            <td>23%</td>
+                            <td>1.5GB</td>
+                            <td><button class="btn btn-secondary">重启</button></td>
+                        </tr>
+                        <tr>
+                            <td>区块链节点</td>
+                            <td><span class="status-warning">● 同步中</span></td>
+                            <td>78%</td>
+                            <td>4.2GB</td>
+                            <td><button class="btn btn-secondary">重启</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Nodes Section -->
+        <div id="nodes" class="section hidden">
+            <h2>节点管理</h2>
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>节点列表</h3>
+                    <button class="btn btn-primary" onclick="addNode()">添加节点</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>节点ID</th>
+                            <th>类型</th>
+                            <th>状态</th>
+                            <th>算力</th>
+                            <th>收益</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="nodesTable">
+                        <tr>
+                            <td>node_001</td>
+                            <td>核心节点</td>
+                            <td><span class="status-online">● 在线</span></td>
+                            <td>1.2 TH/s</td>
+                            <td>45.6 AFC</td>
+                            <td>
+                                <button class="btn btn-secondary">详情</button>
+                                <button class="btn btn-secondary">停用</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>node_002</td>
+                            <td>子节点</td>
+                            <td><span class="status-online">● 在线</span></td>
+                            <td>0.8 TH/s</td>
+                            <td>32.1 AFC</td>
+                            <td>
+                                <button class="btn btn-secondary">详情</button>
+                                <button class="btn btn-secondary">停用</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Users Section -->
+        <div id="users" class="section hidden">
+            <h2>用户管理</h2>
+            <div class="card">
+                <h3>用户列表</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>钱包地址</th>
+                            <th>注册时间</th>
+                            <th>AFC 余额</th>
+                            <th>域名数量</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0xa1b2...c3d4</td>
+                            <td>2024-01-15</td>
+                            <td>1,234.56 AFC</td>
+                            <td>3</td>
+                            <td><span class="status-online">● 活跃</span></td>
+                            <td>
+                                <button class="btn btn-secondary">详情</button>
+                                <button class="btn btn-secondary">冻结</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>0xe5f6...g7h8</td>
+                            <td>2024-02-20</td>
+                            <td>567.89 AFC</td>
+                            <td>1</td>
+                            <td><span class="status-online">● 活跃</span></td>
+                            <td>
+                                <button class="btn btn-secondary">详情</button>
+                                <button class="btn btn-secondary">冻结</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Domains Section -->
+        <div id="domains" class="section hidden">
+            <h2>域名管理</h2>
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h3>域名列表</h3>
+                    <button class="btn btn-primary" onclick="reserveDomain()">预留域名</button>
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>域名</th>
+                            <th>所有者</th>
+                            <th>注册时间</th>
+                            <th>到期时间</th>
+                            <th>状态</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>ai-avatar.web4</td>
+                            <td>0xa1b2...c3d4</td>
+                            <td>2024-01-15</td>
+                            <td>永久</td>
+                            <td><span class="status-online">● 正常</span></td>
+                            <td>
+                                <button class="btn btn-secondary">详情</button>
+                                <button class="btn btn-secondary">转移</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>soul-crystal.web4</td>
+                            <td>0xe5f6...g7h8</td>
+                            <td>2024-02-20</td>
+                            <td>永久</td>
+                            <td><span class="status-online">● 正常</span></td>
+                            <td>
+                                <button class="btn btn-secondary">详情</button>
+                                <button class="btn btn-secondary">转移</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Tokens Section -->
+        <div id="tokens" class="section hidden">
+            <h2>代币管理</h2>
+            <div class="dashboard-grid">
+                <div class="card">
+                    <h3>AFC 代币统计</h3>
+                    <div class="form-group">
+                        <label class="form-label">总供应量</label>
+                        <input type="text" class="form-input" value="21,000,000 AFC" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">流通量</label>
+                        <input type="text" class="form-input" value="2,100,000 AFC" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">当前价格</label>
+                        <input type="text" class="form-input" value="$0.45" readonly>
+                    </div>
+                </div>
+                <div class="card">
+                    <h3>铸造新代币</h3>
+                    <div class="form-group">
+                        <label class="form-label">接收地址</label>
+                        <input type="text" class="form-input" placeholder="0x...">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">数量</label>
+                        <input type="number" class="form-input" placeholder="1000">
+                    </div>
+                    <button class="btn btn-primary" onclick="mintTokens()">铸造代币</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Settings Section -->
+        <div id="settings" class="section hidden">
+            <h2>系统设置</h2>
+            <div class="card">
+                <h3>网络参数</h3>
+                <div class="form-group">
+                    <label class="form-label">区块时间 (秒)</label>
+                    <input type="number" class="form-input" value="12">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">最小质押量 (AFC)</label>
+                    <input type="number" class="form-input" value="1000">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">域名注册费用 (AFC)</label>
+                    <input type="number" class="form-input" value="100">
+                </div>
+                <button class="btn btn-primary" onclick="saveSettings()">保存设置</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <h3 id="modalTitle">操作确认</h3>
+            <p id="modalMessage">确定要执行此操作吗？</p>
+            <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="confirmAction()">确认</button>
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global state
+        let currentSection = 'dashboard';
+        let currentAction = null;
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set admin address from URL params or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            const address = urlParams.get('address') || localStorage.getItem('adminAddress') || '0xa1b2...c3d4';
+            document.getElementById('adminAddress').textContent = address;
+            
+            // Start real-time updates
+            startRealTimeUpdates();
+        });
+
+        // Section management
+        function showSection(sectionName) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Remove active class from all sidebar items
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionName).classList.remove('hidden');
+            
+            // Add active class to clicked sidebar item
+            event.target.closest('.sidebar-item').classList.add('active');
+            
+            currentSection = sectionName;
+        }
+
+        // Real-time updates
+        function startRealTimeUpdates() {
+            setInterval(() => {
+                updateDashboardStats();
+            }, 5000);
+        }
+
+        function updateDashboardStats() {
+            // Simulate real-time data updates
+            const totalNodes = 10149 + Math.floor(Math.random() * 10);
+            const onlineNodes = totalNodes - Math.floor(Math.random() * 20);
+            const activeUsers = 12345 + Math.floor(Math.random() * 100);
+            const newDomains = 127 + Math.floor(Math.random() * 10);
+            const dailyVolume = 156 + Math.floor(Math.random() * 20);
+            
+            document.getElementById('totalNodes').textContent = totalNodes.toLocaleString();
+            document.getElementById('onlineNodes').textContent = onlineNodes.toLocaleString();
+            document.getElementById('activeUsers').textContent = activeUsers.toLocaleString();
+            document.getElementById('newDomains').textContent = newDomains;
+            document.getElementById('dailyVolume').textContent = dailyVolume + 'K';
+        }
+
+        // Node management
+        function addNode() {
+            showModal('添加节点', '请输入新节点的配置信息', () => {
+                alert('节点添加功能开发中...');
+            });
+        }
+
+        // Domain management
+        function reserveDomain() {
+            const domain = prompt('请输入要预留的域名（不含 .web4）:');
+            if (domain) {
+                alert(`域名 ${domain}.web4 已预留`);
+            }
+        }
+
+        // Token management
+        function mintTokens() {
+            showModal('铸造代币', '确定要铸造新的 AFC 代币吗？', () => {
+                alert('代币铸造成功！');
+            });
+        }
+
+        // Settings
+        function saveSettings() {
+            showModal('保存设置', '确定要保存系统设置吗？', () => {
+                alert('设置已保存！');
+            });
+        }
+
+        // Modal management
+        function showModal(title, message, action) {
+            document.getElementById('modalTitle').textContent = title;
+            document.getElementById('modalMessage').textContent = message;
+            document.getElementById('modal').classList.add('show');
+            currentAction = action;
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('show');
+            currentAction = null;
+        }
+
+        function confirmAction() {
+            if (currentAction) {
+                currentAction();
+            }
+            closeModal();
+        }
+
+        // Logout
+        function logout() {
+            if (confirm('确定要退出管理后台吗？')) {
+                window.close();
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>

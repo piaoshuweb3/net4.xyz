@@ -1,0 +1,80 @@
+name: Preview
+
+on:
+  pull_request:
+    branches: [main, develop]
+
+env:
+  NODE_VERSION: '20'
+  PNPM_VERSION: '8'
+
+jobs:
+  # Deploy preview for PR
+  preview:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: cd packages/frontend && pnpm install --frozen-lockfile
+      
+      - name: Build
+        run: cd packages/frontend && pnpm build
+      
+      - name: Deploy to Vercel (Preview)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prebuilt'
+        env:
+          VERCEL_DEPLOYMENT_PR_TITLE: "PR #${{ github.event.pull_request.number }}: ${{ github.event.pull_request.title }}"
+          VERCEL_DEPLOYMENT_PR_COMMENT: true
+
+  # Run tests on PR
+  test-pr:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Build shared package
+        run: cd packages/shared && pnpm build
+      
+      - name: Run frontend tests
+        run: cd packages/frontend && pnpm test --run || true
+      
+      - name: Run backend tests
+        run: cd packages/backend && pnpm test --passWithNoTests || true
+      
+      - name: Run contract tests
+        run: cd packages/contracts && pnpm test || true

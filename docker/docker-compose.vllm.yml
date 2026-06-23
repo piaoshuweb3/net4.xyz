@@ -1,0 +1,72 @@
+# net4.xyz vLLM 高性能推理服务配置
+# 用于生产环境高性能部署
+version: '3.8'
+
+services:
+  # vLLM 高性能推理服务
+  vllm:
+    image: vllm/vllm:latest
+    container_name: net4xyz-vllm
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      - VLLM_HOST=0.0.0.0
+      - VLLM_PORT=8000
+      - VLLM_API_KEY=${VLLM_API_KEY:-}
+      # 模型配置
+      - VLLM_MODEL=${VLLM_MODEL:-meta-llama/Llama-3-70b-instruct}
+      - VLLM_DTYPE=${VLLM_DTYPE:-bfloat16}
+      - VLLM_TENSOR_PARALLEL_SIZE=${VLLM_TENSOR_PARALLEL_SIZE:-1}
+      - VLLM_GPU_MEMORY_UTILIZATION=${VLLM_GPU_MEMORY_UTILIZATION:-0.9}
+      - VLLM_MAX_NUM_SEQS=${VLLM_MAX_NUM_SEQS:-256}
+      - VLLM_MAX_MODEL_LEN=${VLLM_MAX_MODEL_LEN:-8192}
+      # 量化配置（可选）
+      - VLLM_QUANTIZATION=${VLLM_QUANTIZATION:-}
+      # KV Cache 配置
+      - VLLM_KV_CACHE_dtype=${VLLM_KV_CACHE_DTYPE:-auto}
+      # 调度配置
+      - VLLM_SCHEDULER_MAX_TOKEN_BATCH_SIZE=${VLLM_SCHEDULER_MAX_TOKEN_BATCH_SIZE:-8192}
+      - VLLM_PREEMPTION_MODE=${VLLM_PREEMPTION_MODE:-recompute}
+    volumes:
+      - vllm_model_cache:/root/.cache/huggingface
+      - vllm_logs:/var/log/vllm
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: ${VLLM_GPU_COUNT:-1}
+              capabilities: [gpu]
+    shm_size: '16g'
+    ulimits:
+      memlock: -1
+      stack: 67108864
+    networks:
+      - net4xyz-network
+
+  # vLLM 监控服务
+  vllm-metrics:
+    image: prom/prometheus:latest
+    container_name: net4xyz-vllm-metrics
+    restart: unless-stopped
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./vllm-prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - net4xyz-network
+
+volumes:
+  vllm_model_cache:
+  vllm_logs:
+  prometheus_data:
+
+networks:
+  net4xyz-network:
+    driver: bridge

@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline';">
+  <title>net4xyz Node Client</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+      background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .version {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      margin: 20px 0;
+    }
+
+    .tab {
+      padding: 12px 24px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .tab:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .tab.active {
+      background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+      border-color: transparent;
+    }
+
+    .content {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 20px;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    h2 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: #00d4ff;
+    }
+
+    .hardware-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .hardware-card {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .hardware-card h3 {
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-bottom: 8px;
+    }
+
+    .hardware-card .value {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .score-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .score-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s;
+    }
+
+    .score-fill.good {
+      background: linear-gradient(90deg, #00ff88, #00d4ff);
+    }
+
+    .score-fill.medium {
+      background: linear-gradient(90deg, #ffaa00, #ff6600);
+    }
+
+    .score-fill.poor {
+      background: linear-gradient(90deg, #ff4444, #ff0000);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+      color: #fff;
+    }
+
+    .btn-primary:hover {
+      opacity: 0.9;
+      transform: translateY(-2px);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .model-list {
+      display: grid;
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .model-card {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .model-info h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+    }
+
+    .model-info p {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .model-size {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 4px;
+    }
+
+    .progress-bar {
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+      margin-top: 8px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+      transition: width 0.3s;
+    }
+
+    .status-badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-badge.available {
+      background: rgba(0, 255, 136, 0.2);
+      color: #00ff88;
+    }
+
+    .status-badge.downloading {
+      background: rgba(0, 212, 255, 0.2);
+      color: #00d4ff;
+    }
+
+    .status-badge.downloaded {
+      background: rgba(123, 44, 191, 0.2);
+      color: #7b2cbf;
+    }
+
+    .status-badge.error {
+      background: rgba(255, 68, 68, 0.2);
+      color: #ff4444;
+    }
+
+    .wallet-section {
+      margin-top: 20px;
+    }
+
+    .wallet-input {
+      width: 100%;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+
+    .wallet-input:focus {
+      outline: none;
+      border-color: #00d4ff;
+    }
+
+    .wallet-info {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .wallet-info p {
+      margin-bottom: 8px;
+    }
+
+    .wallet-info .label {
+      color: rgba(255, 255, 255, 0.6);
+      font-size: 12px;
+    }
+
+    .wallet-info .value {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .update-status {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 20px;
+    }
+
+    .update-status p {
+      margin-bottom: 8px;
+    }
+
+    .recommendations {
+      margin-top: 20px;
+      padding: 16px;
+      background: rgba(255, 170, 0, 0.1);
+      border-radius: 8px;
+      border-left: 4px solid #ffaa00;
+    }
+
+    .recommendations h3 {
+      color: #ffaa00;
+      margin-bottom: 8px;
+    }
+
+    .recommendations ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .recommendations li {
+      padding: 4px 0;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
+    .recommendations li::before {
+      content: "⚠ ";
+    }
+
+    .loading {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255, 255, 255, 0.1);
+      border-top-color: #00d4ff;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    /* Monitor Section Styles */
+    .monitor-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+
+    .monitor-card {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 8px;
+      padding: 16px;
+    }
+
+    .monitor-card h3 {
+      font-size: 16px;
+      color: #00d4ff;
+      margin-bottom: 12px;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .status-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    .status-dot.online {
+      background: #00ff88;
+      box-shadow: 0 0 10px #00ff88;
+    }
+
+    .status-dot.offline {
+      background: #ff4444;
+      box-shadow: 0 0 10px #ff4444;
+    }
+
+    .status-dot.processing {
+      background: #00d4ff;
+      box-shadow: 0 0 10px #00d4ff;
+      animation: pulse 1s infinite;
+    }
+
+    .status-dot.error {
+      background: #ffaa00;
+      box-shadow: 0 0 10px #ffaa00;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .status-text {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .node-info p {
+      margin: 6px 0;
+      font-size: 13px;
+    }
+
+    .node-info .label {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .earnings-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .earnings-main {
+      text-align: left;
+    }
+
+    .earnings-value {
+      display: block;
+      font-size: 28px;
+      font-weight: bold;
+      color: #00ff88;
+    }
+
+    .earnings-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .earnings-pending {
+      text-align: right;
+    }
+
+    .pending-value {
+      display: block;
+      font-size: 20px;
+      font-weight: 600;
+      color: #ffaa00;
+    }
+
+    .pending-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .last-payout {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+      margin-top: 8px;
+    }
+
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .metric-label {
+      font-size: 12px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .metric-bar {
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .metric-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #00d4ff, #7b2cbf);
+      border-radius: 4px;
+      transition: width 0.5s;
+    }
+
+    .metric-value {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .task-history {
+      max-height: 300px;
+      overflow-y: auto;
+    }
+
+    .task-history .no-data {
+      text-align: center;
+      color: rgba(255, 255, 255, 0.6);
+      padding: 20px;
+    }
+
+    .task-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .task-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .task-info {
+      flex: 1;
+    }
+
+    .task-type {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .task-time {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .task-status {
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .task-status.completed {
+      background: rgba(0, 255, 136, 0.2);
+      color: #00ff88;
+    }
+
+    .task-status.failed {
+      background: rgba(255, 68, 68, 0.2);
+      color: #ff4444;
+    }
+
+    .task-status.timeout {
+      background: rgba(255, 170, 0, 0.2);
+      color: #ffaa00;
+    }
+
+    .task-reward {
+      margin-left: 16px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #00ff88;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">net4xyz Node Client</div>
+      <div class="version">v<span id="appVersion">1.0.0</span></div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="hardware">Hardware</button>
+      <button class="tab" data-tab="models">Models</button>
+      <button class="tab" data-tab="wallet">Wallet</button>
+      <button class="tab" data-tab="monitor">Monitor</button>
+      <button class="tab" data-tab="updates">Updates</button>
+    </div>
+
+    <div class="content">
+      <!-- Hardware Section -->
+      <div class="section active" id="hardware-section">
+        <h2>Hardware Detection</h2>
+        <button class="btn btn-primary" id="detectBtn">Detect Hardware</button>
+        
+        <div id="hardwareLoading" class="loading hidden">
+          <div class="spinner"></div>
+        </div>
+
+        <div id="hardwareResults" class="hidden">
+          <div class="hardware-grid">
+            <div class="hardware-card">
+              <h3>CPU</h3>
+              <div class="value" id="cpuModel">-</div>
+              <div class="score-bar">
+                <div class="score-fill" id="cpuScore"></div>
+              </div>
+            </div>
+            <div class="hardware-card">
+              <h3>Memory</h3>
+              <div class="value" id="memoryTotal">-</div>
+              <div class="score-bar">
+                <div class="score-fill" id="memoryScore"></div>
+              </div>
+            </div>
+            <div class="hardware-card">
+              <h3>GPU</h3>
+              <div class="value" id="gpuModel">-</div>
+              <div class="score-bar">
+                <div class="score-fill" id="gpuScore"></div>
+              </div>
+            </div>
+            <div class="hardware-card">
+              <h3>Disk</h3>
+              <div class="value" id="diskSpace">-</div>
+              <div class="score-bar">
+                <div class="score-fill" id="diskScore"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="hardware-card" style="margin-top: 20px;">
+            <h3>Overall Score</h3>
+            <div class="value" id="overallScore">-</div>
+            <div class="score-bar">
+              <div class="score-fill" id="overallScoreBar"></div>
+            </div>
+          </div>
+
+          <div id="requirementsStatus" class="hardware-card" style="margin-top: 20px;">
+            <h3>Status</h3>
+            <div class="value" id="meetsRequirements">-</div>
+          </div>
+
+          <div id="recommendations" class="recommendations hidden">
+            <h3>Recommendations</h3>
+            <ul id="recommendationsList"></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Models Section -->
+      <div class="section" id="models-section">
+        <h2>AI Models</h2>
+        <p style="color: rgba(255,255,255,0.6); margin-bottom: 16px;">
+          Download AI models to run locally. Hardware requirements must be met for optimal performance.
+        </p>
+        
+        <div class="model-list" id="modelList">
+          <div class="loading">
+            <div class="spinner"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Wallet Section -->
+      <div class="section" id="wallet-section">
+        <h2>Wallet Connection</h2>
+        
+        <div class="wallet-section">
+          <input type="text" class="wallet-input" id="walletAddress" placeholder="Enter wallet address (0x...)">
+          <button class="btn btn-primary" id="connectBtn">Connect Wallet</button>
+        </div>
+
+        <div id="walletInfo" class="wallet-info hidden">
+          <p>
+            <span class="label">Connected Address</span><br>
+            <span class="value" id="connectedAddress">-</span>
+          </p>
+          <p>
+            <span class="label">Balance</span><br>
+            <span class="value" id="walletBalance">-</span>
+          </p>
+          <p>
+            <span class="label">Platform</span><br>
+            <span class="value" id="platform">-</span>
+          </p>
+        </div>
+
+        <div id="nodeRegistration" class="hidden" style="margin-top: 20px;">
+          <h3>Node Registration</h3>
+          <p style="color: rgba(255,255,255,0.6); margin: 8px 0 16px;">
+            Register your node to participate in PoUE consensus.
+          </p>
+          <button class="btn btn-primary" id="registerNodeBtn">Register Node</button>
+        </div>
+      </div>
+
+      <!-- Monitor Section -->
+      <div class="section" id="monitor-section">
+        <h2>Node Monitor</h2>
+        
+        <!-- Node Status Card -->
+        <div class="monitor-grid">
+          <div class="monitor-card">
+            <h3>Node Status</h3>
+            <div class="status-indicator" id="nodeStatus">
+              <span class="status-dot offline"></span>
+              <span class="status-text">Offline</span>
+            </div>
+            <div class="node-info">
+              <p><span class="label">Node ID:</span> <span id="monitorNodeId">-</span></p>
+              <p><span class="label">Node Type:</span> <span id="monitorNodeType">-</span></p>
+              <p><span class="label">Region:</span> <span id="monitorRegion">-</span></p>
+              <p><span class="label">Uptime:</span> <span id="monitorUptime">-</span></p>
+            </div>
+          </div>
+
+          <!-- Earnings Card -->
+          <div class="monitor-card">
+            <h3>Earnings</h3>
+            <div class="earnings-summary">
+              <div class="earnings-main">
+                <span class="earnings-value" id="totalEarnings">0.00</span>
+                <span class="earnings-label">Total AFC</span>
+              </div>
+              <div class="earnings-pending">
+                <span class="pending-value" id="pendingEarnings">0.00</span>
+                <span class="pending-label">Pending</span>
+              </div>
+            </div>
+            <button class="btn btn-primary" id="claimEarningsBtn" disabled>Claim Earnings</button>
+            <p class="last-payout">Last payout: <span id="lastPayoutTime">Never</span></p>
+          </div>
+        </div>
+
+        <!-- Performance Metrics -->
+        <div class="monitor-card" style="margin-top: 20px;">
+          <h3>Performance</h3>
+          <div class="metrics-grid">
+            <div class="metric-item">
+              <span class="metric-label">CPU</span>
+              <div class="metric-bar">
+                <div class="metric-fill" id="cpuMetric" style="width: 0%"></div>
+              </div>
+              <span class="metric-value" id="cpuValue">0%</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Memory</span>
+              <div class="metric-bar">
+                <div class="metric-fill" id="memoryMetric" style="width: 0%"></div>
+              </div>
+              <span class="metric-value" id="memoryValue">0%</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">GPU</span>
+              <div class="metric-bar">
+                <div class="metric-fill" id="gpuMetric" style="width: 0%"></div>
+              </div>
+              <span class="metric-value" id="gpuValue">0%</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Disk</span>
+              <div class="metric-bar">
+                <div class="metric-fill" id="diskMetric" style="width: 0%"></div>
+              </div>
+              <span class="metric-value" id="diskValue">0%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Task History -->
+        <div class="monitor-card" style="margin-top: 20px;">
+          <h3>Task History</h3>
+          <div class="task-history" id="taskHistory">
+            <p class="no-data">No tasks completed yet</p>
+          </div>
+        </div>
+
+        <button class="btn btn-secondary" id="syncMonitorBtn" style="margin-top: 20px;">
+          Sync with Backend
+        </button>
+      </div>
+
+      <!-- Updates Section -->
+      <div class="section" id="updates-section">
+        <h2>Auto Update</h2>
+        
+        <div class="update-status" id="updateStatus">
+          <p>Current Version: <span id="currentVersion">-</span></p>
+          <p>Status: <span id="updateStatusText">Checking for updates...</span></p>
+        </div>
+
+        <button class="btn btn-primary" id="checkUpdateBtn" style="margin-top: 20px;">
+          Check for Updates
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,576 @@
+// net4.xyz Prisma Schema - MongoDB 数据库模型定义
+// 支持读写分离和副本集
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// 用户模型
+model User {
+  id            String    @id @default(uuid()) @map("_id")
+  address       String    @unique // 钱包地址
+  email         String?   @unique
+  twitter       String?   @unique
+  google        String?   @unique
+  password      String?   // 加密后的密码
+  memberLevel   MemberLevel @default(NONE)
+  memberExpiry  DateTime?
+  nodeId        String?   // 关联的节点ID
+  avatar        String?   // 头像URL
+  bio           String?   // 个人简介
+  isVerified    Boolean   @default(false)
+  isAdmin       Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // 关联
+  contents      Content[]
+  transactions  Transaction[]
+  memberships   MemberTransaction[]
+  domains       Domain[]
+  node          Node?
+  comments      Comment[]
+  books         Book[]
+  copyrightNfts CopyrightNFT[]
+  tipsReceived  Tip[]        @relation("TipReceiver")
+  tipsGiven     Tip[]        @relation("TipGiver")
+  revenues      Revenue[]
+  reviews       Appeal[]    @relation("AppealReviewer")
+
+  @@map("users")
+}
+
+// 会员等级枚举
+enum MemberLevel {
+  NONE
+  BASIC      // 初级会员 $99/年
+  MEDIUM     // 中级会员 $999/年
+  ADVANCED   // 高级会员 $9999/年
+}
+
+// 会员交易记录
+model MemberTransaction {
+  id            String    @id @default(uuid()) @map("_id")
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  amount        Float     // 金额（USDT）
+  currency      String    @default("USDT") // 支付货币
+  level         MemberLevel // 会员等级
+  paymentMethod PaymentMethod // 支付方式
+  status        PaymentStatus @default(PENDING)
+  transakOrderId String?  // Transak订单ID
+  txHash        String?   // 区块链交易哈希
+  expiresAt     DateTime? // 会员到期时间
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("member_transactions")
+}
+
+enum PaymentMethod {
+  CREDIT_CARD  // 信用卡 (Transak)
+  USDT         // USDT转账
+  CRYPTO       // 其他加密货币
+}
+
+enum PaymentStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// 节点模型
+model Node {
+  id            String    @id @default(uuid()) @map("_id")
+  ownerId       String    @unique
+  owner         User      @relation(fields: [ownerId], references: [id])
+  nodeType      NodeType
+  status        NodeStatus @default(PENDING)
+  aiModelType   AIModelType @default(GPT_4O)
+  reputation    Int       @default(0)
+  stakedAmount  Float     @default(0) // 抵押金额 (USDT)
+  region        String?   // 地域
+  ipAddress     String?
+  hardwareInfo  Json?     // 硬件信息
+  lastActiveAt  DateTime?
+  approvedAt    DateTime?
+  aiAvatarId    String?   @unique // 关联的 AI 分身 ID
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // 关联
+  tasks         AITask[]
+  punishments   Punishment[]
+  appeals       Appeal[]
+  aiAvatar      AIAvatar?  @relation("NodeAvatar")
+
+  @@map("nodes")
+}
+
+enum NodeType {
+  CORE    // 核心验证节点 (21个)
+  SUB     // 子节点 (128个)
+  NORMAL  // 普通节点
+}
+
+enum NodeStatus {
+  PENDING    // 待审批
+  ACTIVE     // 活跃
+  OFFLINE    // 离线
+  PUNISHING  // 惩罚中
+  REJECTED   // 已拒绝
+}
+
+enum AIModelType {
+  GPT_4O
+  CLAUDE_35
+  LLAMA_3_70B
+  LLAMA_3_405B
+  MIXTRAL_8X22B
+}
+
+// AI任务模型
+model AITask {
+  id            String    @id @default(uuid()) @map("_id")
+  nodeId        String?
+  node          Node?     @relation(fields: [nodeId], references: [id])
+  taskHash      String    @unique
+  taskType      String?   // Task type (EMOTIONAL_ANALYSIS, etc.)
+  prompt        String
+  result        String?
+  status        TaskStatus @default(PENDING)
+  reward        Float     @default(0)
+  timeout       Int       @default(60000) // Timeout in milliseconds
+  zkProof       String?
+  verifiedAt    DateTime?
+  startedAt     DateTime?
+  completedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("ai_tasks")
+}
+
+enum TaskStatus {
+  PENDING      // 待处理
+  PROCESSING   // 处理中
+  COMPLETED    // 已完成
+  FAILED       // 失败
+  VERIFIED     // 已验证
+}
+
+// 惩罚记录
+model Punishment {
+  id            String    @id @default(uuid()) @map("_id")
+  nodeId        String
+  node          Node      @relation(fields: [nodeId], references: [id])
+  type          PunishmentType
+  amount        Float     // 扣除金额
+  reason        String
+  isResolved    Boolean   @default(false)
+  resolvedAt    DateTime?
+  createdAt     DateTime  @default(now())
+
+  // 关联申诉
+  appeals       Appeal[]
+
+  @@map("punishments")
+}
+
+enum PunishmentType {
+  OFFLINE       // 离线惩罚
+  CHEATING      // 作弊惩罚
+  CONTENT_VIOLATION // 内容违规
+}
+
+// 申诉记录
+model Appeal {
+  id            String    @id @default(uuid()) @map("_id")
+  punishmentId  String
+  punishment    Punishment @relation(fields: [punishmentId], references: [id])
+  nodeId        String
+  node          Node      @relation(fields: [nodeId], references: [id])
+  reason        String    // 申诉理由
+  evidence      String?   // 证据材料
+  status        AppealStatus @default(PENDING)
+  reviewerId    String?   // 审核者 ID
+  reviewer      User?     @relation("AppealReviewer", fields: [reviewerId], references: [id])
+  reviewComment String?   // 审核意见
+  reviewedAt    DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("appeals")
+}
+
+enum AppealStatus {
+  PENDING    // 待审核
+  APPROVED   // 申诉成功
+  REJECTED   // 申诉驳回
+}
+
+// AI 分身模型
+model AIAvatar {
+  id            String    @id @default(uuid()) @map("_id")
+  nodeId        String    @unique
+  node          Node      @relation("NodeAvatar", fields: [nodeId], references: [id])
+  avatarType    String    // LIGHT, MEDIUM, ADVANCED
+  nickname      String
+  sparkNftId    String    @unique // Spark NFT ID
+  status        AIAvatarStatus @default(ACTIVE)
+  modelId       String?   // 使用的 AI 模型 ID
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("ai_avatars")
+}
+
+enum AIAvatarStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+}
+
+// 域名模型
+model Domain {
+  id            String    @id @default(uuid()) @map("_id")
+  name          String    @unique // 不包含 .web4 后缀
+  ownerId       String
+  owner         User      @relation(fields: [ownerId], references: [id])
+  recordType    DNSRecordType
+  recordValue   String    // 解析值（钱包地址/IPFS哈希/DID）
+  expiryDate    DateTime
+  price         Float     // 年费
+  isLocked      Boolean   @default(false)
+  lockReason    String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("domains")
+}
+
+enum DNSRecordType {
+  WALLET  // 钱包地址
+  IPFS    // IPFS哈希
+  DID     // Mirrome DID
+}
+
+// 内容模型
+model Content {
+  id            String    @id @default(uuid()) @map("_id")
+  authorId      String
+  author        User      @relation(fields: [authorId], references: [id])
+  type          ContentType
+  title         String
+  summary       String?
+  content       String    // 使用 String 替代 @db.Text (MongoDB不支持)
+  ipfsHash      String?
+  chainHash     String?   // 链上存证哈希
+  isPremium     Boolean   @default(false)
+  price         Float?    // 价格（如果需要付费）
+  status        ContentStatus @default(DRAFT)
+  tags          String[]  // 标签
+  viewCount     Int       @default(0)
+  likeCount     Int       @default(0)
+  commentCount  Int       @default(0)
+  publishedAt   DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // 关联
+  comments      Comment[]
+  media         Media[]
+
+  @@map("contents")
+}
+
+enum ContentType {
+  WIKI      // Wiki知识库
+  BLOG      // 博客
+  VIDEO     // 视频
+  PODCAST   // 播客
+  BOOK      // 书籍
+}
+
+enum ContentStatus {
+  DRAFT       // 草稿
+  PENDING     // 待审核
+  PUBLISHED   // 已发布
+  REJECTED    // 已拒绝
+  ARCHIVED    // 已归档
+}
+
+// 评论模型
+model Comment {
+  id            String    @id @default(uuid()) @map("_id")
+  contentId     String
+  content       Content   @relation(fields: [contentId], references: [id])
+  authorId      String
+  author        User      @relation(fields: [authorId], references: [id])
+  parentId      String?   // 父评论ID（用于回复）
+  parent        Comment?  @relation("CommentReplies", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  replies       Comment[] @relation("CommentReplies")
+  text          String
+  chainHash     String?   // 链上存证哈希
+  likeCount     Int       @default(0)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("comments")
+}
+
+// 媒体模型
+model Media {
+  id            String    @id @default(uuid()) @map("_id")
+  contentId     String?
+  content       Content?  @relation(fields: [contentId], references: [id])
+  type          MediaType
+  url           String
+  ipfsHash      String?
+  filename      String
+  mimeType      String
+  size          Int       // 文件大小（字节）
+  width         Int?
+  height        Int?
+  duration      Int?      // 视频/音频时长（秒）
+  uploadedBy    String
+  createdAt     DateTime  @default(now())
+
+  @@map("media")
+}
+
+enum MediaType {
+  IMAGE
+  VIDEO
+  AUDIO
+  DOCUMENT
+}
+
+// 交易模型
+model Transaction {
+  id            String    @id @default(uuid()) @map("_id")
+  hash          String    @unique
+  from          String
+  to            String
+  amount        Float
+  token         String    @default("USDT")
+  type          TransactionType
+  status        TransactionStatus @default(PENDING)
+  blockNumber   Int?
+  userId        String?
+  user          User?     @relation(fields: [userId], references: [id])
+  metadata      Json?     // 附加信息
+  createdAt     DateTime  @default(now())
+
+  @@map("transactions")
+}
+
+enum TransactionType {
+  TRANSFER
+  STAKE
+  UNSTAKE
+  REWARD
+  BURN
+  FEE
+  PURCHASE
+  TIP
+  BOOK_SALE
+  COPYRIGHT_SALE
+}
+
+enum TransactionStatus {
+  PENDING
+  CONFIRMED
+  FAILED
+}
+
+// ==================== 创作者经济系统模型 ====================
+
+// 书籍模型
+model Book {
+  id              String    @id @default(uuid()) @map("_id")
+  authorId        String
+  author          User      @relation(fields: [authorId], references: [id])
+  title           String
+  description     String?
+  coverImage      String?   // 封面图片URL
+  content         String    // 使用 String 替代 @db.Text (MongoDB不支持)
+  ipfsHash        String?   // IPFS存储哈希
+  chainHash       String?   // 链上存证
+  price           Float     // 销售价格 (USDT)
+  royaltyRate     Float     @default(0.7) // 作者分成比例 (70%)
+  status          BookStatus @default(DRAFT)
+  totalSales      Int       @default(0) // 总销量
+  totalRevenue    Float     @default(0) // 总收入
+  publishedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // 关联
+  sales           BookSale[]
+  copyrightNft    CopyrightNFT?
+
+  @@map("books")
+}
+
+enum BookStatus {
+  DRAFT       // 草稿
+  PENDING     // 待审核
+  PUBLISHED   // 已发布
+  REJECTED    // 已拒绝
+  ARCHIVED    // 已归档
+}
+
+// 书籍销售记录
+model BookSale {
+  id            String    @id @default(uuid()) @map("_id")
+  bookId        String
+  book          Book      @relation(fields: [bookId], references: [id])
+  buyerId       String
+  amount        Float     // 销售金额
+  authorShare   Float     // 作者分成
+  platformShare Float     // 平台分成
+  txHash        String?   // 区块链交易哈希
+  status        SaleStatus @default(PENDING)
+  createdAt     DateTime  @default(now())
+
+  @@map("book_sales")
+}
+
+enum SaleStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  REFUNDED
+}
+
+// 版权NFT模型
+model CopyrightNFT {
+  id            String    @id @default(uuid()) @map("_id")
+  bookId        String    @unique
+  book          Book      @relation(fields: [bookId], references: [id])
+  ownerId       String
+  owner         User      @relation(fields: [ownerId], references: [id])
+  tokenId       String    @unique // NFT Token ID
+  ipfsHash      String?   // 版权证书IPFS哈希
+  chainHash     String?   // 链上存证
+  price         Float     // 售价
+  royaltyRate   Float     @default(0.1) // 转售分成比例 (10%)
+  isListed      Boolean   @default(false)
+  listedAt      DateTime?
+  soldAt        DateTime?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  // 关联
+  sales          CopyrightNFTSale[]
+
+  @@map("copyright_nfts")
+}
+
+// 版权NFT销售记录
+model CopyrightNFTSale {
+  id            String    @id @default(uuid()) @map("_id")
+  nftId         String
+  nft           CopyrightNFT @relation(fields: [nftId], references: [id])
+  sellerId      String
+  buyerId       String
+  price         Float     // 销售价格
+  royalty       Float     // 转售分成
+  txHash        String?   // 区块链交易哈希
+  status        SaleStatus @default(PENDING)
+  createdAt     DateTime  @default(now())
+
+  @@map("copyright_nft_sales")
+}
+
+// 打赏模型
+model Tip {
+  id            String    @id @default(uuid()) @map("_id")
+  receiverId    String
+  receiver      User      @relation("TipReceiver", fields: [receiverId], references: [id])
+  giverId       String
+  giver         User      @relation("TipGiver", fields: [giverId], references: [id])
+  amount        Float     // 打赏金额
+  message       String?   // 打赏留言
+  txHash        String?   // 区块链交易哈希
+  status        TipStatus @default(PENDING)
+  createdAt     DateTime  @default(now())
+
+  @@map("tips")
+}
+
+enum TipStatus {
+  PENDING
+  COMPLETED
+  FAILED
+}
+
+// 收益记录模型
+model Revenue {
+  id            String    @id @default(uuid()) @map("_id")
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  type          RevenueType
+  amount        Float     // 收益金额
+  source        String?   // 来源说明
+  sourceId      String?   // 来源ID
+  txHash        String?   // 区块链交易哈希
+  status        RevenueStatus @default(PENDING)
+  settledAt     DateTime? // 结算时间
+  createdAt     DateTime  @default(now())
+
+  @@map("revenues")
+}
+
+enum RevenueType {
+  BOOK_SALE         // 书籍销售
+  COPYRIGHT_SALE    // 版权NFT销售
+  TIP               // 打赏
+  ROYALTY           // 转售分成
+}
+
+enum RevenueStatus {
+  PENDING   // 待��算
+  SETTLED   // 已结算
+  WITHDRAWN // 已提现
+}
+
+// 系统配置模型
+model SystemConfig {
+  id            String    @id @default(uuid()) @map("_id")
+  key           String    @unique
+  value         Json
+  description   String?
+  isPublic      Boolean   @default(false)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@map("system_configs")
+}
+
+// 审计日志模型
+model AuditLog {
+  id            String    @id @default(uuid()) @map("_id")
+  userId        String?
+  action        String
+  resource      String
+  resourceId    String?
+  details       Json?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime  @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+
+  @@map("audit_logs")
+}

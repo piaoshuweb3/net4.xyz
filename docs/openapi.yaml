@@ -1,0 +1,254 @@
+openapi: 3.0.3
+info:
+  title: net4.xyz API
+  description: Web4.0 AI 文明门户 — AP2 协议 API 规范
+  version: 1.0.0
+  contact:
+    name: net4.xyz
+    url: https://net4.xyz
+servers:
+  - url: https://api.net4.xyz/api/v1
+    description: Production
+  - url: http://localhost:4000/api/v1
+    description: Development
+
+paths:
+  /escrow/create-task:
+    post:
+      summary: Create a new escrow task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payer: { type: string, description: "Payer wallet address" }
+                payee: { type: string, description: "Payee wallet address" }
+                scope: { type: string, description: "Task scope identifier" }
+                target: { type: string, description: "Target identifier" }
+                baseAmount: { type: string, description: "Base payment in wei" }
+                optionAmount: { type: string, description: "Option fee in wei" }
+                durationSeconds: { type: integer, minimum: 1 }
+      responses:
+        "200":
+          description: Task created
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  taskId: { type: string }
+                  txHash: { type: string }
+
+  /escrow/approve:
+    post:
+      summary: Approve escrow payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskId: { type: string }
+                amount: { type: string }
+      responses:
+        "200": { description: "Approved" }
+
+  /escrow/withdraw:
+    post:
+      summary: Withdraw escrow payment
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskId: { type: string }
+      responses:
+        "200": { description: "Withdrawn" }
+
+  /escrow/settle:
+    post:
+      summary: Settle escrow task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskId: { type: string }
+                qualityScore: { type: integer, minimum: 0, maximum: 100 }
+      responses:
+        "200": { description: "Settled" }
+
+  /escrow/status:
+    get:
+      summary: Get escrow task status
+      parameters:
+        - name: taskId
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Task status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  taskId: { type: string }
+                  status: { type: string, enum: [created, active, withdrawn, settled, cancelled] }
+                  payer: { type: string }
+                  payee: { type: string }
+                  baseAmount: { type: string }
+                  optionAmount: { type: string }
+                  withdrawnAmount: { type: string }
+                  createdAt: { type: integer, description: "Unix timestamp" }
+
+  /tdpo/lock-contrarian:
+    post:
+      summary: Lock contrarian cognition
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cognitiveHash: { type: string, description: "Bytes32 hash" }
+                duration: { type: integer, description: "Lock duration in seconds, min 2592000" }
+      responses:
+        "200": { description: "Locked" }
+
+  /tdpo/inject-factor:
+    post:
+      summary: Inject evolution factor (Oracle only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cognitiveHash: { type: string }
+                factor: { type: integer }
+      responses:
+        "200": { description: "Injected" }
+
+  /tdpo/veto:
+    post:
+      summary: Veto evolution (FDEAC only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cognitiveHash: { type: string }
+      responses:
+        "200": { description: "Vetoed" }
+
+  /tdpo/claim:
+    post:
+      summary: Claim retroactive reward
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cognitiveHash: { type: string }
+      responses:
+        "200": { description: "Claimed" }
+
+  /tdpo/status:
+    get:
+      summary: Get TDPO lock status
+      parameters:
+        - name: cognitiveHash
+          in: query
+          required: true
+          schema: { type: string }
+      responses:
+        "200":
+          description: Lock status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  cognitiveHash: { type: string }
+                  creator: { type: string }
+                  lockTime: { type: integer }
+                  unlockTime: { type: integer }
+                  evolutionFactor: { type: integer }
+                  isVetoed: { type: boolean }
+                  challengeEndTime: { type: integer }
+                  claimed: { type: boolean }
+
+  /events/stream:
+    get:
+      summary: Server-Sent Events stream for protocol events
+      responses:
+        "200":
+          description: SSE stream
+          content:
+            text/event-stream:
+              schema:
+                type: object
+                properties:
+                  event: { type: string }
+                  data: { type: object }
+
+  /admin/mint-safc:
+    post:
+      summary: Mint sAFC tokens (Owner only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                to: { type: string }
+                amount: { type: string }
+      responses:
+        "200": { description: "Minted" }
+
+  /admin/set-policy:
+    post:
+      summary: Set payer policy (Owner only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                payer: { type: string }
+                dailyCap: { type: string }
+                scopes: { type: array, items: { type: string } }
+      responses:
+        "200": { description: "Policy set" }
+
+  /health:
+    get:
+      summary: Health check
+      responses:
+        "200":
+          description: Service healthy
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, enum: [ok, degraded] }
+                  timestamp: { type: integer }
+                  version: { type: string }

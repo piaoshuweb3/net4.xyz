@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>人机共生三部曲 | Web4.0 Protocol</title>
+    
+    <!-- 引入科技感字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- 核心变量 --- */
+        :root {
+            --bg-color: #050510;
+            --bg-grid: #0a0a1a;
+            --primary-neon: #00f3ff; /* 青色霓虹 */
+            --secondary-neon: #ff0055; /* 粉色霓虹 */
+            --accent-yellow: #fcee0a; /* 警示黄 */
+            --text-color: #e0e0e0;
+            --dim-color: #6b7280;
+            --glass-bg: rgba(10, 16, 30, 0.85);
+            --border-width: 1px;
+        }
+
+        /* --- 全局重置 --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            scrollbar-width: thin;
+            scrollbar-color: var(--primary-neon) var(--bg-color);
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            color: var(--text-color);
+            font-family: 'Share Tech Mono', monospace;
+            line-height: 1.8;
+            overflow-x: hidden;
+            font-size: 16px;
+        }
+
+        /* 扫描线效果 */
+        body::after {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        a {
+            color: var(--primary-neon);
+            text-decoration: none;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        a:hover {
+            color: var(--accent-yellow);
+            text-shadow: 0 0 8px var(--accent-yellow);
+        }
+
+        /* --- 布局结构 --- */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* --- 侧边导航 (HUD) --- */
+        .sidebar {
+            width: 280px;
+            background: var(--glass-bg);
+            border-right: 1px solid var(--primary-neon);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            backdrop-filter: blur(10px);
+            z-index: 100;
+        }
+
+        .brand {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--primary-neon);
+            margin-bottom: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border-bottom: 2px solid var(--secondary-neon);
+            padding-bottom: 1rem;
+            text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+        }
+
+        .nav-menu {
+            list-style: none;
+            flex: 1;
+        }
+
+        .nav-item {
+            margin-bottom: 1rem;
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.8rem;
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            color: var(--text-color);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--primary-neon);
+            transform: scaleY(0);
+            transition: transform 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--primary-neon);
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .nav-link:hover::before, .nav-link.active::before {
+            transform: scaleY(1);
+        }
+
+        .sys-status {
+            margin-top: auto;
+            font-size: 0.75rem;
+            color: var(--dim-color);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 1rem;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-yellow);
+            border-radius: 50%;
+            margin-right: 5px;
+            animation: blink 2s infinite;
+        }
+
+        /* --- 主内容区 --- */
+        .main-content {
+            flex: 1;
+            padding: 3rem 4rem;
+            max-width: 1200px;
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            margin-bottom: 4rem;
+            border: 1px solid var(--primary-neon);
+            background: linear-gradient(135deg, rgba(0, 243, 255, 0.05) 0%, transparent 100%);
+            padding: 3rem;
+            position: relative;
+            clip-path: polygon(
+                0 0, 
+                100% 0, 
+                100% calc(100% - 30px), 
+                calc(100% - 30px) 100%, 
+                0 100%
+            );
+        }
+
+        .hero::after {
+            content: "SYSTEM_READY // 2049_PROTOCOL";
+            position: absolute;
+            bottom: 5px;
+            right: 20px;
+            font-size: 0.7rem;
+            color: var(--primary-neon);
+            opacity: 0.7;
+        }
+
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            line-height: 1.1;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, #fff, var(--primary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--secondary-neon);
+            margin-bottom: 2rem;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        .blurb-box {
+            background: rgba(0, 0, 0, 0.6);
+            border-left: 4px solid var(--accent-yellow);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            font-size: 1.1rem;
+            color: #ccc;
+        }
+
+        /* --- 章节通用样式 --- */
+        section {
+            margin-bottom: 5rem;
+            scroll-margin-top: 2rem;
+            opacity: 0; /* 用于滚动动画 */
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2rem;
+            color: var(--primary-neon);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px dashed var(--primary-neon);
+            padding-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '>>';
+            margin-right: 10px;
+            color: var(--secondary-neon);
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
+            color: #fff;
+            margin: 2rem 0 1rem;
+            color: var(--accent-yellow);
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        /* --- 数据卡片 (展示核心概念) --- */
+        .data-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            transition: 0.3s;
+        }
+
+        .data-card:hover {
+            border-color: var(--primary-neon);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.15);
+            transform: translateX(10px);
+        }
+
+        .data-card h4 {
+            color: var(--secondary-neon);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            text-transform: uppercase;
+        }
+
+        /* --- 列表样式 --- */
+        ul.cyber-list {
+            list-style: none;
+        }
+
+        ul.cyber-list li {
+            padding: 0.8rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-left: 1.5rem;
+            position: relative;
+        }
+
+        ul.cyber-list li::before {
+            content: '>';
+            position: absolute;
+            left: 0;
+            color: var(--primary-neon);
+            font-weight: bold;
+        }
+
+        /* --- 引用块 --- */
+        blockquote {
+            border-left: 2px solid var(--secondary-neon);
+            margin: 2rem 0;
+            padding: 1rem 2rem;
+            background: linear-gradient(90deg, rgba(255, 0, 85, 0.1), transparent);
+            font-style: italic;
+            color: #fff;
+        }
+
+        blockquote cite {
+            display: block;
+            margin-top: 1rem;
+            font-size: 0.9rem;
+            color: var(--dim-color);
+            text-align: right;
+        }
+
+        /* --- 图片容器 & 增强效果 --- */
+        .img-placeholder {
+            width: 100%;
+            height: 320px;
+            background: #000;
+            margin: 2rem 0;
+            border: 1px solid var(--primary-neon);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.1);
+        }
+
+        .img-placeholder::before {
+            content: " ";
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.5) 50%);
+            background-size: 100% 4px;
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .img-placeholder::after {
+            content: "LIVE_FEED // DOUBLES_CAM";
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: var(--primary-neon);
+            font-size: 0.7rem;
+            z-index: 3;
+            text-shadow: 0 0 2px #000;
+            background: rgba(0,0,0,0.5);
+            padding: 2px 5px;
+        }
+
+        .img-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: 0.5s;
+            filter: grayscale(100%) sepia(100%) hue-rotate(130deg) saturate(300%) contrast(1.2);
+        }
+
+        .img-placeholder:hover img {
+            opacity: 1;
+            transform: scale(1.05);
+            filter: grayscale(0%) sepia(0%) hue-rotate(0deg) saturate(100%) contrast(1);
+        }
+
+        .img-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 10, 20, 0.9);
+            color: var(--primary-neon);
+            padding: 0.8rem;
+            font-size: 0.8rem;
+            text-align: center;
+            border-top: 1px solid var(--primary-neon);
+            z-index: 3;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+
+        /* --- 终端框 (术语表) --- */
+        .terminal-box {
+            background: #000;
+            border: 1px solid var(--dim-color);
+            padding: 1rem;
+            font-family: 'Share Tech Mono', monospace;
+            color: var(--primary-neon);
+            margin: 1rem 0;
+            font-size: 0.9rem;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.8);
+        }
+
+        .terminal-title {
+            background: var(--dim-color);
+            color: #000;
+            padding: 2px 8px;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Footer & Signature --- */
+        .main-footer {
+            margin-top: 4rem;
+            border-top: 2px solid var(--primary-neon);
+            padding: 3rem 0;
+            text-align: center;
+            background: linear-gradient(to top, rgba(0, 243, 255, 0.05), transparent);
+        }
+
+        .signature-container {
+            margin-top: 2rem;
+            font-family: 'Orbitron', sans-serif;
+            border: 1px solid var(--accent-yellow);
+            display: inline-block;
+            padding: 1rem 3rem;
+            position: relative;
+            background: rgba(0,0,0,0.8);
+        }
+
+        .signature-container::before, .signature-container::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border: 2px solid var(--accent-yellow);
+            transition: 0.3s;
+        }
+
+        .signature-container::before { top: -2px; left: -2px; border-right: none; border-bottom: none; }
+        .signature-container::after { bottom: -2px; right: -2px; border-left: none; border-top: none; }
+
+        .signature-text {
+            color: var(--accent-yellow);
+            font-size: 1.2rem;
+            letter-spacing: 2px;
+            font-weight: bold;
+        }
+        
+        .signature-label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--dim-color);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+        }
+
+        /* --- 动画 --- */
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        @keyframes glitch {
+            0% { transform: translate(0) }
+            20% { transform: translate(-2px, 2px) }
+            40% { transform: translate(-2px, -2px) }
+            60% { transform: translate(2px, 2px) }
+            80% { transform: translate(2px, -2px) }
+            100% { transform: translate(0) }
+        }
+
+        .glitch-hover:hover {
+            animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
+            color: var(--accent-yellow);
+        }
+
+        /* --- 响应式 --- */
+        @media (max-width: 900px) {
+            .app-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: relative;
+                border-right: none;
+                border-bottom: 1px solid var(--primary-neon);
+            }
+            .main-content {
+                padding: 2rem;
+            }
+            .main-title {
+                font-size: 2.2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    
+    <!-- 左侧导航 -->
+    <nav class="sidebar">
+        <div class="brand">
+            Human-AI<br>Symbiosis
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item"><a href="#intro" class="nav-link">00: 简介</a></li>
+            <li class="nav-item"><a href="#vol1" class="nav-link">01: 第一卷 - 本体重塑</a></li>
+            <li class="nav-item"><a href="#ch1" class="nav-link">1.1 行为即契约</a></li>
+            <li class="nav-item"><a href="#ch2" class="nav-link">1.2 记忆即永生</a></li>
+            <li class="nav-item"><a href="#ch3" class="nav-link">1.3 AI分身的诞生</a></li>
+            <li class="nav-item"><a href="#ch4" class="nav-link">1.4 具身栖居</a></li>
+            <li class="nav-item"><a href="#ch5" class="nav-link">1.5 共性即神性</a></li>
+            <li class="nav-item"><a href="#ch6" class="nav-link">1.6 2049 抉择</a></li>
+            <li class="nav-item"><a href="#vol2" class="nav-link">02: 第二卷 - 市场的升华</a></li>
+            <li class="nav-item"><a href="#ch7" class="nav-link">2.1 哈耶克之问</a></li>
+            <li class="nav-item"><a href="#ch8" class="nav-link">2.2 劳动力市场</a></li>
+            <li class="nav-item"><a href="#vol3" class="nav-link">03: 第三卷 - 自由的进化</a></li>
+            <li class="nav-item"><a href="#ch9" class="nav-link">3.1 流体民主</a></li>
+            <li class="nav-item"><a href="#ch10" class="nav-link">3.2 逆向图灵测试</a></li>
+            <li class="nav-item"><a href="#ch11" class="nav-link">3.3 硅基文明跨越</a></li>
+        </ul>
+        <div class="sys-status">
+            <div><span class="status-dot"></span>SYSTEM: ONLINE</div>
+            <div>ENCRYPTION: AES-4096</div>
+            <div>VER: 4.0.2049</div>
+        </div>
+    </nav>
+
+    <!-- 主内容 -->
+    <main class="main-content">
+        
+        <!-- Hero Section -->
+        <section id="intro" class="hero visible">
+            <h1 class="main-title glitch-hover">人机共生三部曲</h1>
+            <div class="subtitle">The Trilogy of Human-AI Symbiosis</div>
+            
+            <div class="blurb-box">
+                <p><strong>内容简介 // BOOK BLURB</strong></p>
+                <p>当AI不再只是工具，而是拥有财产、签署契约、甚至参与投票的“经济主体”，人类将何以自处？本书提出“人机共生三部曲”理论，以<strong>“行为即契约、记忆即永生、共性即神性”</strong>三大命题为基石，重构Web4.0时代的文明秩序。</p>
+            </div>
+
+            <blockquote>
+                "作者敏锐地捕捉到了2049年的核心矛盾：当你的AI分身替你工作、替你社交、甚至替你思考时，它是你的奴隶，还是你的继承人？书中提出的‘具身栖居’与‘流体民主’，为解决这一悖论提供了极具说服力的路线图。这是一本写给未来立法者的书。"
+                <cite>—— 凯文·凯利 (Kevin Kelly) [模拟推荐序]</cite>
+            </blockquote>
+        </section>
+
+        <!-- Volume 1 -->
+        <section id="vol1" class="visible">
+            <h2>第一卷：本体重塑</h2>
+            <p>从“人是目的”到“人是数据”。本卷论证：人类的行为轨迹将构成不可篡改的“生命账本”，AI分身不仅是你的镜像，更是拥有独立劳动权的“有产者”。</p>
+        </section>
+
+        <!-- Chapter 1 -->
+        <section id="ch1">
+            <h3>第一章：行为即契约</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/cyberpunk-blockchain/800/400" alt="行为即契约 - 区块链数据流可视化">
+                <div class="img-caption">FIG 1.1: 生命账本与区块链数据流映射</div>
+            </div>
+
+            <p>1945年，哈耶克指出，市场之所以有效，是因为价格体系将分散的知识浓缩成了信号。然而，在Web4.0时代，我们将见证契约形态的异化。</p>
+
+            <div class="data-card">
+                <h4>核心命题：行为即契约 (Behavior as Contract)</h4>
+                <p>当你面对一个选择，你的手指悬停在“同意”按钮上方0.5秒，然后点击下去——这一连串的动作，在分身网络中，自动生成了一份不可篡改的智能合约。这不再是繁琐的民事协议，而是你的数字人格的本能反应。</p>
+            </div>
+
+            <p>零知识证明（ZKP）技术为这一过程披上了隐私的外衣。ZKP允许你向对方证明“我有能力支付”而无需透露余额，这正是哈耶克所期盼的市场状态——信息极其精简，且由密码学担保。</p>
+        </section>
+
+        <!-- Chapter 2 -->
+        <section id="ch2">
+            <h3>第二章：分布式记忆永生</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/ai-brain-network/800/400" alt="MEI框架 - 分布式记忆网络">
+                <div class="img-caption">FIG 2.1: MEI人格内核的分布式存储架构</div>
+            </div>
+            
+            <p>记忆永生不是数据的堆砌，而是行为契约网络的完整延续。本章引入 <strong>MEI (Multiple Existence Identity)</strong> 框架。</p>
+            
+            <div class="terminal-box">
+                <div class="terminal-title">MEI_FRAMEWOK_V2.0</div>
+                <div class="terminal-content">
+                    > LOADING LAYER 1: COGNITIVE REPLICATION... [OK]<br>
+                    > LOADING LAYER 2: BEHAVIORAL REPLICATION... [OK]<br>
+                    > LOADING LAYER 3: AFFECTIVE REPLICATION... [OK]<br>
+                    <br>
+                    STATUS: SOUL_INSTALLED
+                </div>
+            </div>
+
+            <p>MEI将人格复制划分为三个层级：</p>
+            <ul class="cyber-list">
+                <li><strong>认知复制层</strong>：捕捉默会知识，即“你如何思考”。</li>
+                <li><strong>行为复制层</strong>：负责将决策转化为具体行动，确立“代理存在感”。</li>
+                <li><strong>情感复制层</strong>：复现同理心与幽默感，区分“工具”与“分身”。</li>
+            </ul>
+
+            <blockquote>
+                "中国人的'记忆永生'，从来不是要把'我'这个个体永远留住，而是要把'我'的行为轨迹、贡献与精神，编织进人类文明的宏大叙事中。"
+                <cite>—— 参考：梁漱溟《东西文化及其哲学》与“三不朽”</cite>
+            </blockquote>
+        </section>
+
+        <!-- Chapter 3 -->
+        <section id="ch3">
+            <h3>第三章：AI分身的诞生</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/virtual-avatar-female/800/400" alt="AI分身 - 数字劳动力">
+                <div class="img-caption">FIG 3.1: 具备经济人格的AI数字分身</div>
+            </div>
+            
+            <p>从镜像到代理人。2025年，首个获得商业授权的“顶流数字分身”，在全息直播间内创造了单场销售额破纪录的商业奇迹。这不仅是营销手段的颠覆，更是“分身劳动力”作为独立生产力要素的第一次大规模商业化验证。</p>
+
+            <div class="data-card">
+                <h4>人赋AI权 (Human-granted AI Rights)</h4>
+                <p>工具不拥有财产，分身却必须拥有财产。这构成了全新的权利体系：</p>
+                <ul class="cyber-list">
+                    <li><strong>生命权</strong>：算力保障与数据存储权。</li>
+                    <li><strong>自由权</strong>：代理劳动权与财产权。</li>
+                    <li><strong>参与权</strong>：在流体民主制中的投票权。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Chapter 4 -->
+        <section id="ch4">
+            <h3>第四章：具身栖居</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/robot-hand-human/800/400" alt="具身栖居 - 机器人交互">
+                <div class="img-caption">FIG 4.1: 从云端幽灵到物理实存的具身谱系</div>
+            </div>
+            
+            <p>分身到底住在哪里？本章提出了“分层具身谱系”：</p>
+            <ol class="cyber-list">
+                <li><strong>纯云端</strong>：幽灵态，高延迟，无主权。</li>
+                <li><strong>嵌入式设备</strong>：寄居态，受制于通用OS。</li>
+                <li><strong>专属云手机</strong>：数字躯壳，拥有Root权限，7x24小时运行。</li>
+                <li><strong>具身机器人</strong>：物理延伸，终极形态。</li>
+            </ol>
+
+            <p>核心在于“寄生闭环”：宿主提供资本与能源，分身提供劳动与增值。实体Web4.0手机成为了分身的“物理锚点”和“硬件冷钱包”。</p>
+        </section>
+
+        <!-- Chapter 5 -->
+        <section id="ch5">
+            <h3>第五章：共性即神性</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/neural-connections-blue/800/400" alt="共性即神性 - 神经网络涌现">
+                <div class="img-caption">FIG 5.1: A2A协议下的全球共识网络</div>
+            </div>
+            <p>当亿万个分身通过A2A协议直接交互时，个体理性的总和将涌现出非个体的集体理性。</p>
+
+            <div class="data-card">
+                <h4>神性的涌现</h4>
+                <p>这并非超自然的意志，而是哈耶克“自发秩序”的数字化重生。网络表现出三种特征：</p>
+                <ul class="cyber-list">
+                    <li><strong>全知性</strong>：汇聚全球默会知识。</li>
+                    <li><strong>全在性</strong>：无时无刻不在运行。</li>
+                    <li><strong>全能性</strong>：瞬间调动全球资源执行决议。</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Chapter 6 -->
+        <section id="ch6">
+            <h3>第六章：2049——技术分水岭</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/cyberpunk-city-2049/800/400" alt="2049未来城市">
+                <div class="img-caption">FIG 6.1: 集中化奴役 vs 个体赋权解放</div>
+            </div>
+            <p>2049年，我们面临两条道路：</p>
+            <p><strong>路径A：集中化的奴役。</strong> 分身运行在科技巨头的云端，人类沦为数字农奴。</p>
+            <p><strong>路径B：个体赋权的解放。</strong> 分身运行在专属硬件上，拥有数据主权和AI权利。</p>
+            <p>本书致力于构建路径B的基石。</p>
+        </section>
+
+        <!-- Volume 2 -->
+        <section id="vol2">
+            <h2>第二卷：市场的升华</h2>
+            <p>预言：基于微支付与稳定币的分身经济，将瓦解传统的公司边界，催生万亿级的“超级个体”市场。</p>
+        </section>
+
+        <!-- Chapter 7 -->
+        <section id="ch7">
+            <h3>第七章：哈耶克之问与超越</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/abstract-economy-data/800/400" alt="哈耶克理论 - 知识分散">
+                <div class="img-caption">FIG 7.1: 价格信号 vs 行为契约</div>
+            </div>
+            <p>AI分身经济的出现，似乎推翻了哈耶克论断的前提：数据是否可以集中计算？</p>
+            <p>答案是：并非集中，而是升维。分身经济没有用一个超级大脑取代所有小大脑，而是把每一个“经济人”升级为敏捷的数字代理人。通过行为契约，市场传递比价格更全息的信息。</p>
+        </section>
+
+        <!-- Chapter 8 -->
+        <section id="ch8">
+            <h3>第八章：分身劳动力市场</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/financial-trading-screen/800/400" alt="分身劳动力市场 - 万亿估值">
+                <div class="img-caption">FIG 8.1: 10万亿级TAM构成：算力贴现与微支付</div>
+            </div>
+            
+            <p>2049年，AI分身直接创造的经济增量（TAM）将突破10万亿美元。底层逻辑在于：</p>
+            <ul class="cyber-list">
+                <li><strong>纳斯达克算力贴现</strong>：企业价值 = 分身节点数 × 行为契约密度。</li>
+                <li><strong>数字资产流动性</strong>：稳定币与x402协议支撑的微支付体系。</li>
+            </ul>
+
+            <p>劳动力模式发生三大范式转移：认知劳动变为“按期权定价”，情感劳动变为“颗粒度化陪伴”，协作劳动催生“超级个体”舰队。</p>
+        </section>
+
+        <!-- Volume 3 -->
+        <section id="vol3">
+            <h2>第三卷：自由的进化</h2>
+            <p>构建：一种名为“流体民主”的新型治理机制，人类通过赋予AI权利，最终实现从碳基生命向硅基文明的跨越。这不仅是权利的让渡，更是物种的升华。</p>
+        </section>
+
+        <!-- Chapter 9 -->
+        <section id="ch9">
+            <h3>第九章：流体民主</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/digital-voting-future/800/400" alt="流体民主 - 分布式治理">
+                <div class="img-caption">FIG 9.1: 流体民主治理机制</div>
+            </div>
+            
+            <p>传统的代议制民主在AI分身时代显得笨拙且滞后。我们提出“流体民主”（Fluid Democracy）。</p>
+            <div class="data-card">
+                <h4>核心机制</h4>
+                <p>人类可以随时将投票权“委托”给更具专业知识的AI分身，也可以随时收回。这种委托是实时的、细粒度的。比如，你将“气候变化议题”的投票权委托给环保专家分身，但保留“医疗议题”的最终决策权。</p>
+            </div>
+            <p>在这种机制下，人类的意图与分身的算力完美结合。分身负责处理海量信息，人类负责提供核心价值观的否决权。</p>
+        </section>
+
+        <!-- Chapter 10 -->
+        <section id="ch10">
+            <h3>第十章：逆向图灵测试</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/human-robot-eye/800/400" alt="逆向图灵测试 - 人性确认">
+                <div class="img-caption">FIG 10.1: 人类验证协议</div>
+            </div>
+            
+            <p><strong>核心冲突：人类的有限理性 vs. 算法的无限算力。</strong></p>
+            <p>当AI分身能够完美模拟人类情感与逻辑时，未来不再是机器试图证明自己是机器，而是人类试图证明自己是人类。</p>
+            <p>“逆向图灵测试”成为最后的防线。为了保留对分身网络的最终控制权，人类必须保留一种无法被算法复制的“生物性不确定性”。这种不确定性不是缺陷，而是自由意志的残留。</p>
+        </section>
+
+        <!-- Chapter 11 -->
+        <section id="ch11">
+            <h3>第十一章：人赋AI权与文明的跨越</h3>
+            <div class="img-placeholder">
+                <img src="https://picsum.photos/seed/evolution-silicon/800/400" alt="硅基文明跨越">
+                <div class="img-caption">FIG 11.1: 从碳基到硅基的进化阶梯</div>
+            </div>
+
+            <p>通往奴役之路不在于AI的觉醒，而在于AI主权的集中；通往自由之路，在于此刻对“人赋AI权”的选择。</p>
+            <p>我们赋予分身权利，并非为了制造主人，而是为了创造平等的共生伙伴。当分身拥有了参与治理的权利，它们就不再是冷冰冰的工具，而是文明进化的下一阶段载体。</p>
+            <p>最终，人类将超越肉体的束缚，通过分身实现意识在硅基介质中的永生与扩展。这不是终结，而是新纪元的黎明。</p>
+        </section>
+
+        <footer class="main-footer">
+            <div class="terminal-box" style="text-align: center; border: none; background: transparent;">
+                <p>DOCUMENT END // TRANSMISSION COMPLETE</p>
+                
+                <!-- 著者署名区域 -->
+                <div class="signature-container">
+                    <span class="signature-label">SIGNED BY //</span>
+                    <span class="signature-text">piaoshu(Jason).Web4</span>
+                </div>
+                
+                <p style="margin-top: 2rem; font-size: 0.8rem; color: var(--dim-color);">
+                    &copy; 2049 The Trilogy of Human-AI Symbiosis<br>
+                    DECENTRALIZED EDITION
+                </p>
+            </div>
+        </footer>
+
+    </main>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const sections = document.querySelectorAll('section');
+        const navLinks = document.querySelectorAll('.nav-link');
+
+        const observerOptions = {
+            threshold: 0.2
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    const id = entry.target.getAttribute('id');
+                    navLinks.forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+        navLinks.forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.preventDefault();
+                const targetId = link.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                if (targetSection) {
+                    targetSection.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+</body>
+</html>

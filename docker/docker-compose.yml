@@ -1,0 +1,302 @@
+version: '3.8'
+
+services:
+  # MongoDB 集群 (一主两从)
+  mongodb-primary:
+    image: mongo:7.0
+    container_name: net4xyz-mongodb-primary
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-net4xyz}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-net4xyz123}
+      MONGO_INITDB_DATABASE: net4xyz
+      MONGO_REPLICA_SET_NAME: rs0
+    volumes:
+      - mongodb_data_primary:/data/db
+      - mongodb_config:/data/configdb
+    ports:
+      - "27017:27017"
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    networks:
+      - net4xyz-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  mongodb-secondary-1:
+    image: mongo:7.0
+    container_name: net4xyz-mongodb-secondary-1
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-net4xyz}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-net4xyz123}
+      MONGO_REPLICA_SET_NAME: rs0
+    volumes:
+      - mongodb_data_secondary_1:/data/db
+    ports:
+      - "27018:27017"
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    networks:
+      - net4xyz-network
+    depends_on:
+      mongodb-primary:
+        condition: service_healthy
+
+  mongodb-secondary-2:
+    image: mongo:7.0
+    container_name: net4xyz-mongodb-secondary-2
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-net4xyz}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-net4xyz123}
+      MONGO_REPLICA_SET_NAME: rs0
+    volumes:
+      - mongodb_data_secondary_2:/data/db
+    ports:
+      - "27019:27017"
+    command: ["--replSet", "rs0", "--bind_ip_all"]
+    networks:
+      - net4xyz-network
+    depends_on:
+      mongodb-primary:
+        condition: service_healthy
+
+  # MongoDB 备份服务
+  mongodb-backup:
+    image: mongo:7.0
+    container_name: net4xyz-mongodb-backup
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER:-net4xyz}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:-net4xyz123}
+      MONGO_REPLICA_SET_NAME: rs0
+      BACKUP_CRON: "0 2 * * *"  # 每天凌晨2点备份
+      BACKUP_RETENTION_DAYS: 30
+    volumes:
+      - mongodb_backup:/backup
+      - ./backup-scripts:/scripts
+    networks:
+      - net4xyz-network
+    depends_on:
+      - mongodb-primary
+      - mongodb-secondary-1
+      - mongodb-secondary-2
+
+  # IPFS 节点集群 (多节点冗余存储)
+  ipfs:
+    image: ipfs/kubo:v0.24.0
+    container_name: net4xyz-ipfs
+    restart: unless-stopped
+    environment:
+      - IPFS_PROFILE=server
+      - IPFS_SWARM_KEY=/key/swarm/psk/1.0.0/
+      - LIBP2P_FORCE_PNET=1
+    volumes:
+      - ipfs_data:/data/ipfs
+      - ipfs_staging:/staging
+      - ipfs_keys:/keys
+    ports:
+      - "5001:5001"
+      - "8080:8080"
+      - "4001:4001"
+    networks:
+      - net4xyz-network
+
+  # IPFS 节点 2 (冗余节点)
+  ipfs-2:
+    image: ipfs/kubo:v0.24.0
+    container_name: net4xyz-ipfs-2
+    restart: unless-stopped
+    environment:
+      - IPFS_PROFILE=server
+      - IPFS_SWARM_KEY=/key/swarm/psk/1.0.0/
+      - LIBP2P_FORCE_PNET=1
+    volumes:
+      - ipfs_data_2:/data/ipfs
+      - ipfs_staging_2:/staging
+      - ipfs_keys_2:/keys
+    ports:
+      - "5002:5001"
+      - "8081:8080"
+      - "4002:4001"
+    networks:
+      - net4xyz-network
+
+  # IPFS 节点 3 (冗余节点)
+  ipfs-3:
+    image: ipfs/kubo:v0.24.0
+    container_name: net4xyz-ipfs-3
+    restart: unless-stopped
+    environment:
+      - IPFS_PROFILE=server
+      - IPFS_SWARM_KEY=/key/swarm/psk/1.0.0/
+      - LIBP2P_FORCE_PNET=1
+    volumes:
+      - ipfs_data_3:/data/ipfs
+      - ipfs_staging_3:/staging
+      - ipfs_keys_3:/keys
+    ports:
+      - "5003:5001"
+      - "8082:8080"
+      - "4003:4001"
+    networks:
+      - net4xyz-network
+
+  # 后端服务
+  backend:
+    build:
+      context: ..
+      dockerfile: packages/backend/Dockerfile
+    container_name: net4xyz-backend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - DATABASE_URL=mongodb://net4xyz:net4xyz123@mongodb-primary:27017,mongodb-secondary-1:27017,mongodb-secondary-2:27017/net4xyz?replicaSet=rs0&readPreference=secondaryPreferred
+      - DATABASE_READ_URL=mongodb://net4xyz:net4xyz123@mongodb-secondary-1:27017,mongodb-secondary-2:27017/net4xyz?replicaSet=rs0&readPreference=secondaryPreferred
+      - DATABASE_WRITE_URL=mongodb://net4xyz:net4xyz123@mongodb-primary:27017/net4xyz?replicaSet=rs0
+      - JWT_SECRET=${JWT_SECRET:-your-secret-key}
+      - IPFS_URL=http://ipfs:5001
+    ports:
+      - "3001:3001"
+    depends_on:
+      mongodb-primary:
+        condition: service_healthy
+      - ipfs
+    networks:
+      - net4xyz-network
+
+  # 前端服务
+  frontend:
+    build:
+      context: ..
+      dockerfile: packages/frontend/Dockerfile
+    container_name: net4xyz-frontend
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:3001
+      - NEXT_PUBLIC_IPFS_GATEWAY=http://localhost:8080/ipfs/
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - net4xyz-network
+
+  # AI 引擎服务
+  ai-engine:
+    build:
+      context: ..
+      dockerfile: packages/ai-engine/Dockerfile
+    container_name: net4xyz-ai-engine
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=development
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - VLLM_BASE_URL=http://vllm:8000
+      - DEFAULT_LOCAL_MODEL=llama3:70b
+      - ALLOW_NO_KEY=${ALLOW_NO_KEY:-true}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ai_models:/models
+    depends_on:
+      - ollama
+      - vllm
+    networks:
+      - net4xyz-network
+
+  # Ollama 本地模型服务
+  ollama:
+    image: ollama/ollama:latest
+    container_name: net4xyz-ollama
+    restart: unless-stopped
+    volumes:
+      - ollama_data:/root/.ollama
+      - ai_models:/models
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+      # 预加载模型（可选）
+      # OLLAMA_MODELS=/models
+    networks:
+      - net4xyz-network
+
+  # vLLM 高性能推理服务
+  vllm:
+    image: vllm/vllm:latest
+    container_name: net4xyz-vllm
+    restart: unless-stopped
+    volumes:
+      - vllm_data:/vllm
+      - ai_models:/models
+    ports:
+      - "8000:8000"
+      - "8001:8001"
+    environment:
+      - VLLM_HOST=0.0.0.0
+      - VLLM_PORT=8000
+      - VLLM_API_KEY=${VLLM_API_KEY:-}
+      # 模型配置
+      - VLLM_MODEL=meta-llama/Llama-3-70b-instruct
+      - VLLM_DTYPE=bfloat16
+      - VLLM_TENSOR_PARALLEL_SIZE=1
+      - VLLM_GPU_MEMORY_UTILIZATION=0.9
+      - VLLM_MAX_NUM_SEQS=256
+      # 量化配置（可选）
+      # - VLLM_QUANTIZATION=awq
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    networks:
+      - net4xyz-network
+
+  # LocalStack (AWS S3 兼容模拟)
+  localstack:
+    image: localstack/localstack:3.0
+    container_name: net4xyz-localstack
+    restart: unless-stopped
+    environment:
+      - SERVICES=s3
+      - DEBUG=1
+      - DEFAULT_REGION=us-east-1
+    volumes:
+      - localstack_data:/var/lib/localstack
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "4566:4566"
+    networks:
+      - net4xyz-network
+
+volumes:
+  mongodb_data_primary:
+  mongodb_data_secondary_1:
+  mongodb_data_secondary_2:
+  mongodb_config:
+  mongodb_backup:
+  ipfs_data:
+  ipfs_data_2:
+  ipfs_data_3:
+  ipfs_staging:
+  ipfs_staging_2:
+  ipfs_staging_3:
+  ipfs_keys:
+  ipfs_keys_2:
+  ipfs_keys_3:
+  ai_models:
+  ollama_data:
+  vllm_data:
+  localstack_data:
+
+networks:
+  net4xyz-network:
+    driver: bridge

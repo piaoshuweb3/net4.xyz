@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package net4xyz.blockchain;
+
+service BlockchainService {
+  rpc GetBalance (GetBalanceRequest) returns (BalanceResponse);
+  rpc Transfer (TransferRequest) returns (TransactionResponse);
+  rpc GetTransaction (GetTransactionRequest) returns (TransactionResponse);
+  rpc GetTokenInfo (GetTokenInfoRequest) returns (TokenInfoResponse);
+  rpc GetNftInfo (GetNftInfoRequest) returns (NftInfoResponse);
+  rpc StakeNft (StakeNftRequest) returns (StakeResponse);
+  rpc UnstakeNft (UnstakeNftRequest) returns (StakeResponse);
+  rpc GetStakeInfo (GetStakeInfoRequest) returns (StakeInfoResponse);
+}
+
+message GetBalanceRequest {
+  string address = 1;
+  string token = 2;
+}
+
+message BalanceResponse {
+  string address = 1;
+  string balance = 2;
+  string token = 3;
+}
+
+message TransferRequest {
+  string from = 1;
+  string to = 2;
+  string amount = 3;
+  string token = 4;
+  string private_key = 5;
+}
+
+message TransactionResponse {
+  string hash = 1;
+  string from = 2;
+  string to = 3;
+  string amount = 4;
+  string status = 5;
+  int64 timestamp = 6;
+}
+
+message GetTransactionRequest {
+  string hash = 1;
+}
+
+message GetTokenInfoRequest {
+  string address = 1;
+}
+
+message TokenInfoResponse {
+  string address = 1;
+  string name = 2;
+  string symbol = 3;
+  uint32 decimals = 4;
+  string total_supply = 5;
+}
+
+message GetNftInfoRequest {
+  string token_id = 1;
+  string contract_address = 2;
+}
+
+message NftInfoResponse {
+  string token_id = 1;
+  string contract_address = 2;
+  string owner = 3;
+  string token_uri = 4;
+  string nft_type = 5;
+  uint32 level = 6;
+}
+
+message StakeNftRequest {
+  string owner = 1;
+  string token_id = 2;
+  string contract_address = 3;
+  string private_key = 4;
+}
+
+message UnstakeNftRequest {
+  string owner = 1;
+  string token_id = 2;
+  string contract_address = 3;
+  string private_key = 4;
+}
+
+message StakeResponse {
+  string transaction_hash = 1;
+  bool success = 2;
+  string message = 3;
+}
+
+message GetStakeInfoRequest {
+  string owner = 1;
+}
+
+message StakeInfoResponse {
+  string owner = 1;
+  repeated StakedNft nfts = 2;
+  string total_rewards = 3;
+}
+
+message StakedNft {
+  string token_id = 1;
+  string contract_address = 2;
+  int64 staked_at = 3;
+  string rewards = 4;
+}

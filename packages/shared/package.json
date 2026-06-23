@@ -1,0 +1,31 @@
+{
+  "name": "@net4xyz/shared",
+  "version": "1.0.0",
+  "description": "net4.xyz 共享类型定义与工具函数",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint \"src/**/*.ts\"",
+    "test": "vitest",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "ethers": "^6.10.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "typescript": "^5.3.0",
+    "vitest": "^1.2.0"
+  },
+  "keywords": [
+    "shared",
+    "types",
+    "utils"
+  ],
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

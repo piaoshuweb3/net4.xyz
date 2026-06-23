@@ -1,0 +1,173 @@
+
+
+  AFC_Token
+    部署
+      √ 应该设置正确的代币名称和符号 (4382ms)
+      √ 应该铸造最大供应量给部署者 (104ms)
+      √ 总供应量应该是10亿 (146ms)
+    锁定与释放功能
+      √ 应该允许所有者锁定代币 (503ms)
+      √ 应该拒绝锁定超过余额的代币 (265ms)
+      √ 应该允许创建 vesting 计划 (186ms)
+      √ 应该正确计算可释放金额 (112ms)
+    治理投票功能
+      √ 应该允许满足条件的用户创建提案 (183ms)
+      √ 应该拒绝代币不足的用户创建提案 (300ms)
+      √ 应该允许投票 (288ms)
+      √ 应该防止重复投票 (113ms)
+      √ 应该正确检查用户是否已投票 (163ms)
+    燃烧功能
+      √ 应该允许任何人燃烧自己的代币 (252ms)
+      √ 应该允许所有者从其他账户燃烧代币 (361ms)
+    批量分发功能
+      √ 应该正确批量转账 (154ms)
+      √ 应该拒绝长度不匹配的数组 (203ms)
+    紧急提现功能
+      √ 应该允许所有者提取代币 (297ms)
+
+  EconomyModel
+    部署
+      √ 应该正确设置合约地址 (844ms)
+      √ 应该正确设置初始价格 (1001ms)
+      √ 应该正确设置初始配额 (654ms)
+      √ 应该正确设置收益钱包 (1128ms)
+    销售阶段管理
+      √ 应该允许所有者开始销售 (335ms)
+      √ 应该允许所有者结束销售 (331ms)
+      √ 应该拒绝非所有者开始销售 (600ms)
+    购买功能
+      √ 应该允许在公开销售期间购买普通节点 (753ms)
+      √ 应该允许购买封装版节点 (386ms)
+      √ 应该拒绝在销售关闭时购买 (228ms)
+      √ 应该拒绝超过配额购买 (346ms)
+      √ 应该正确处理批量购买 (515ms)
+      √ 应该拒绝批量购买长度不匹配 (354ms)
+    动态定价
+      √ 应该返回正确的基础价格 (469ms)
+      √ 应该允许管理员设置价格乘数 (745ms)
+      √ 应该拒绝设置过低的价格乘数 (2035ms)
+      √ 应该拒绝设置过高的价格乘数 (999ms)
+      √ 应该返回所有等级价格 (685ms)
+    收益分配
+      √ 应该正确分配收益 (597ms)
+      √ 应该返回收益分配预览 (478ms)
+    合规功能
+      √ 应该允许管理员设置黑名单 (519ms)
+      √ 应该阻止黑名单用户购买 (504ms)
+      √ 应该允许批量设置黑名单 (514ms)
+      √ 应该正确执行合规检查 (634ms)
+    紧急提取
+      √ 应该允许所有者提取代币 (409ms)
+    配额查询
+      √ 应该返回正确的配额状态 (231ms)
+    购买历史
+      √ 应该正确记录购买历史 (567ms)
+      √ 应该返回正确的购买数量 (1311ms)
+
+  LiquidityManager
+    Deployment
+      √ should set correct token addresses (70ms)
+      √ should set market maker address
+      √ should set default liquidity ratio
+      √ should have 6-month lock period
+    Liquidity Reservation
+      √ should allow owner to reserve liquidity (112ms)
+      √ should emit LiquidityReserved event (165ms)
+      √ should revert if AFC amount is zero
+      √ should revert if USDT amount is zero (54ms)
+      √ should record liquidity history
+    Market Maker Configuration
+      √ should allow owner to set market maker (270ms)
+      √ should emit MarketMakerUpdated event (167ms)
+      √ should allow owner to enable/disable market maker (107ms)
+      √ should emit MarketMakerEnabled event (202ms)
+      √ should revert if market maker address is zero
+    Liquidity Ratio
+      √ should allow owner to set liquidity ratio (42ms)
+      √ should emit LiquidityRatioUpdated event
+      √ should revert if ratio is below minimum (46ms)
+      √ should revert if ratio is above maximum (233ms)
+    Liquidity Status
+      √ should return correct liquidity status (78ms)
+    NFT Liquidation - Purchase AFC
+      √ should reserve liquidity correctly
+      √ should reject purchase when liquidity not initialized (299ms)
+    NFT Liquidation - Sell AFC
+      √ should have reserved liquidity
+      √ should reject sell when liquidity not initialized (291ms)
+    Emergency Withdraw
+      √ should allow owner to emergency withdraw tokens (71ms)
+      √ should emit EmergencyWithdraw event (159ms)
+      √ should revert if recipient is zero address (148ms)
+    Constants
+      √ should have correct min liquidity ratio
+      √ should have correct max liquidity ratio (64ms)
+      √ should have correct default liquidity ratio
+      √ should have correct Uniswap V3 factory address (placeholder)
+
+  Security Tests
+    AFC_Token Security
+      √ should have ReentrancyGuard imported
+      √ should only allow owner to create vesting schedule (66ms)
+      √ should use SafeMath (Solidity 0.8+ overflow protection)
+      √ should have correct initial supply (48ms)
+    Spark_NFT Security
+      √ should have ReentrancyGuard imported
+      √ should only allow owner to mint core nodes (68ms)
+      √ should enforce quota limits
+      √ should validate NFT attributes (67ms)
+    Access Control Tests
+      √ should prevent unauthorized vesting creation (47ms)
+      √ should prevent unauthorized vesting creation
+      √ should prevent unauthorized proposal creation
+    Integer Overflow/Underflow Tests
+      √ should handle large transfers safely (Solidity 0.8+)
+      √ should prevent underflow in transferFrom (95ms)
+    Governance Security
+      √ should have governance parameters defined
+      √ should track proposal count
+    NFT Quota Security
+      √ should not exceed core node quota (510ms)
+      √ should not exceed sub node quota (3228ms)
+
+  Spark_NFT
+    部署
+      √ 应该设置正确的代币名称和符号 (322ms)
+      √ 初始配额应该正确 (202ms)
+    铸造功能
+      √ 应该允许所有者铸造核心节点 NFT (221ms)
+      √ 应该允许所有者铸造子节点 NFT (117ms)
+      √ 应该允许所有者铸造普通节点 NFT (161ms)
+      √ 应该拒绝超过配额铸造 (154ms)
+      √ 应该正确更新配额计数 (219ms)
+    质押功能
+      √ 应该允许用户质押 NFT (195ms)
+      √ 应该拒绝非所有者质押 (120ms)
+      √ 应该拒绝重复质押 (198ms)
+      √ 封装版应该增加 90 天锁定 (197ms)
+    解锁功能
+      √ 应该拒绝在锁定期间解锁 (233ms)
+      √ 应该允许所有者紧急解锁（惩罚机制） (188ms)
+    属性更新功能
+      √ 应该允许所有者更新属性 (510ms)
+      √ 应该拒绝非所有者更新属性 (235ms)
+    节点身份绑定功能
+      √ 应该允许绑定节点身份 (210ms)
+    配额管理功能
+      √ 应该允许所有者设置铸造状态 (335ms)
+    转账限制功能
+      √ 应该阻止质押中且未解锁的 NFT 转账 (543ms)
+      √ 应该允许解锁后的 NFT 转账 (309ms)
+    批量铸造功能
+      √ 应该正确批量铸造 (528ms)
+      √ 应该拒绝长度不匹配的批量铸造 (184ms)
+    紧急提现功能
+      √ 应该允许所有者提取 NFT (283ms)
+    Token URI 功能
+      √ 应该返回正确的 Token URI (250ms)
+    燃烧功能
+      √ 应该允许所有者燃烧 NFT (296ms)
+
+
+  116 passing (59s)
+

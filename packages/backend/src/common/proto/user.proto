@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package net4xyz.user;
+
+service UserService {
+  rpc GetUser (GetUserRequest) returns (UserResponse);
+  rpc CreateUser (CreateUserRequest) returns (UserResponse);
+  rpc UpdateUser (UpdateUserRequest) returns (UserResponse);
+  rpc DeleteUser (DeleteUserRequest) returns (Empty);
+  rpc GetUserByEmail (GetUserByEmailRequest) returns (UserResponse);
+  rpc ListUsers (ListUsersRequest) returns (UserListResponse);
+}
+
+message GetUserRequest {
+  string id = 1;
+}
+
+message CreateUserRequest {
+  string email = 1;
+  string name = 2;
+  string avatar = 3;
+  string provider = 4;
+  string provider_id = 5;
+}
+
+message UpdateUserRequest {
+  string id = 1;
+  string name = 2;
+  string avatar = 3;
+}
+
+message DeleteUserRequest {
+  string id = 1;
+}
+
+message GetUserByEmailRequest {
+  string email = 1;
+}
+
+message ListUsersRequest {
+  int32 limit = 1;
+  int32 offset = 2;
+}
+
+message UserResponse {
+  string id = 1;
+  string email = 2;
+  string name = 3;
+  string avatar = 4;
+  string provider = 5;
+  string provider_id = 6;
+  int64 created_at = 7;
+  int64 updated_at = 8;
+}
+
+message UserListResponse {
+  repeated UserResponse users = 1;
+  int32 total = 2;
+}
+
+message Empty {}

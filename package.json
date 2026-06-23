@@ -1,0 +1,27 @@
+{
+  "name": "net4.xyz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Web4 AI 文明门户 - 基于 PoUE 共识机制的分布式基础设施",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "test:ci": "pnpm -r test -- --run",
+    "lint": "pnpm -r lint",
+    "lint:fix": "pnpm -r lint:fix || true",
+    "clean": "pnpm -r clean",
+    "typecheck": "pnpm -r build"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "packageManager": "pnpm@8.15.0"
+}

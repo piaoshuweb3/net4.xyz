@@ -1,0 +1,1410 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AIAvatarResponse {
+  avatarType: String!
+  createdAt: DateTime!
+  id: ID!
+  modelId: String
+  nickname: String!
+  nodeId: String!
+  sparkNftId: String!
+  status: String!
+}
+
+enum AIModelType {
+  CLAUDE_35
+  GPT_4O
+  LLAMA_3_70B
+  LLAMA_3_405B
+  MIXTRAL_8X22B
+}
+
+input ActivateAIAvatarInput {
+  avatarType: String!
+  nickname: String!
+  sparkNftId: String!
+}
+
+type AmlCheckResult {
+  allowed: Boolean!
+  flags: [String!]!
+  requiresManualReview: Boolean!
+  riskLevel: String!
+}
+
+input AntiCheatCheckInput {
+  aiResult: String!
+  nodeId: ID!
+  resultHash: String
+  taskId: ID!
+}
+
+type AntiCheatResponse {
+  isValid: Boolean!
+  message: String!
+  riskScore: Float
+  violations: [String!]
+}
+
+input ApproveContentInput {
+  approved: Boolean!
+  reason: String
+}
+
+input ApproveNodeInput {
+  approved: Boolean!
+  reason: String
+}
+
+type ArweaveAttestation {
+  blockHash: String!
+  blockHeight: Int!
+  dataHash: String!
+  owner: String!
+  tags: [ArweaveTag!]!
+  timestamp: Int!
+  transactionId: String!
+  verified: Boolean!
+}
+
+type ArweaveConnectionStatus {
+  connected: Boolean!
+  gatewayUrl: String!
+  walletAddress: String
+}
+
+type ArweaveFileResponse {
+  contentType: String!
+  filename: String!
+  gatewayUrl: String!
+  size: Int!
+  timestamp: Int!
+  transactionId: String!
+}
+
+type ArweaveNetworkInfo {
+  height: Int!
+  network: String!
+  release: String!
+  version: String!
+}
+
+type ArweaveTag {
+  name: String!
+  value: String!
+}
+
+type ArweaveTransactionInfo {
+  fee: String!
+  id: String!
+  quantity: String!
+  timestamp: Int!
+}
+
+type ArweaveTransactionStatus {
+  blockHash: String
+  blockHeight: Int
+  confirmed: Boolean!
+  status: Int!
+}
+
+type ArweaveUploadResponse {
+  gatewayUrl: String!
+  size: Int!
+  tags: [ArweaveTag!]!
+  timestamp: Int!
+  transactionId: String!
+}
+
+type AuthResponse {
+  token: String!
+  user: AuthUserResponse!
+}
+
+type AuthUserResponse {
+  address: String!
+  avatar: String
+  bio: String
+  createdAt: DateTime!
+  email: String
+  id: ID!
+  isAdmin: Boolean!
+  isVerified: Boolean!
+  memberExpiry: DateTime
+  memberLevel: MemberLevel!
+  nodeId: String
+  twitter: String
+}
+
+type AuthorResponse {
+  address: String!
+  avatar: String
+  bio: String
+  id: ID!
+}
+
+type BookOutput {
+  author: JSON
+  content: String!
+  coverImage: String
+  description: String
+  hasPurchased: Boolean
+  id: String!
+  price: Float!
+  publishedAt: DateTime
+  royaltyRate: Float!
+  status: String!
+  title: String!
+  totalRevenue: Float!
+  totalSales: Float!
+}
+
+type BridgeConfig {
+  afcChainId: Int!
+  baseChainId: Int!
+  fallbackEnabled: Boolean!
+  messageExpiry: Int!
+  requiredConfirmations: Int!
+}
+
+type BridgeStats {
+  confirmedTransfers: Int!
+  failedTransfers: Int!
+  pendingTransfers: Int!
+  totalTransfers: Int!
+}
+
+type CommentResponse {
+  author: AuthorResponse!
+  createdAt: DateTime!
+  id: ID!
+  likeCount: Int!
+  replies: [CommentResponse!]
+  text: String!
+}
+
+type CompleteTransferResult {
+  status: String!
+  txHash: String!
+}
+
+type ComplianceCheckResultDto {
+  allowed: Boolean!
+  amlCheck: AmlCheckResult!
+  overallRisk: String!
+  refundRiskCheck: RefundRiskCheckResult!
+  securitiesCheck: SecuritiesCheckResult!
+}
+
+type ComplianceReportDto {
+  amlReport: JSON!
+  generatedAt: DateTime!
+  period: JSON!
+  refundReport: JSON!
+  reportId: String!
+  reportType: String!
+  riskMetrics: JSON!
+  securitiesReport: JSON!
+}
+
+type ContentResponse {
+  author: AuthorResponse!
+  chainHash: String
+  commentCount: Int!
+  comments: [CommentResponse!]
+  content: String!
+  createdAt: DateTime!
+  id: ID!
+  ipfsHash: String
+  isLocked: Boolean!
+  isPremium: Boolean!
+  likeCount: Int!
+  media: [MediaResponse!]
+  price: Float
+  publishedAt: DateTime
+  status: ContentStatus!
+  summary: String
+  tags: [String!]!
+  title: String!
+  type: ContentType!
+  viewCount: Int!
+}
+
+type ContentStatsResponse {
+  pendingContents: Int!
+  publishedContents: Int!
+  totalContents: Int!
+  totalLikes: Int!
+  totalViews: Int!
+}
+
+enum ContentStatus {
+  ARCHIVED
+  DRAFT
+  PENDING
+  PUBLISHED
+  REJECTED
+}
+
+enum ContentType {
+  BLOG
+  BOOK
+  PODCAST
+  VIDEO
+  WIKI
+}
+
+type CopyrightNFTOutput {
+  book: JSON
+  id: String!
+  isListed: Boolean!
+  owner: JSON
+  price: Float!
+  royaltyRate: Float!
+  tokenId: String!
+}
+
+type CostEstimateResponse {
+  celestia: JSON!
+  eigenda: JSON!
+}
+
+input CreateBookInput {
+  content: String!
+  coverImage: String
+  description: String
+  price: Float!
+  royaltyRate: Float
+  title: String!
+}
+
+input CreateContentInput {
+  content: String!
+  isPremium: Boolean
+  price: Float
+  summary: String
+  tags: [String!]
+  title: String!
+  type: ContentType!
+}
+
+input CreateCopyrightNFTInput {
+  bookId: String!
+  price: Float!
+  royaltyRate: Float
+}
+
+input CreateMembershipInput {
+  level: MemberLevel!
+  paymentMethod: String!
+}
+
+input CreatePaymentInput {
+  amount: Float!
+  fiatCurrency: String
+  level: MemberLevel!
+  paymentMethod: String!
+  walletAddress: String!
+}
+
+input CreateTaskInput {
+  nodeId: ID
+  prompt: String!
+  reward: Int
+  taskType: String
+  timeout: Int
+}
+
+input CreateTipInput {
+  amount: Float!
+  giverId: String!
+  message: String
+  receiverId: String!
+}
+
+enum DNSRecordType {
+  DID
+  IPFS
+  WALLET
+}
+
+input DaIdentifierInput {
+  blobKey: String
+  namespace: String
+  txHash: String
+}
+
+type DaStatusResponse {
+  provider: String!
+  ready: Boolean!
+}
+
+input DaSubmitOptions {
+  expiry: Float
+  namespace: String
+  priority: String
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type DomainOwnerResponse {
+  address: String!
+  email: String
+  id: ID!
+}
+
+type DomainResponse {
+  createdAt: DateTime!
+  expiryDate: DateTime!
+  fullName: String!
+  id: ID!
+  isLocked: Boolean!
+  lockReason: String
+  name: String!
+  owner: DomainOwnerResponse!
+  price: Int!
+  recordType: DNSRecordType!
+  recordValue: String!
+}
+
+type EmotionalAnalysisItemResponse {
+  intensity: Float!
+  primaryEmotion: String!
+  sentiment: String!
+}
+
+input EmotionalConsensusInput {
+  inputs: [String!]!
+  threshold: Float
+}
+
+type EmotionalConsensusResponse {
+  consensusEmotion: String!
+  consensusScore: Float!
+  individualAnalyses: [EmotionalAnalysisItemResponse!]!
+  intensityVariance: String!
+  isValid: Boolean!
+  timestamp: String!
+}
+
+type ExchangeRateResponse {
+  from: String!
+  rate: Float
+  to: String!
+}
+
+type FallbackResult {
+  message: String!
+  refundTxHash: String
+  success: Boolean!
+}
+
+type FallbackStatus {
+  allowed: Boolean!
+  reason: String
+  timeRemaining: Int
+}
+
+input GenerateProofInput {
+  aiResult: String!
+  inputHash: String
+  modelHash: String!
+  prompt: String!
+  taskId: ID!
+}
+
+type GrpcClientStatus {
+  services: String
+  status: String!
+}
+
+type GrpcServerStatus {
+  servers: String
+  status: String!
+}
+
+type IpfsClusterPeerResponse {
+  peer: String!
+  success: Boolean!
+}
+
+type IpfsConnectionStatus {
+  connected: Boolean!
+  gatewayUrl: String!
+}
+
+type IpfsJsonResponse {
+  cid: String!
+  gatewayUrl: String!
+  size: Int!
+  timestamp: Int!
+}
+
+type IpfsNodeId {
+  agentVersion: String!
+  id: String!
+  protocolVersion: String!
+}
+
+type IpfsPeer {
+  addr: String!
+  peer: String!
+}
+
+type IpfsPin {
+  cid: String!
+  type: String!
+}
+
+type IpfsPinResponse {
+  cid: String!
+  pinned: Boolean!
+}
+
+type IpfsReplicateResponse {
+  cid: String!
+  failedPeers: Int!
+  replicatedPeers: Int!
+}
+
+type IpfsStats {
+  blocks: Int!
+  cid: String!
+  cumulativeSize: Int!
+  size: Int!
+  type: String!
+}
+
+type IpfsUnpinResponse {
+  cid: String!
+  unpinned: Boolean!
+}
+
+type IpfsUploadResponse {
+  cid: String!
+  filename: String!
+  gatewayUrl: String!
+  size: Int!
+  timestamp: Int!
+}
+
+"""JSON custom scalar type"""
+scalar JSON
+
+type KYCStatusResponse {
+  documentType: String
+  expiresAt: DateTime
+  level: String!
+  rejectionReason: String
+  riskScore: Int!
+  verified: Boolean!
+}
+
+type KYCSubmissionResponse {
+  expiresAt: DateTime!
+  submissionId: String!
+  verificationUrl: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
+}
+
+type MediaResponse {
+  filename: String!
+  height: Float
+  id: ID!
+  ipfsHash: String
+  mimeType: String
+  size: Float
+  type: String!
+  url: String!
+  width: Float
+}
+
+enum MediaType {
+  AUDIO
+  DOCUMENT
+  IMAGE
+  VIDEO
+}
+
+enum MemberLevel {
+  ADVANCED
+  BASIC
+  MEDIUM
+  NONE
+}
+
+type MemberOrderResponse {
+  amount: Float!
+  createdAt: DateTime!
+  expiresAt: DateTime
+  id: ID!
+  level: MemberLevel!
+  paymentMethod: PaymentMethod!
+  status: PaymentStatus!
+  txHash: String
+}
+
+type MemberPriceResponse {
+  benefits: [String!]!
+  level: MemberLevel!
+  price: Int!
+}
+
+type MemberRevenueDistributionResponse {
+  advanced: JSON!
+  basic: JSON!
+  medium: JSON!
+  total: Float!
+}
+
+type MemberStatisticsResponse {
+  activeMembers: Int!
+  byLevel: JSON!
+  expiringIn30Days: Int!
+  newMembersLast30Days: JSON!
+  revenue: JSON!
+  totalMembers: Int!
+}
+
+type MemberTrendResponse {
+  advanced: Int!
+  basic: Int!
+  date: String!
+  medium: Int!
+  revenue: Float!
+}
+
+type MembershipInfoResponse {
+  benefits: [String!]!
+  daysLeft: Int!
+  expiresAt: DateTime
+  isExpired: Boolean!
+  level: MemberLevel!
+}
+
+type MicroservicesStatus {
+  grpcClients: GrpcClientStatus!
+  grpcServers: GrpcServerStatus!
+  serviceDiscovery: ServiceDiscoveryStatus!
+  timestamp: String!
+}
+
+input ModerateContentInput {
+  approved: Boolean!
+  contentId: ID!
+  moderatorNote: String
+}
+
+type Mutation {
+  activateaIAvatar(input: ActivateAIAvatarInput!, nodeId: ID!): AIAvatarResponse!
+  addComment(contentId: ID!, parentId: String, text: String!): String!
+  addIpfsClusterPeer(peerAddress: String!): IpfsClusterPeerResponse!
+  addToWatchlist(reason: String!, userId: String!): Boolean!
+  adminDeleteContent(id: ID!): String!
+  adminDeleteUser(id: ID!): String!
+  adminUpdateUser(email: String, id: ID!, isAdmin: Boolean, isVerified: Boolean, memberExpiry: DateTime, memberLevel: String): String!
+  antiCheatCheck(input: AntiCheatCheckInput!): AntiCheatResponse!
+  approveBook(approved: Boolean!, bookId: String!): BookOutput!
+  approveContent(id: ID!, input: ApproveContentInput!): ContentResponse!
+  approveNode(id: ID!, input: ApproveNodeInput!): NodeResponse!
+  archiveContent(contentId: ID!): ContentResponse!
+  attachMedia(contentId: ID!, mediaId: ID!): MediaResponse!
+  autoModerate(contentId: ID!): String!
+  batchModerate(approved: Boolean!, contentIds: [ID!]!): String!
+  batchSettleRevenues(userId: String!): String!
+  blockUserRefunds(reason: String!, userId: String!): Boolean!
+  completeTransfer(destinationChain: String!, sourceTxHash: String!, transferId: String!): CompleteTransferResult!
+  confirmMediaUpload(mediaId: ID!): MediaResponse!
+  createAppeal(evidence: String, nodeId: ID!, punishmentId: ID!, reason: String!): String!
+  createBook(authorId: String!, input: CreateBookInput!): BookOutput!
+  createContent(input: CreateContentInput!): ContentResponse!
+  createCopyrightNFT(input: CreateCopyrightNFTInput!, ownerId: String!): CopyrightNFTOutput!
+  createKYCApplication(level: String! = "standard"): KYCSubmissionResponse!
+  createMembershipOrder(input: CreateMembershipInput!): MemberPriceResponse!
+  createPaymentOrder(input: CreatePaymentInput!): PaymentOrderResponse!
+  createTask(input: CreateTaskInput!): TaskResponse!
+  createTip(input: CreateTipInput!, txHash: String): TipOutput!
+  deleteContent(id: ID!): String!
+  deleteMedia(mediaId: ID!): String!
+  deregisterService(instanceId: String!): Boolean!
+  executeFallback(reason: String!, transferId: String!): FallbackResult!
+  generateZKProof(input: GenerateProofInput!): ZKProofResponse!
+  getUploadUrl(input: UploadMediaInput!): String!
+  handleKYCWebhook(applicantId: String!, documentType: String, reviewStatus: String!, riskScore: Float): Boolean!
+  handleSimplexWebhook(data: String!): Boolean!
+  handleTransakWebhook(data: PaymentCallbackInput!): Boolean!
+  likeContent(contentId: ID!): String!
+  listCopyrightNFT(nftId: String!, ownerId: String!, price: Float!): CopyrightNFTOutput!
+  lockAndTransfer(amount: String!, destinationChain: String!, recipient: String!, token: String!): TransferResult!
+  login(input: LoginInput!): AuthResponse!
+  moderateContent(input: ModerateContentInput!): ContentResponse!
+  nodeHeartbeat(nodeId: ID!): NodeResponse!
+  oauthLogin(input: OAuthLoginInput!): AuthResponse!
+  pinIpfsFile(cid: String!): IpfsPinResponse!
+  processRefund(reason: String, transactionId: String!, userId: String!): RefundResult!
+  publishContent(id: ID!): ContentResponse!
+  punishForCheating(nodeId: ID!, reason: String!): String!
+  punishForContentViolation(nodeId: ID!, reason: String!): String!
+  punishNode(amount: Float!, nodeId: ID!, reason: String!, type: String!): String!
+  purchaseBook(bookId: String!, buyerId: String!, txHash: String): String!
+  purchaseCopyrightNFT(buyerId: String!, nftId: String!, txHash: String): String!
+  register(input: RegisterInput!): AuthResponse!
+  registerDomain(input: RegisterDomainInput!): DomainResponse!
+  registerNode(input: RegisterNodeInput!): NodeResponse!
+  registerService(host: String!, name: String!, port: Float!, version: String): String!
+  removeFromWatchlist(reason: String!, userId: String!): Boolean!
+  renewDomain(id: ID!, years: Float! = 1): DomainResponse!
+  replicateToIpfsCluster(cid: String!): IpfsReplicateResponse!
+  reportContent(input: ReportContentInput!): String!
+  requestPasswordReset(email: String!): Boolean!
+  resetPassword(newPassword: String!, token: String!): Boolean!
+  resolvePunishment(punishmentId: ID!): String!
+  restoreContent(contentId: ID!): ContentResponse!
+  retrieveFromDa(identifier: DaIdentifierInput!): String!
+  reviewAppeal(appealId: ID!, approved: Boolean!, reviewComment: String!): String!
+  reviewContent(approved: Boolean!, id: ID!, reason: String): String!
+  setSystemConfig(description: String, isPublic: Boolean! = false, key: String!, value: JSON!): String!
+  settleRevenue(revenueId: String!): String!
+  stakeNft(tokenId: Float!): String!
+  storeStateRoot(metadata: StateRootMetadataInput, stateRoot: String!): StoreStateRootResponse!
+  submitBookForReview(authorId: String!, bookId: String!): BookOutput!
+  submitContent(id: ID!): ContentResponse!
+  submitTaskError(error: String!, nodeId: ID!, taskId: ID!): String!
+  submitTaskResult(input: SubmitTaskResultInput!): TaskResponse!
+  submitToDa(data: String!, options: DaSubmitOptions): SubmitDataResponse!
+  submitWorkProof(input: SubmitWorkProofInput!): WorkProofResponse!
+  syncNodeData(tokenId: Float!): String!
+  syncTaskData(taskHash: String!): String!
+  toggleDomainLock(id: ID!, isLocked: Boolean!, reason: String): DomainResponse!
+  transfer(amount: String!, to: String!): String!
+  transferDomain(id: ID!, newOwnerId: ID!): DomainResponse!
+  unblockUserRefunds(userId: String!): Boolean!
+  unpinIpfsFile(cid: String!): IpfsUnpinResponse!
+  unstakeNft(tokenId: Float!): String!
+  updateBook(authorId: String!, bookId: String!, input: UpdateBookInput!): BookOutput!
+  updateContent(id: ID!, input: UpdateContentInput!): ContentResponse!
+  updateDomainRecord(id: ID!, input: UpdateDomainInput!): DomainResponse!
+  updateNode(id: ID!, input: UpdateNodeInput!): NodeResponse!
+  updateProfile(input: UpdateProfileInput!): UserResponse!
+  updateUser(input: UpdateUserInput!): UserResponse!
+  updateaIAvatar(avatarType: String, id: ID!, nickname: String): AIAvatarResponse!
+  uploadFileToArweave(content: String!, contentType: String, filename: String!): ArweaveFileResponse!
+  uploadJsonToArweave(data: String!, tags: String): ArweaveUploadResponse!
+  uploadJsonToIpfs(data: String!): IpfsJsonResponse!
+  uploadToArweave(data: String!, tags: String): ArweaveUploadResponse!
+  uploadToIpfs(content: String!, filename: String): IpfsUploadResponse!
+  verifyBridgeMessage(sourceTxHash: String!, transferId: String!): Boolean!
+  verifyEmail(token: String!): Boolean!
+  verifyTask(taskId: ID!, zkProof: String): TaskResponse!
+  verifyUsdtPayment(orderId: String!, txHash: String!): PaymentOrderResponse!
+  verifyZKProof(input: VerifyProofInput!): VerificationResultResponse!
+  walletLogin(input: WalletLoginInput!): AuthResponse!
+  withdrawRevenue(toAddress: String!, userId: String!): String!
+}
+
+type NodeEarningsResponse {
+  completedTasks: Int!
+  netEarnings: Int!
+  nodeId: ID!
+  nodeType: NodeType!
+  reputation: Int!
+  stakedAmount: Int!
+  totalEarnings: Int!
+  totalPenalties: Int!
+}
+
+type NodeResponse {
+  aiModelType: AIModelType!
+  approvedAt: DateTime
+  createdAt: DateTime!
+  hardwareInfo: JSON
+  id: ID!
+  ipAddress: String
+  lastActiveAt: DateTime
+  nodeType: NodeType!
+  owner: OwnerResponse!
+  punishments: [PunishmentResponse!]
+  region: String
+  reputation: Int!
+  stakedAmount: Int!
+  status: NodeStatus!
+  tasks: [NodeTaskResponse!]
+}
+
+type NodeStatsResponse {
+  active: Int!
+  byType: JSON!
+  offline: Int!
+  pending: Int!
+  punishing: Int!
+  total: Int!
+}
+
+enum NodeStatus {
+  ACTIVE
+  OFFLINE
+  PENDING
+  PUNISHING
+  REJECTED
+}
+
+type NodeTaskResponse {
+  createdAt: DateTime!
+  id: ID!
+  prompt: String!
+  result: String
+  reward: Int!
+  status: TaskStatus!
+  taskHash: String!
+  verifiedAt: DateTime
+}
+
+enum NodeType {
+  CORE
+  NORMAL
+  SUB
+}
+
+input OAuthLoginInput {
+  displayName: String
+  email: String
+  name: String
+  provider: String!
+  providerId: String!
+  username: String
+}
+
+type OwnerResponse {
+  address: String!
+  avatar: String
+  email: String
+  id: ID!
+}
+
+type PaginatedContentsResponse {
+  items: [ContentResponse!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedDomainsResponse {
+  items: [DomainResponse!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedNodesResponse {
+  items: [NodeResponse!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedOrdersResponse {
+  items: [MemberOrderResponse!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedOutput {
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedTasksResponse {
+  items: [TaskResponse!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+type PaginatedUsersResponse {
+  items: [UserResponse!]!
+  limit: Int!
+  page: Int!
+  total: Int!
+  totalPages: Int!
+}
+
+input PaymentCallbackInput {
+  cryptoAmount: String
+  cryptoTxHash: String
+  fiatAmount: String
+  referenceId: String!
+  status: String!
+}
+
+enum PaymentMethod {
+  CREDIT_CARD
+  CRYPTO
+  USDT
+}
+
+type PaymentOrderResponse {
+  amount: Float
+  network: String
+  orderId: ID!
+  paymentUrl: String
+  receiveAddress: String
+  status: String!
+}
+
+enum PaymentStatus {
+  COMPLETED
+  FAILED
+  PENDING
+  PROCESSING
+  REFUNDED
+}
+
+type PaymentStatusResponse {
+  amount: Int!
+  currency: String!
+  level: MemberLevel!
+  orderId: ID!
+  status: PaymentStatus!
+  txHash: String
+}
+
+type PunishmentResponse {
+  amount: Int!
+  createdAt: DateTime!
+  id: ID!
+  isResolved: Boolean!
+  reason: String!
+  resolvedAt: DateTime
+  type: PunishmentType!
+}
+
+enum PunishmentType {
+  CHEATING
+  CONTENT_VIOLATION
+  OFFLINE
+}
+
+type Query {
+  activeNodes: [NodeResponse!]!
+  adminUser(id: ID!): String!
+  adminUsers(isVerified: Boolean, limit: Float! = 20, memberLevel: String, page: Float! = 1): String!
+  allSystemConfigs(includePrivate: Boolean! = false): [JSON!]!
+  appeal(appealId: ID!): String!
+  arweaveAttestation(transactionId: String!): ArweaveAttestation!
+  arweaveBalance: String!
+  arweaveFileUrl(transactionId: String!): String!
+  arweaveGatewayUrl: String!
+  arweaveGetData(transactionId: String!): String!
+  arweaveGetJson(transactionId: String!): String!
+  arweaveGetTags(transactionId: String!): [ArweaveTag!]!
+  arweaveNetworkInfo: ArweaveNetworkInfo!
+  arweaveSearchByTag(tagName: String!, tagValue: String!): [String!]!
+  arweaveStatus: ArweaveConnectionStatus!
+  arweaveTransactionStatus(transactionId: String!): ArweaveTransactionStatus!
+  arweaveTransactions(address: String!, limit: Float): [ArweaveTransactionInfo!]!
+  assessPaymentRisk(amount: Float!, paymentMethod: String!): RiskCheckResponse!
+  auditLogs(action: String, limit: Float! = 50, page: Float! = 1, userId: String): String!
+  availableServices: [String!]!
+  canUpgrade(targetLevel: String!): String!
+  canUseFallback(transferId: String!): FallbackStatus!
+  checkDomainAvailability(name: String!): Boolean!
+  checkNodeOnline(nodeId: ID!): Boolean!
+  complianceCheck(amount: Int!, country: String, ipAddress: String, paymentMethod: String, productType: String!, userId: String!): ComplianceCheckResultDto!
+  complianceReport(endDate: DateTime!, reportType: String, startDate: DateTime!): ComplianceReportDto!
+  compliantMessaging(productType: String!): [String!]!
+  content(id: ID!): ContentResponse!
+  contentMedia(contentId: ID!): [MediaResponse!]!
+  contentStats: ContentStatsResponse!
+  contentTags: [TagResponse!]!
+  contents(limit: Float! = 20, page: Float! = 1, status: String! = "PUBLISHED", tag: String, type: String): PaginatedContentsResponse!
+  dashboardStats: String!
+  detectOfflineNodes: String!
+  domain(id: ID!): DomainResponse!
+  domainByName(name: String!): DomainResponse!
+  domainPrice(name: String!): Int!
+  domains(limit: Float! = 20, page: Float! = 1): PaginatedDomainsResponse!
+  emotionalConsensus(input: EmotionalConsensusInput!): EmotionalConsensusResponse!
+  estimateGas(to: String!, value: String!): String!
+  estimateStorageCost(dataSize: Int!): CostEstimateResponse!
+  expiringDomains(days: Float! = 30): [DomainResponse!]!
+  featuredContent(limit: Float! = 5): [ContentResponse!]!
+  flaggedContents(limit: Float! = 20, page: Float! = 1): PaginatedContentsResponse!
+  flaggedTransactions(endDate: DateTime!, startDate: DateTime!): [JSON!]!
+  getAuthorBooks(authorId: String!, limit: Float, page: Float): PaginatedOutput!
+  getBalance(address: String!): String!
+  getBlockNumber: Float!
+  getBook(bookId: String!, userId: String): BookOutput
+  getBooks(limit: Float, page: Float, status: String): PaginatedOutput!
+  getBridgeConfig: BridgeConfig!
+  getBridgeStats: BridgeStats!
+  getCopyrightNFT(nftId: String!): CopyrightNFTOutput
+  getCopyrightNFTs(includeUnlisted: Boolean, limit: Float, page: Float): PaginatedOutput!
+  getDaStatus: DaStatusResponse!
+  getExchangeRate(fromCurrency: String!, toCurrency: String! = "usdt"): ExchangeRateResponse!
+  getGasPrice: String!
+  getHotBooks(limit: Float): [BookOutput!]!
+  getKYCStatus: KYCStatusResponse!
+  getNodeInfo(tokenId: Float!): String!
+  getPaymentStatus(orderId: String!): PaymentStatusResponse!
+  getRecommendedProvider(dataSize: Int!, priority: String!): String!
+  getRevenues(input: RevenueQueryInput!): PaginatedOutput!
+  getService(name: String!): ServiceInstanceGql
+  getStateRoot(identifier: DaIdentifierInput!): StateRootResponse
+  getSupportedChains: [String!]!
+  getTask(taskHash: String!): String!
+  getTopCreators(limit: Float): [BookOutput!]!
+  getTransactionLimits: TransactionLimitResponse!
+  getTransferStatus(transferId: String!): TransferStatus!
+  getUserRevenueStats(userId: String!): RevenueStatsOutput!
+  getUserTips(limit: Float, page: Float, userId: String!): PaginatedOutput!
+  hello: String!
+  hotContents(limit: Float! = 10): [ContentResponse!]!
+  ipfsClusterPeers: [String!]!
+  ipfsExists(cid: String!): Boolean!
+  ipfsFileUrl(cid: String!): String!
+  ipfsGatewayUrl: String!
+  ipfsNodeId: IpfsNodeId
+  ipfsPins: [IpfsPin!]!
+  ipfsStats(cid: String!): IpfsStats!
+  ipfsStatus: IpfsConnectionStatus!
+  ipfsSwarmPeers: [IpfsPeer!]!
+  latestContent(limit: Float! = 10, type: String): [ContentResponse!]!
+  me: AuthUserResponse!
+  media(id: ID!): MediaResponse!
+  mediaDownloadUrl(id: ID!): String!
+  memberBenefits(level: String!): [String!]!
+  memberPrices: [MemberPriceResponse!]!
+  memberRevenueDistribution: MemberRevenueDistributionResponse!
+  memberStatistics: MemberStatisticsResponse!
+  memberTrend(days: Float! = 30): [MemberTrendResponse!]!
+  microservicesStatus: MicroservicesStatus!
+  moderationStats: String!
+  myContents(limit: Float! = 20, page: Float! = 1): PaginatedContentsResponse!
+  myDomains: [DomainResponse!]!
+  myMembership: MembershipInfoResponse!
+  myMembershipOrders(limit: Float! = 20, page: Float! = 1): PaginatedOrdersResponse!
+  myNode: NodeResponse
+  myStats: UserStatsResponse!
+  node(id: ID!): NodeResponse!
+  nodeAIAvatar(nodeId: ID!): AIAvatarResponse
+  nodeAppeals(nodeId: ID!): [JSON!]!
+  nodeEarnings(nodeId: ID!): NodeEarningsResponse!
+  nodeLimit(nodeType: String!): Int!
+  nodePunishments(nodeId: ID!): [JSON!]!
+  nodeStats: String!
+  nodeTask(nodeId: ID!): TaskResponse
+  nodeTasks(limit: Float! = 20, nodeId: ID!, page: Float! = 1, status: String): PaginatedTasksResponse!
+  nodes(limit: Float! = 20, nodeType: String, page: Float! = 1, region: String, status: String): PaginatedNodesResponse!
+  penaltyStats: String!
+  pendingAppeals: [JSON!]!
+  pendingContents(limit: Float! = 20, page: Float! = 1): String!
+  pendingNodes(limit: Float! = 20, page: Float! = 1): PaginatedNodesResponse!
+  pendingTasks(limit: Float! = 50): [TaskResponse!]!
+  personalizedRecommendations(limit: Float! = 10): [ContentResponse!]!
+  recentComplianceAlerts(days: Int): [JSON!]!
+  reconcile(endDate: DateTime!, startDate: DateTime!): String!
+  refundStatistics(endDate: DateTime!, startDate: DateTime!): String!
+  relatedContent(contentId: ID!, limit: Float! = 5): [ContentResponse!]!
+  resolveDomain(name: String!): String!
+  revenueStats(endDate: DateTime!, startDate: DateTime!): String!
+  searchContents(limit: Float! = 20, page: Float! = 1, query: String!): PaginatedContentsResponse!
+  searchDomains(limit: Float! = 20, page: Float! = 1, query: String!): PaginatedDomainsResponse!
+  searchUsers(limit: Float! = 20, query: String!): [UserResponse!]!
+  servicesList: [ServiceListItem!]!
+  similarAuthorContent(authorId: ID!, limit: Float! = 5): [ContentResponse!]!
+  stakeAmount(nodeType: String!): Int!
+  systemConfig(key: String!): JSON
+  task(id: ID!): TaskResponse!
+  taskStats: TaskStatsResponse!
+  user(id: ID!): UserResponse!
+  userAmlStatus(userId: String!): String!
+  userByAddress(address: String!): UserResponse!
+  userComplianceStatus(userId: String!): String!
+  userGrowthStats(days: Float! = 30): [JSON!]!
+  userRefundStatus(userId: String!): String!
+  users(limit: Float! = 20, page: Float! = 1): PaginatedUsersResponse!
+  validateProductDescription(description: String!): String!
+  verifyDaData(identifier: DaIdentifierInput!): VerifyDataResponse!
+  verifyMembership(input: VerifyMembershipInput!): Boolean!
+  zkmlStats: ZKMLStatsResponse!
+}
+
+type ReconciliationResponse {
+  byLevel: JSON!
+  endDate: DateTime!
+  startDate: DateTime!
+  totalAmount: Int!
+  totalTransactions: Int!
+  transactions: [ReconciliationTransaction!]!
+}
+
+type ReconciliationTransaction {
+  amount: Int!
+  completedAt: DateTime!
+  id: ID!
+  level: MemberLevel!
+  txHash: String
+  userAddress: String!
+  userEmail: String
+}
+
+type RefundResult {
+  message: String!
+  refundAmount: Float!
+  success: Boolean!
+}
+
+type RefundRiskCheckResult {
+  allowed: Boolean!
+  reasons: [String!]!
+  refundEligibility: Boolean!
+  riskScore: Float!
+}
+
+input RegisterDomainInput {
+  name: String!
+  recordType: DNSRecordType!
+  recordValue: String!
+}
+
+input RegisterInput {
+  email: String!
+  password: String!
+}
+
+input RegisterNodeInput {
+  aiModelType: AIModelType
+  hardwareInfo: JSON
+  ipAddress: String
+  nodeType: NodeType!
+  region: String
+}
+
+input ReportContentInput {
+  contentId: ID!
+  details: String
+  reason: String!
+}
+
+input RevenueQueryInput {
+  limit: Int
+  page: Int
+  status: String
+  type: String
+  userId: String
+}
+
+type RevenueStatsOutput {
+  bookSaleRevenue: Float!
+  copyrightSaleRevenue: Float!
+  pendingSettlement: Float!
+  royaltyRevenue: Float!
+  settled: Float!
+  tipRevenue: Float!
+  totalRevenue: Float!
+  withdrawn: Float!
+}
+
+type RiskCheckResponse {
+  allowed: Boolean!
+  reasons: [String!]!
+  recommendations: [String!]!
+  requiresAdditionalVerification: Boolean!
+  riskLevel: String!
+  riskScore: Int!
+}
+
+type SecuritiesCheckResult {
+  allowed: Boolean!
+  messaging: [String!]!
+  productType: String!
+  warnings: [String!]!
+}
+
+type ServiceDiscoveryStatus {
+  services: String
+  status: String!
+}
+
+type ServiceInstanceGql {
+  host: String!
+  id: String!
+  name: String!
+  port: Int!
+  status: String!
+  version: String!
+}
+
+type ServiceListItem {
+  instances: [ServiceInstanceGql!]!
+  name: String!
+}
+
+input StateRootMetadataInput {
+  blockNumber: Float
+  timestamp: Float
+  validatorSet: [String!]
+}
+
+type StateRootResponse {
+  blockNumber: Float!
+  root: String!
+  timestamp: Float!
+}
+
+type StoreStateRootResponse {
+  blobKey: String
+  height: Float
+  provider: String!
+  txHash: String
+}
+
+type SubmitDataResponse {
+  blobKey: String
+  height: Float
+  namespace: String
+  provider: String!
+  txHash: String
+}
+
+input SubmitTaskResultInput {
+  executionTime: Int
+  modelUsed: String
+  nodeId: ID!
+  result: String!
+  taskId: ID!
+  zkProof: String
+  zkProofHash: String
+  zkProofPublicSignals: JSON
+}
+
+input SubmitWorkProofInput {
+  aiResult: String!
+  nodeId: ID!
+  taskHash: String!
+  zkProof: String!
+}
+
+type TagResponse {
+  count: Int!
+  tag: String!
+}
+
+type TaskResponse {
+  completedAt: DateTime
+  createdAt: DateTime!
+  id: ID!
+  nodeId: ID
+  prompt: String!
+  result: String
+  reward: Float!
+  startedAt: DateTime
+  status: TaskStatus!
+  taskHash: String!
+  updatedAt: DateTime!
+  verifiedAt: DateTime
+  zkProof: String
+}
+
+type TaskStatsResponse {
+  completed: Int!
+  failed: Int!
+  pending: Int!
+  processing: Int!
+  total: Int!
+  totalRewards: Float!
+  verified: Int!
+}
+
+enum TaskStatus {
+  COMPLETED
+  FAILED
+  PENDING
+  PROCESSING
+  VERIFIED
+}
+
+type TipOutput {
+  amount: Float!
+  giver: JSON
+  id: String!
+  message: String
+  status: String!
+}
+
+type TransactionLimitResponse {
+  dailyLimit: Int!
+  monthlyLimit: Int!
+  requiresAdditionalAuth: Boolean!
+  requiresKYC: Boolean!
+  singleTransactionLimit: Int!
+}
+
+type TransferResult {
+  status: String!
+  transferId: String!
+  txHash: String!
+}
+
+type TransferStatus {
+  confirmations: Int
+  message: String
+  status: String!
+}
+
+input UpdateBookInput {
+  content: String
+  coverImage: String
+  description: String
+  price: Float
+  royaltyRate: Float
+  title: String
+}
+
+input UpdateContentInput {
+  content: String
+  isPremium: Boolean
+  price: Float
+  summary: String
+  tags: [String!]
+  title: String
+  type: ContentType
+}
+
+input UpdateDomainInput {
+  recordType: DNSRecordType
+  recordValue: String
+}
+
+input UpdateNodeInput {
+  aiModelType: AIModelType
+  hardwareInfo: JSON
+  ipAddress: String
+  nodeType: NodeType
+  region: String
+}
+
+input UpdateProfileInput {
+  avatar: String
+  bio: String
+}
+
+input UpdateUserInput {
+  email: String
+  isVerified: Boolean
+  memberExpiry: DateTime
+  memberLevel: MemberLevel
+  nodeId: String
+  twitter: String
+}
+
+input UploadMediaInput {
+  contentId: String
+  duration: Float
+  filename: String!
+  height: Float
+  mimeType: String!
+  size: Float!
+  type: MediaType!
+  width: Float
+}
+
+type UserNodeResponse {
+  id: ID!
+  lastActiveAt: DateTime
+  nodeType: NodeType!
+  region: String
+  reputation: Int!
+  stakedAmount: Float!
+  status: NodeStatus!
+}
+
+type UserResponse {
+  address: String!
+  avatar: String
+  bio: String
+  createdAt: DateTime!
+  email: String
+  id: ID!
+  isAdmin: Boolean!
+  isVerified: Boolean!
+  memberExpiry: DateTime
+  memberLevel: MemberLevel!
+  node: UserNodeResponse
+  nodeId: String
+  twitter: String
+}
+
+type UserStatsResponse {
+  contentCount: Int!
+  memberTransactionCount: Int!
+  transactionCount: Int!
+}
+
+type VerificationResultResponse {
+  confidence: Float
+  errorCode: String
+  isValid: Boolean!
+  message: String!
+}
+
+type VerifyDataResponse {
+  provider: String!
+  verified: Boolean!
+}
+
+input VerifyMembershipInput {
+  requiredLevel: MemberLevel!
+}
+
+input VerifyProofInput {
+  aiResult: String!
+  proof: String!
+  publicSignals: String!
+  taskId: ID!
+}
+
+input WalletLoginInput {
+  address: String!
+  signature: String
+}
+
+type WorkProofResponse {
+  message: String!
+  newReputation: Float
+  reward: Float
+  success: Boolean!
+}
+
+type ZKMLStatsResponse {
+  averageProofTime: Float!
+  cheatingAttemptsDetected: Float!
+  successRate: Float!
+  totalProofsGenerated: Float!
+  totalProofsVerified: Float!
+}
+
+type ZKProofResponse {
+  generationTime: Float!
+  proof: String!
+  proofHash: String!
+  publicSignals: String!
+  taskId: ID!
+}

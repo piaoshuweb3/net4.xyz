@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>管理员配置工具 - net4.xyz</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230a0a0f'/%3E%3Cpath d='M16 6l3 5 6 1-4 4 1 6-6-3-6 3 1-6-4-4 6-1z' fill='%23ff69b4' stroke='%2300ffff' stroke-width='1.2'/%3E%3C/svg%3E">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background-color: #0a0a0f;
+            color: white;
+            font-family: 'Inter', 'Arial', sans-serif;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #b026ff;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #b026ff;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            margin-right: 1rem;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(to right, #b026ff, #ff69b4);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn:hover {
+            transform: scale(1.05);
+        }
+        
+        .admin-list {
+            list-style: none;
+        }
+        
+        .admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .admin-address {
+            font-family: monospace;
+            color: #00ffff;
+        }
+        
+        .status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+        
+        .status-active {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+        }
+        
+        .status-default {
+            background: rgba(255, 170, 0, 0.2);
+            color: #ffaa00;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(to right, #b026ff, #ff69b4);
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .instructions {
+            background: rgba(0, 255, 255, 0.1);
+            border: 1px solid rgba(0, 255, 255, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .instructions h3 {
+            color: #00ffff;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 管理员配置工具</h1>
+        
+        <div class="instructions">
+            <h3>📋 使用说明</h3>
+            <p>1. 添加钱包地址到管理员列表</p>
+            <p>2. 配置会自动保存到浏览器本地存储</p>
+            <p>3. 在主页面连接对应钱包即可获得管理员权限</p>
+            <p>4. 默认地址以 0xa 或 0xb 开头的钱包自动拥有管理员权限</p>
+        </div>
+
+        <div class="card">
+            <h3>➕ 添加管理员地址</h3>
+            <div class="form-group">
+                <label class="form-label">钱包地址</label>
+                <input type="text" class="form-input" id="newAdminAddress" placeholder="0x1234567890abcdef1234567890abcdef12345678">
+            </div>
+            <div class="form-group">
+                <label class="form-label">备注名称 (可选)</label>
+                <input type="text" class="form-input" id="adminName" placeholder="管理员名称">
+            </div>
+            <button class="btn btn-primary" onclick="addAdmin()">添加管理员</button>
+            <button class="btn btn-secondary" onclick="generateTestAddress()">生成测试地址</button>
+        </div>
+
+        <div class="card">
+            <h3>👥 当前管理员列表</h3>
+            <ul class="admin-list" id="adminList">
+                <!-- 管理员列表将在这里显示 -->
+            </ul>
+        </div>
+
+        <div class="card">
+            <h3>🔧 配置管理</h3>
+            <button class="btn btn-secondary" onclick="exportConfig()">导出配置</button>
+            <button class="btn btn-secondary" onclick="importConfig()">导入配置</button>
+            <button class="btn btn-secondary" onclick="resetConfig()">重置配置</button>
+            <input type="file" id="configFile" style="display: none;" accept=".json" onchange="handleImport(event)">
+        </div>
+
+        <div class="card">
+            <h3>🚀 快速访问</h3>
+            <button class="btn btn-primary" onclick="openMainSite()">打开主站</button>
+            <button class="btn btn-primary" onclick="openAdmin()">打开管理后台</button>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        // 默认管理员地址
+        const DEFAULT_ADMINS = [
+            { address: '0xa1b2c3d4e5f6789012345678901234567890abcd', name: '默认管理员1', isDefault: true },
+            { address: '0xb2c3d4e5f6789012345678901234567890abcdef', name: '默认管理员2', isDefault: true },
+            { address: '0xc3d4e5f6789012345678901234567890abcdef12', name: '默认管理员3', isDefault: true },
+        ];
+
+        let adminList = [];
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAdminList();
+            displayAdminList();
+        });
+
+        // 加载管理员列表
+        function loadAdminList() {
+            const saved = localStorage.getItem('net4xyz_admins');
+            if (saved) {
+                try {
+                    adminList = JSON.parse(saved);
+                } catch (e) {
+                    console.error('Failed to load admin list:', e);
+                    adminList = [...DEFAULT_ADMINS];
+                }
+            } else {
+                adminList = [...DEFAULT_ADMINS];
+            }
+        }
+
+        // 保存管理员列表
+        function saveAdminList() {
+            localStorage.setItem('net4xyz_admins', JSON.stringify(adminList));
+            // 同时保存到旧格式以兼容主页面
+            const addresses = adminList.map(admin => admin.address.toLowerCase());
+            localStorage.setItem('adminAddresses', JSON.stringify(addresses));
+        }
+
+        // 显示管理员列表
+        function displayAdminList() {
+            const listElement = document.getElementById('adminList');
+            listElement.innerHTML = '';
+
+            adminList.forEach((admin, index) => {
+                const item = document.createElement('li');
+                item.className = 'admin-item';
+                item.innerHTML = `
+                    <div>
+                        <div class="admin-address">${admin.address}</div>
+                        <div style="font-size: 0.875rem; color: #888; margin-top: 0.25rem;">${admin.name || '未命名'}</div>
+                    </div>
+                    <div>
+                        <span class="status ${admin.isDefault ? 'status-default' : 'status-active'}">
+                            ${admin.isDefault ? '默认' : '自定义'}
+                        </span>
+                        ${!admin.isDefault ? `<button class="btn btn-secondary" style="margin-left: 0.5rem; padding: 0.25rem 0.5rem; font-size: 0.75rem;" onclick="removeAdmin(${index})">删除</button>` : ''}
+                    </div>
+                `;
+                listElement.appendChild(item);
+            });
+        }
+
+        // 添加管理员
+        function addAdmin() {
+            const address = document.getElementById('newAdminAddress').value.trim();
+            const name = document.getElementById('adminName').value.trim();
+
+            if (!address) {
+                showNotification('请输入钱包地址');
+                return;
+            }
+
+            if (!isValidAddress(address)) {
+                showNotification('无效的钱包地址格式');
+                return;
+            }
+
+            // 检查是否已存在
+            if (adminList.some(admin => admin.address.toLowerCase() === address.toLowerCase())) {
+                showNotification('该地址已存在于管理员列表中');
+                return;
+            }
+
+            // 添加到列表
+            adminList.push({
+                address: address,
+                name: name || '未命名',
+                isDefault: false
+            });
+
+            saveAdminList();
+            displayAdminList();
+            
+            // 清空输入框
+            document.getElementById('newAdminAddress').value = '';
+            document.getElementById('adminName').value = '';
+            
+            showNotification(`已添加管理员: ${address}`);
+        }
+
+        // 删除管理员
+        function removeAdmin(index) {
+            const admin = adminList[index];
+            if (admin.isDefault) {
+                showNotification('无法删除默认管理员');
+                return;
+            }
+
+            if (confirm(`确定要删除管理员 ${admin.address} 吗？`)) {
+                adminList.splice(index, 1);
+                saveAdminList();
+                displayAdminList();
+                showNotification('管理员已删除');
+            }
+        }
+
+        // 生成测试地址
+        function generateTestAddress() {
+            const testAddress = '0x' + Array.from({length: 40}, () => Math.floor(Math.random() * 16).toString(16)).join('');
+            document.getElementById('newAdminAddress').value = testAddress;
+            document.getElementById('adminName').value = '测试管理员';
+        }
+
+        // 验证地址格式
+        function isValidAddress(address) {
+            return /^0x[a-fA-F0-9]{40}$/.test(address);
+        }
+
+        // 导出配置
+        function exportConfig() {
+            const config = {
+                admins: adminList,
+                exportTime: new Date().toISOString(),
+                version: '1.0'
+            };
+
+            const blob = new Blob([JSON.stringify(config, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'net4xyz-admin-config.json';
+            a.click();
+            URL.revokeObjectURL(url);
+
+            showNotification('配置已导出');
+        }
+
+        // 导入配置
+        function importConfig() {
+            document.getElementById('configFile').click();
+        }
+
+        // 处理导入
+        function handleImport(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const config = JSON.parse(e.target.result);
+                    if (config.admins && Array.isArray(config.admins)) {
+                        adminList = config.admins;
+                        saveAdminList();
+                        displayAdminList();
+                        showNotification('配置已导入');
+                    } else {
+                        showNotification('无效的配置文件格式');
+                    }
+                } catch (error) {
+                    showNotification('配置文件解析失败');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // 重置配置
+        function resetConfig() {
+            if (confirm('确定要重置所有配置吗？这将删除所有自定义管理员地址。')) {
+                adminList = [...DEFAULT_ADMINS];
+                saveAdminList();
+                displayAdminList();
+                showNotification('配置已重置');
+            }
+        }
+
+        // 打开主站
+        function openMainSite() {
+            window.open('http://localhost:8082/', '_blank');
+        }
+
+        // 打开管理后台
+        function openAdmin() {
+            window.open('http://localhost:8082/admin', '_blank');
+        }
+
+        // 显示通知
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

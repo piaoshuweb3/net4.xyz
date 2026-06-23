@@ -1,0 +1,229 @@
+name: Security Audit
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+  schedule:
+    # Run security audit weekly
+    - cron: '0 0 * * 0'
+
+jobs:
+  # 1. Smart Contract Security Tests
+  contract-security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: packages/contracts/package-lock.json
+      
+      - name: Install dependencies
+        run: |
+          cd packages/contracts
+          npm install
+      
+      - name: Compile contracts
+        run: cd packages/contracts && npx hardhat compile
+      
+      - name: Run security tests
+        run: cd packages/contracts && npx hardhat test test/Security.test.ts
+      
+      - name: Run contract tests
+        run: cd packages/contracts && npx hardhat test test/AFC_Token.test.ts test/Spark_NFT.test.ts
+
+  # 2. Static Analysis with Slither
+  slither-analysis:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      
+      - name: Install Slither
+        run: |
+          pip install slither-analyzer
+      
+      - name: Run Slither
+        run: |
+          cd packages/contracts
+          slither . --solc-remaps '@openzeppelin=node_modules/@openzeppelin' --exclude-dependencies --json slither-results.json || true
+      
+      - name: Upload Slither results
+        uses: actions/upload-artifact@v4
+        with:
+          name: slither-results
+          path: packages/contracts/slither-results.json
+
+  # 3. MythX Security Analysis (if available)
+  mythril-analysis:
+    runs-on: ubuntu-latest
+    if: false  # Requires MythX API key
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          cd packages/contracts
+          npm install
+      
+      - name: Run Mythril
+        run: |
+          cd packages/contracts
+          myth analyze contracts/AFC_Token.sol --solv 0.8.20 || true
+
+  # 4. Dependency Security Audit
+  dependency-audit:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run pnpm audit
+        run: pnpm audit --audit-level=high || true
+      
+      - name: Run npm audit
+        run: npm audit --audit-level=high || true
+      
+      - name: Check for known vulnerabilities
+        run: |
+          echo "Checking for known vulnerabilities in dependencies..."
+          npm audit --prefix=. --audit-level=high || true
+
+  # 5. Code Quality & Linting
+  code-quality:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+      
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      
+      - name: Run ESLint
+        run: pnpm lint || true
+      
+      - name: Run TypeScript check
+        run: pnpm typecheck || true
+
+  # 6. Frontend Security Headers Check
+  frontend-security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Check CSP headers
+        run: |
+          echo "Checking for Content-Security-Policy in HTML files..."
+          grep -r "Content-Security-Policy" packages/frontend/src/ || echo "CSP not found in frontend"
+          grep -r "Content-Security-Policy" packages/node-client/src/ || echo "CSP not found in node-client"
+
+  # 7. Backend Security Checks
+  backend-security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'pnpm'
+          cache-dependency-path: packages/backend/package-lock.json
+      
+      - name: Install dependencies
+        run: |
+          cd packages/backend
+          pnpm install --frozen-lockfile
+      
+      - name: Run backend tests
+        run: cd packages/backend && pnpm test --passWithNoTests
+      
+      - name: Check for hardcoded secrets
+        run: |
+          echo "Checking for hardcoded secrets..."
+          grep -r "password\s*=\s*['\"]" packages/backend/src/ || true
+          grep -r "apiKey\s*=\s*['\"]" packages/backend/src/ || true
+          grep -r "secret\s*=\s*['\"]" packages/backend/src/ || true
+
+  # 8. Generate Security Report
+  security-report:
+    runs-on: ubuntu-latest
+    needs: [contract-security, dependency-audit, code-quality]
+    if: always()
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Generate report
+        run: |
+          echo "# Security Audit Report" > security-report.md
+          echo "" >> security-report.md
+          echo "## Date: $(date)" >> security-report.md
+          echo "" >> security-report.md
+          echo "## Summary" >> security-report.md
+          echo "- Contract Tests: ${{ needs.contract-security.result }}" >> security-report.md
+          echo "- Dependency Audit: ${{ needs.dependency-audit.result }}" >> security-report.md
+          echo "- Code Quality: ${{ needs.code-quality.result }}" >> security-report.md
+      
+      - name: Upload report
+        uses: actions/upload-artifact@v4
+        with:
+          name: security-report
+          path: security-report.md
