@@ -10,6 +10,7 @@ import ParticleBackground from '../Effects/ParticleBackground';
 import LiveStatsTicker from '../Stats/LiveStatsTicker';
 import CTECycle from '../CTE/CTECycle';
 import TrustSection from '../Trust/TrustSection';
+import ScrollReveal from '../Effects/ScrollReveal';
 
 // 3D 地球 — 体积较大，lazy load
 const Web4Globe = lazy(() => import('../Globe/Web4Globe'));
@@ -117,26 +118,36 @@ export default function HomePageClient() {
           
           {/* 3D Web4 地球 */}
           <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <ScrollReveal>
             <Suspense fallback={<div className="h-[480px] rounded-2xl bg-black/20 animate-pulse flex items-center justify-center"><span className="text-gray-600">Loading 3D Globe...</span></div>}>
               <Web4Globe />
             </Suspense>
+            </ScrollReveal>
           </section>
 
           {/* CTE 分身经济循环 */}
           <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <ScrollReveal>
             <CTECycle />
+            </ScrollReveal>
           </section>
 
           {/* 实时网络数据 */}
           <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <ScrollReveal direction="right">
             <LiveStatsTicker />
+            </ScrollReveal>
           </section>
 
+          <ScrollReveal>
           <FeaturesSection onSectionChange={setActiveSection} />
+          </ScrollReveal>
 
           {/* 信任与路线图 */}
           <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <ScrollReveal direction="left">
             <TrustSection />
+            </ScrollReveal>
           </section>
 
           <Footer onSectionChange={setActiveSection} />

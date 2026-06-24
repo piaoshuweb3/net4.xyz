@@ -31,6 +31,8 @@ const getNavItems = (t: (key: string) => string): NavItem[] => [
   { labelKey: 'nav.nodes', href: '#nodes', sectionId: 'nodes' },
   { labelKey: 'nav.web4Dns', href: '#dns', sectionId: 'dns' },
   { labelKey: 'nav.afcWallet', href: '/wallet' },
+  { labelKey: 'nav.avatar', href: '/avatar' },
+  { labelKey: 'nav.labor', href: '/labor' },
   {
     labelKey: 'nav.ecosystem',
     href: '#ecosystem',
