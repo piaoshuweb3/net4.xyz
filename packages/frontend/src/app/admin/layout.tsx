@@ -4,15 +4,19 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
+import { useAccount } from 'wagmi';
+import { checkAdminAccess } from '../../utils/admin-auth';
 import { 
   Users, FileText, Crown, Wallet, Server, 
   BarChart3, Settings, LogOut, Menu, X,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, Shield
 } from 'lucide-react';
 
 export default function AdminRouteLayout({ children }: { children: React.ReactNode }) {
   const { t } = useTranslation();
   const pathname = usePathname();
+  const { address } = useAccount();
+  const { isAdmin: isAdminUser, adminAddress } = checkAdminAccess(address);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
@@ -54,6 +58,20 @@ export default function AdminRouteLayout({ children }: { children: React.ReactNo
             );
           })}
         </nav>
+        {/* Admin Status */}
+        {address ? (
+          <div className={`mx-4 mb-1 rounded-lg px-3 py-2 text-xs ${isAdminUser ? 'bg-green-900/30 border border-green-800/50' : 'bg-yellow-900/20 border border-yellow-800/50'}`}>
+            <div className="flex items-center gap-1.5 mb-0.5">
+              <Shield className={`w-3 h-3 ${isAdminUser ? 'text-green-400' : 'text-yellow-400'}`} />
+              <span className={isAdminUser ? 'text-green-400' : 'text-yellow-400'}>
+                {isAdminUser ? '✅ 终极管理员' : '⚠️ 非管理员'}
+              </span>
+            </div>
+            {!isCollapsed && <div className="text-gray-500 font-mono">{address.slice(0,6)}...{address.slice(-4)}</div>}
+          </div>
+        ) : !isCollapsed ? (
+          <div className="mx-4 px-3 py-2 text-xs text-gray-500">🔒 请连接钱包验证</div>
+        ) : null}
         <div className="absolute bottom-0 left-0 right-0 p-4 border-t border-gray-800">
           <button className="flex items-center gap-3 w-full px-4 py-3 text-gray-400 hover:text-red-400 hover:bg-gray-800 rounded-lg transition-all">
             <LogOut className="w-5 h-5" />
