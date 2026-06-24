@@ -63,6 +63,20 @@ export default function HomePageClient() {
     }
   }, [activeSection, loadSectionData, pageData]);
 
+  // 从 URL hash 恢复 section 状态（支持从其他页面跳回）
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && !activeSection) {
+      setActiveSection(hash);
+    }
+    const onHashChange = () => {
+      const newHash = window.location.hash.replace('#', '');
+      if (newHash) setActiveSection(newHash);
+    };
+    window.addEventListener('hashchange', onHashChange);
+    return () => window.removeEventListener('hashchange', onHashChange);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleAIQuery = async (prompt: string) => {
     setLoading(true);
     try {

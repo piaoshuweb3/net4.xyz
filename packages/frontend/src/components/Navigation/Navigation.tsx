@@ -128,10 +128,19 @@ export default function Navigation({ onSectionChange }: { onSectionChange?: (sec
       setIsMobileMenuOpen(false);
       return;
     }
+    // 锚点导航 — 如果不在首页，先跳回首页再定位
     if (item.sectionId) {
-      onSectionChange?.(item.sectionId);
+      if (onSectionChange) {
+        onSectionChange(item.sectionId);
+      } else {
+        window.location.href = '/#' + item.sectionId;
+      }
     } else if (item.labelKey === 'nav.home') {
-      onSectionChange?.(null);
+      if (onSectionChange) {
+        onSectionChange(null);
+      } else {
+        window.location.href = '/';
+      }
     }
     setIsMobileMenuOpen(false);
   };
