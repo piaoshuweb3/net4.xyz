@@ -27,7 +27,7 @@ const getNavItems = (t: (key: string) => string): NavItem[] => [
     ]
   },
   { labelKey: 'nav.poueEngine', href: '#poue', sectionId: 'poue' },
-  { labelKey: 'nav.nodes', href: '/admin/nodes', sectionId: 'nodes' },
+  { labelKey: 'nav.nodes', href: '#nodes', sectionId: 'nodes' },
   { labelKey: 'nav.web4Dns', href: '#dns', sectionId: 'dns' },
   { labelKey: 'nav.afcWallet', href: '/wallet' },
   {
