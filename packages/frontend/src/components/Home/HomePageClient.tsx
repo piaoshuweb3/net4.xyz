@@ -6,6 +6,10 @@ import Navigation from '../Navigation/Navigation';
 import HeroSection from '../Hero/HeroSection';
 import FeaturesSection from '../Features/FeaturesSection';
 import Footer from '../Footer/Footer';
+import ParticleBackground from '../Effects/ParticleBackground';
+import LiveStatsTicker from '../Stats/LiveStatsTicker';
+import CTECycle from '../CTE/CTECycle';
+import TrustSection from '../Trust/TrustSection';
 import { ChevronRight, Loader2, AlertCircle } from 'lucide-react';
 import apiService from '../../services/api';
 
@@ -105,8 +109,26 @@ export default function HomePageClient() {
 
       {!activeSection ? (
         <>
+          <ParticleBackground />
           <HeroSection />
+          
+          {/* CTE 分身经济循环 */}
+          <section className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <CTECycle />
+          </section>
+
+          {/* 实时网络数据 */}
+          <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <LiveStatsTicker />
+          </section>
+
           <FeaturesSection onSectionChange={setActiveSection} />
+
+          {/* 信任与路线图 */}
+          <section className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+            <TrustSection />
+          </section>
+
           <Footer onSectionChange={setActiveSection} />
         </>
       ) : (
