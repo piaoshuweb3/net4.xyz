@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 1200px; height: 630px;
+    background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 40%, #16213e 100%);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: system-ui, -apple-system, sans-serif;
+    overflow: hidden; position: relative;
+  }
+  .grid { position: absolute; inset: 0; opacity: 0.08; }
+  .grid::before {
+    content: ''; position: absolute; inset: 0;
+    background-image: 
+      linear-gradient(rgba(176,38,255,0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(176,38,255,0.3) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+  .nodes { position: absolute; inset: 0; }
+  .node {
+    position: absolute; width: 8px; height: 8px;
+    background: #b026ff; border-radius: 50%;
+    box-shadow: 0 0 15px #b026ff, 0 0 30px rgba(176,38,255,0.5);
+  }
+  .node:nth-child(1) { top: 15%; left: 10%; }
+  .node:nth-child(2) { top: 75%; left: 15%; }
+  .node:nth-child(3) { top: 20%; left: 85%; }
+  .node:nth-child(4) { top: 70%; left: 80%; }
+  .node:nth-child(5) { top: 50%; left: 50%; background: #00d4ff; box-shadow: 0 0 15px #00d4ff, 0 0 30px rgba(0,212,255,0.5); }
+  .node:nth-child(6) { top: 30%; left: 30%; }
+  .node:nth-child(7) { top: 60%; left: 65%; background: #00d4ff; box-shadow: 0 0 15px #00d4ff, 0 0 30px rgba(0,212,255,0.5); }
+  .line {
+    position: absolute; height: 1px;
+    background: linear-gradient(90deg, rgba(176,38,255,0.3), rgba(0,212,255,0.3));
+    transform-origin: left center;
+  }
+  .content {
+    position: relative; z-index: 10; text-align: center; padding: 40px;
+    display: flex; flex-direction: column; align-items: center; gap: 16px;
+  }
+  .logo {
+    font-size: 72px; font-weight: 900; color: #fff;
+    letter-spacing: 2px;
+    text-shadow: 0 0 40px rgba(176,38,255,0.6), 0 0 80px rgba(176,38,255,0.3);
+  }
+  .logo span { color: #b026ff; }
+  .subtitle {
+    font-size: 32px; font-weight: 600; color: #e2ddd4;
+    letter-spacing: 8px;
+  }
+  .tagline {
+    font-size: 20px; color: #9a9488; margin-top: 8px;
+    letter-spacing: 4px; max-width: 800px; line-height: 1.6;
+  }
+  .bottom {
+    position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%);
+    font-size: 16px; color: #6b665e; letter-spacing: 4px;
+  }
+</style>
+</head>
+<body>
+<div class="grid"></div>
+<div class="nodes">
+  <div class="node"></div><div class="node"></div><div class="node"></div>
+  <div class="node"></div><div class="node"></div><div class="node"></div><div class="node"></div>
+</div>
+<div class="content">
+  <div class="logo"><span>net4</span>.xyz</div>
+  <div class="subtitle">Web4.0 AI 文明门户</div>
+  <div class="tagline">AI 不再是工具，而是文明<br>基于 PoUE 共识机制 · 将电力转化为对人类有用的 AI 智能</div>
+</div>
+<div class="bottom">PoUE 共识 · 感知互联网 · 11 个生态子域</div>
+</body>
+</html>

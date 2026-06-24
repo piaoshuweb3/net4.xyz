@@ -35,14 +35,15 @@ export default function EcoDetailPage({ pageKey, onBack }: EcoDetailPageProps) {
   const page = ecoPages.find(p => p.key === pageKey);
   if (!page) return null;
 
-  // Get all data from i18n
-  const pageData = t(`ecosystem.${pageKey}`, { returnObjects: true }) as {
-    title: string;
-    tagline: string;
-    overview: string;
-    features: { icon: string; title: string; desc: string }[];
-    stats: { label: string; value: string }[];
-    cta: string;
+  // Get all data from i18n (可能返回 key 字符串如果翻译缺失)
+  const rawData = t(`ecosystem.${pageKey}`, { returnObjects: true });
+  const pageData = (typeof rawData === 'object' && rawData !== null ? rawData : {}) as {
+    title?: string;
+    tagline?: string;
+    overview?: string;
+    features?: { icon: string; title: string; desc: string }[];
+    stats?: { label: string; value: string }[];
+    cta?: string;
   };
 
   return (
@@ -63,17 +64,17 @@ export default function EcoDetailPage({ pageKey, onBack }: EcoDetailPageProps) {
             <span className="text-5xl">{page.icon}</span>
             <div>
               <div className={`text-xs font-mono ${page.accentColor} mb-1 opacity-70`}>{page.domain}</div>
-              <h1 className={`text-3xl md:text-4xl font-bold ${page.accentColor}`}>{pageData.title}</h1>
+              <h1 className={`text-3xl md:text-4xl font-bold ${page.accentColor}`}>{pageData.title || page.domain}</h1>
             </div>
           </div>
-          <p className="text-lg text-gray-300 mb-6 max-w-2xl">{pageData.tagline}</p>
-          <p className="text-base text-gray-400 leading-relaxed max-w-3xl">{pageData.overview}</p>
+          <p className="text-lg text-gray-300 mb-6 max-w-2xl">{pageData.tagline || ''}</p>
+          <p className="text-base text-gray-400 leading-relaxed max-w-3xl">{pageData.overview || ''}</p>
         </div>
       </div>
 
       {/* 统计数据 */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {pageData.stats.map(stat => (
+        {(pageData.stats || []).map(stat => (
           <div key={stat.label} className="glass-cyber rounded-xl p-5 text-center">
             <div className={`text-2xl md:text-3xl font-bold ${page.accentColor} mb-1`}>{stat.value}</div>
             <div className="text-xs text-gray-500">{stat.label}</div>
@@ -85,7 +86,7 @@ export default function EcoDetailPage({ pageKey, onBack }: EcoDetailPageProps) {
       <div>
         <h2 className="text-xl font-bold text-white mb-6">{t('ecosystem.coreFeatures')}</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {pageData.features.map(f => (
+          {(pageData.features || []).map(f => (
             <div key={f.title} className="glass-cyber rounded-xl p-5 hover:bg-white/10 transition-all group">
               <div className="text-2xl mb-3">{f.icon}</div>
               <h3 className={`text-base font-bold mb-2 ${page.accentColor} group-hover:opacity-100`}>{f.title}</h3>
@@ -97,7 +98,7 @@ export default function EcoDetailPage({ pageKey, onBack }: EcoDetailPageProps) {
 
       {/* CTA */}
       <div className={`rounded-2xl border ${page.borderColor} ${page.bgColor} p-8 text-center`}>
-        <h3 className="text-xl font-bold text-white mb-3">{pageData.cta}</h3>
+        <h3 className="text-xl font-bold text-white mb-3">{pageData.cta || t('ecosystem.visitDomain', { domain: page.domain })}</h3>
         <p className="text-gray-400 mb-6 text-sm">{t('ecosystem.visitDomain', { domain: page.domain })}</p>
         <a
           href={`https://${page.domain}`}
