@@ -7,6 +7,7 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import WalletConnectButton from '../Wallet/WalletConnectButton';
 import Logo from '../Logo/Logo';
+import { useAccount } from 'wagmi';
 
 interface NavItem {
   labelKey: string;
@@ -28,7 +29,6 @@ const getNavItems = (t: (key: string) => string): NavItem[] => [
     ]
   },
   { labelKey: 'nav.poueEngine', href: '#poue', sectionId: 'poue' },
-  { labelKey: 'nav.nodes', href: '#nodes', sectionId: 'nodes' },
   { labelKey: 'nav.web4Dns', href: '#dns', sectionId: 'dns' },
   { labelKey: 'nav.afcWallet', href: '/wallet' },
   { labelKey: 'nav.avatar', href: '/avatar' },
@@ -68,11 +68,14 @@ const getNavItems = (t: (key: string) => string): NavItem[] => [
     ]
   },
   { labelKey: 'nav.team', href: '#team', sectionId: 'team' },
-  { labelKey: 'nav.admin', href: '/admin' },
 ];
+
+// 管理后台 — 仅钱包连接后可见
+const adminNavItem: NavItem = { labelKey: 'nav.admin', href: '/admin' };
 
 export default function Navigation({ onSectionChange }: { onSectionChange?: (section: string | null) => void }) {
   const { t } = useTranslation();
+  const { address, isConnected } = useAccount();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
@@ -81,7 +84,9 @@ export default function Navigation({ onSectionChange }: { onSectionChange?: (sec
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   // Web3 连接 — 由 WalletConnectButton 组件统一处理
-  const navItems = getNavItems(t);
+  const navItems = isConnected
+    ? [...getNavItems(t), adminNavItem]
+    : getNavItems(t);
 
   useEffect(() => {
     const handleScroll = () => {
