@@ -5,7 +5,7 @@
 'use client';
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
-import { SPARK_NFT_ABI, getContractAddress } from '@/config/contracts';
+import { SPARK_NFT_ABI, getContractAddress } from '../config/contracts';
 
 // 获取 NFT 信息
 export function useSparkNFTInfo(chainId?: number) {

@@ -4,8 +4,8 @@ import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 import { Menu, X, ChevronDown } from 'lucide-react';
-import LanguageSwitcher from '@/components/LanguageSwitcher/LanguageSwitcher';
-import WalletConnectButton from '@/components/Wallet/WalletConnectButton';
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import WalletConnectButton from '../Wallet/WalletConnectButton';
 
 interface NavItem {
   labelKey: string;

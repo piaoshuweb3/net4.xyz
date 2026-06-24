@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { ecoPages } from '@/components/Ecosystem/EcoDetailPage';
+import { ecoPages } from '../Ecosystem/EcoDetailPage';
 
 interface EcosystemSectionProps {
   onSelectEco: (key: string) => void;

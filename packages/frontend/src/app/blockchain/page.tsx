@@ -7,9 +7,9 @@
 import { useEffect, useState } from 'react';
 import { useAccount, useConnect, useDisconnect } from 'wagmi';
 import { injected } from 'wagmi/connectors';
-import AFCTokenPanel from '@/components/Blockchain/AFCTokenPanel';
-import SparkNFTPanel from '@/components/Blockchain/SparkNFTPanel';
-import EconomyModelPanel from '@/components/Blockchain/EconomyModelPanel';
+import AFCTokenPanel from '../../components/Blockchain/AFCTokenPanel';
+import SparkNFTPanel from '../../components/Blockchain/SparkNFTPanel';
+import EconomyModelPanel from '../../components/Blockchain/EconomyModelPanel';
 
 export default function BlockchainPage() {
   const [isClient, setIsClient] = useState(false);

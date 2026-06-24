@@ -6,7 +6,7 @@
 
 import { useReadContract, useWriteContract, useWaitForTransactionReceipt } from 'wagmi';
 import { parseEther, formatEther } from 'viem';
-import { AFC_TOKEN_ABI, getContractAddress } from '@/config/contracts';
+import { AFC_TOKEN_ABI, getContractAddress } from '../config/contracts';
 
 // 获取代币余额
 export function useAFCBalance(address?: `0x${string}`, chainId?: number) {

@@ -1,9 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import '@rainbow-me/rainbowkit/styles.css';
-import ClientOnlyWeb3Provider from '@/components/Web3Provider/ClientOnlyWeb3Provider';
-import I18nProvider from '@/components/I18nProvider/I18nProvider';
-import StructuredData from '@/components/SEO/StructuredData';
+import ClientOnlyWeb3Provider from '../components/Web3Provider/ClientOnlyWeb3Provider';
+import I18nProvider from '../components/I18nProvider/I18nProvider';
+import StructuredData from '../components/SEO/StructuredData';
 
 const SITE_URL = 'https://net4.xyz';
 const SITE_NAME = 'net4.xyz — Web4.0 AI 文明门户';

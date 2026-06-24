@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import HomePageClient from '@/components/Home/HomePageClient';
+import HomePageClient from '../components/Home/HomePageClient';
 
 const SITE_URL = 'https://net4.xyz';
 

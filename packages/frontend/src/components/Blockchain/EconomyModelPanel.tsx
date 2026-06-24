@@ -13,7 +13,7 @@ import {
   useRemoveLiquidity,
   useTokenPrice,
   useTokenLiquidity 
-} from '@/hooks/useEconomyModel';
+} from '../../hooks/useEconomyModel';
 
 export default function EconomyModelPanel() {
   const { chainId } = useAccount();

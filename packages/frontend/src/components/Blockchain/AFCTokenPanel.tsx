@@ -15,7 +15,7 @@ import {
   useAFCLock,
   useAFCRelease,
   useAFCLockedBalance
-} from '@/hooks/useAFCToken';
+} from '../../hooks/useAFCToken';
 // formatEther is used via useAFCBalance/useAFCLockedBalance hooks internally
 
 export default function AFCTokenPanel() {

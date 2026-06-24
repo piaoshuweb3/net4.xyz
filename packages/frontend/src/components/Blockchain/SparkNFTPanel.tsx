@@ -12,7 +12,7 @@ import {
   useSparkNFTMint, 
   useSparkNFTTokenURI,
   useSparkNFTOwner 
-} from '@/hooks/useSparkNFT';
+} from '../../hooks/useSparkNFT';
 
 export default function SparkNFTPanel() {
   const { address, chainId } = useAccount();

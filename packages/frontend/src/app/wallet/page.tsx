@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import WalletPanel from '@/components/Wallet/WalletPanel';
+import WalletPanel from '../../components/Wallet/WalletPanel';
 
 export default function WalletPage() {
   const { t } = useTranslation();

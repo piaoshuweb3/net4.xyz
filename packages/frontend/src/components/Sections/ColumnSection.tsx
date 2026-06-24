@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { columnArticles } from '@/components/Column/ColumnDetailPage';
+import { columnArticles } from '../Column/ColumnDetailPage';
 
 interface ColumnSectionProps {
   onSelectMedia: () => void;
@@ -16,7 +16,7 @@ export default function ColumnSection({ onSelectMedia, onSelectArticle }: Column
 
   useEffect(() => {
     // 动态加载媒体数据，避免打包到首屏
-    import('@/components/Media/MediaPage').then((mod) => {
+    import('../Media/MediaPage').then((mod) => {
       setPodcastCount(mod.podcastEpisodes.length);
       setVideoCount(mod.videoItems.length);
     }).catch(() => {

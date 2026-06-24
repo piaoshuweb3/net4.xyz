@@ -1,7 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
-import { columnArticles } from '@/components/Column/ColumnDetailPage';
+import { columnArticles } from '../Column/ColumnDetailPage';
 
 interface FeaturesSectionProps {
   onSectionChange?: (section: string) => void;

@@ -2,18 +2,18 @@
 
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
-import Navigation from '@/components/Navigation/Navigation';
-import HeroSection from '@/components/Hero/HeroSection';
-import FeaturesSection from '@/components/Features/FeaturesSection';
-import Footer from '@/components/Footer/Footer';
+import Navigation from '../Navigation/Navigation';
+import HeroSection from '../Hero/HeroSection';
+import FeaturesSection from '../Features/FeaturesSection';
+import Footer from '../Footer/Footer';
 import { ChevronRight, Loader2, AlertCircle } from 'lucide-react';
-import apiService from '@/services/api';
+import apiService from '../../services/api';
 
 // 动态导入详情页组件（代码分割）
-const EcoDetailPage = lazy(() => import('@/components/Ecosystem/EcoDetailPage'));
-const ColumnDetailPage = lazy(() => import('@/components/Column/ColumnDetailPage'));
-const MediaPage = lazy(() => import('@/components/Media/MediaPage'));
-const SectionRenderer = lazy(() => import('@/components/Sections/SectionRenderer'));
+const EcoDetailPage = lazy(() => import('../Ecosystem/EcoDetailPage'));
+const ColumnDetailPage = lazy(() => import('../Column/ColumnDetailPage'));
+const MediaPage = lazy(() => import('../Media/MediaPage'));
+const SectionRenderer = lazy(() => import('../Sections/SectionRenderer'));
 
 export default function HomePageClient() {
   const { t } = useTranslation();

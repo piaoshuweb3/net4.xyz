@@ -6,7 +6,7 @@ import {
   useAFCBalanceOnBase,
   useAFCSend,
   useAFCTrade,
-} from '@/hooks/useWalletService';
+} from '../../hooks/useWalletService';
 
 export default function WalletPanel() {
   const { status, isLoading: statusLoading, fetchStatus } = useWalletStatus();
