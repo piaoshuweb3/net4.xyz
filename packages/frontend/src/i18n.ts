@@ -39,6 +39,7 @@ const zhCN = {
       afcWhitepaper: 'AFC经济模型',
       web4Roadmap: 'Web4生态路线图',
       media: '播客 & 视频',
+      admin: '⚙️ 管理后台',
     },
     wallet: {
       connect: '连接钱包',
@@ -638,6 +639,7 @@ const enUS = {
       afcWhitepaper: 'AFC Economic Model',
       web4Roadmap: 'Web4 Ecosystem Roadmap',
       media: 'Podcast & Video',
+      admin: '⚙️ Admin Panel',
     },
     wallet: {
       connect: 'Connect Wallet',

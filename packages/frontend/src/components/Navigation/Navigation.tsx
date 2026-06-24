@@ -65,6 +65,7 @@ const getNavItems = (t: (key: string) => string): NavItem[] => [
     ]
   },
   { labelKey: 'nav.team', href: '#team', sectionId: 'team' },
+  { labelKey: 'nav.admin', href: '/admin' },
 ];
 
 export default function Navigation({ onSectionChange }: { onSectionChange?: (section: string | null) => void }) {
