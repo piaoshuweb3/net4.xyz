@@ -26,7 +26,6 @@ export default function StatsPage() {
   const maxValue = Math.max(...chartData.map(d => d.value));
 
   return (
-    <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">

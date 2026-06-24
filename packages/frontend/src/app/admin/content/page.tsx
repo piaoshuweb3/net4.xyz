@@ -38,7 +38,6 @@ export default function ContentPage() {
   };
 
   return (
-    <AdminLayout>
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
