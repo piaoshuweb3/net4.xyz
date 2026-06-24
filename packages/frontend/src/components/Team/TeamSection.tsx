@@ -1,6 +1,7 @@
 'use client';
 
 import { Github, Twitter, Linkedin, Mail } from 'lucide-react';
+import { sciFiAvatars } from '../Avatar/SciFiAvatars';
 
 interface TeamMember {
   name: string;
@@ -88,8 +89,8 @@ export default function TeamSection() {
               style={{ animationDelay: `${index * 100}ms` }}
             >
               {/* Avatar */}
-              <div className="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-3xl font-bold text-white">
-                {member.name.charAt(0)}
+              <div className="w-20 h-20 mx-auto mb-4 rounded-full overflow-hidden border-2 border-white/10">
+                <img src={sciFiAvatars[index % 10].dataUri(200)} alt={member.name} className="w-full h-full object-cover" />
               </div>
 
               {/* Info */}

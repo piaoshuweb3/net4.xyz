@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslation } from 'react-i18next';
+import { sciFiAvatars } from '../Avatar/SciFiAvatars';
 
 interface TeamSectionProps {
   onSelectSection?: (section: string) => void;
@@ -34,7 +35,7 @@ export default function TeamSection({ onSelectSection }: TeamSectionProps) {
             {
               name: 'Jason (piaoshu)',
               title: '联合创始人 & CEO',
-              avatar: '👨‍💻',
+              avatarIndex: 0,
               color: 'from-purple-600 to-pink-600',
               border: 'border-purple-500/30',
               bg: 'bg-purple-500/5',
@@ -49,7 +50,7 @@ export default function TeamSection({ onSelectSection }: TeamSectionProps) {
             {
               name: 'John',
               title: '联合创始人 & CTO',
-              avatar: '🧑‍🔬',
+              avatarIndex: 1,
               color: 'from-cyan-600 to-blue-600',
               border: 'border-cyan-500/30',
               bg: 'bg-cyan-500/5',
@@ -64,8 +65,8 @@ export default function TeamSection({ onSelectSection }: TeamSectionProps) {
           ].map(m => (
             <div key={m.name} className={`glass-cyber rounded-2xl p-8 border ${m.border} ${m.bg}`}>
               <div className="flex items-start gap-5 mb-5">
-                <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${m.color} flex items-center justify-center text-3xl flex-shrink-0`}>
-                  {m.avatar}
+                <div className={`w-16 h-16 rounded-2xl overflow-hidden border-2 ${m.border} flex-shrink-0`}>
+                  <img src={sciFiAvatars[m.avatarIndex % 10].dataUri(160)} alt={m.name} className="w-full h-full object-cover" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-white">{m.name}</h3>
@@ -107,16 +108,18 @@ export default function TeamSection({ onSelectSection }: TeamSectionProps) {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {[
-            { name: 'Alex Chen', role: '首席产品官 CPO', avatar: '👩‍💼', tags: ['产品设计', 'UX', 'Web4 生态'], color: 'text-pink-400' },
-            { name: 'David Li', role: '首席运营官 COO', avatar: '👨‍💼', tags: ['运营增长', '代理商体系', '全球扩张'], color: 'text-yellow-400' },
-            { name: 'Sarah Wang', role: 'AI 引擎负责人', avatar: '👩‍🔬', tags: ['LLM', 'AI 分身', '情感计算'], color: 'text-cyan-400' },
-            { name: 'Mike Zhang', role: '区块链工程师', avatar: '👨‍💻', tags: ['Solidity', 'DeFi', 'PoUE'], color: 'text-green-400' },
-            { name: 'Lisa Zhao', role: '市场总监', avatar: '👩‍🎨', tags: ['品牌', '社区', '内容营销'], color: 'text-orange-400' },
-            { name: 'Tom Wu', role: '安全架构师', avatar: '🧑‍💻', tags: ['密码学', 'ZKP', '安全审计'], color: 'text-red-400' },
+            { name: 'Alex Chen', role: '首席产品官 CPO', avatarIndex: 2, tags: ['产品设计', 'UX', 'Web4 生态'], color: 'text-pink-400' },
+            { name: 'David Li', role: '首席运营官 COO', avatarIndex: 3, tags: ['运营增长', '代理商体系', '全球扩张'], color: 'text-yellow-400' },
+            { name: 'Sarah Wang', role: 'AI 引擎负责人', avatarIndex: 4, tags: ['LLM', 'AI 分身', '情感计算'], color: 'text-cyan-400' },
+            { name: 'Mike Zhang', role: '区块链工程师', avatarIndex: 5, tags: ['Solidity', 'DeFi', 'PoUE'], color: 'text-green-400' },
+            { name: 'Lisa Zhao', role: '市场总监', avatarIndex: 6, tags: ['品牌', '社区', '内容营销'], color: 'text-orange-400' },
+            { name: 'Tom Wu', role: '安全架构师', avatarIndex: 7, tags: ['密码学', 'ZKP', '安全审计'], color: 'text-red-400' },
           ].map(m => (
             <div key={m.name} className="glass-cyber rounded-xl p-5 hover:bg-white/10 transition-all">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-xl">{m.avatar}</div>
+                <div className="w-10 h-10 rounded-xl overflow-hidden border border-white/10">
+                  <img src={sciFiAvatars[m.avatarIndex % 10].dataUri(100)} alt={m.name} className="w-full h-full object-cover" />
+                </div>
                 <div>
                   <div className="font-bold text-white text-sm">{m.name}</div>
                   <div className={`text-xs ${m.color}`}>{m.role}</div>
@@ -140,13 +143,15 @@ export default function TeamSection({ onSelectSection }: TeamSectionProps) {
         </h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {[
-            { name: '顾问 A', field: '区块链经济学', org: '某知名大学' },
-            { name: '顾问 B', field: 'AI 伦理与治理', org: '国际研究机构' },
-            { name: '顾问 C', field: '去中心化金融', org: '头部 DeFi 协议' },
-            { name: '顾问 D', field: '全球合规', org: '律所合伙人' },
+            { name: '顾问 A', field: '区块链经济学', org: '某知名大学', avatarIndex: 8 },
+            { name: '顾问 B', field: 'AI 伦理与治理', org: '国际研究机构', avatarIndex: 9 },
+            { name: '顾问 C', field: '去中心化金融', org: '头部 DeFi 协议', avatarIndex: 2 },
+            { name: '顾问 D', field: '全球合规', org: '律所合伙人', avatarIndex: 4 },
           ].map(a => (
             <div key={a.name} className="glass-cyber rounded-xl p-4 text-center">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-yellow-600/30 to-orange-600/30 border border-yellow-500/20 flex items-center justify-center text-xl mx-auto mb-3">🎓</div>
+              <div className="w-12 h-12 rounded-full overflow-hidden border border-white/10 mx-auto mb-3">
+                <img src={sciFiAvatars[a.avatarIndex % 10].dataUri(120)} alt={a.name} className="w-full h-full object-cover" />
+              </div>
               <div className="font-bold text-white text-sm mb-1">{a.name}</div>
               <div className="text-xs text-yellow-400 mb-1">{a.field}</div>
               <div className="text-xs text-gray-600">{a.org}</div>
