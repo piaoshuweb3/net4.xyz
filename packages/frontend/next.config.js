@@ -23,6 +23,12 @@ const nextConfig = {
       };
     }
 
+    // 显式别名（Vercel 构建环境兼容）
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@': path.resolve(__dirname, 'src'),
+    };
+
     config.resolve = config.resolve || {};
     config.resolve.fallback = {
       ...(config.resolve.fallback || {}),
