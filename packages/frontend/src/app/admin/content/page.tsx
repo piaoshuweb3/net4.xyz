@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Search, Plus, Edit, Trash2, Eye, Check, FileText, Image, Video } from 'lucide-react';
-import AdminLayout from '@/components/Admin/AdminLayout';
 
 const mockContent = [
   { id: 1, title: 'Web4.0 白皮书 v4.7', type: 'article', status: 'published', author: 'admin', views: 12500, createdAt: '2024-01-10' },
@@ -144,7 +143,5 @@ export default function ContentPage() {
             </tbody>
           </table>
         </div>
-      </div>
-    </AdminLayout>
-  );
+      </div>);
 }

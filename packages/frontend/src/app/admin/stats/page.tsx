@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Download, Users, Wallet, Server, Activity } from 'lucide-react';
-import AdminLayout from '@/components/Admin/AdminLayout';
 
 const timeRanges = [
   { label: '今日', value: 'today' },
@@ -148,7 +147,5 @@ export default function StatsPage() {
             </div>
           </div>
         </div>
-      </div>
-    </AdminLayout>
-  );
+      </div>);
 }

@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Search, Server, Shield, Cpu, Zap, AlertTriangle, CheckCircle, XCircle, MoreVertical } from 'lucide-react';
-import AdminLayout from '@/components/Admin/AdminLayout';
 
 const mockNodes = [
   { id: 1, address: '0x7a2f...3e4d', type: 'core', status: 'active', uptime: '99.9%', tasks: 1234, earnings: 1250, lastActive: '2分钟前' },
@@ -166,7 +165,5 @@ export default function NodesPage() {
             </button>
           </div>
         </div>
-      </div>
-    </AdminLayout>
-  );
+      </div>);
 }

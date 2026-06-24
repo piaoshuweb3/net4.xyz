@@ -1,7 +1,6 @@
 'use client';
 
 import { Users, Server, Activity, DollarSign } from 'lucide-react';
-import AdminLayout from '@/components/Admin/AdminLayout';
 
 const stats = [
   { label: '总用户数', value: '12,345', change: '+12.5%', icon: Users, color: 'text-purple-400' },
@@ -119,7 +118,5 @@ export default function AdminDashboard() {
             </button>
           ))}
         </div>
-      </div>
-    </AdminLayout>
-  );
+      </div>);
 }

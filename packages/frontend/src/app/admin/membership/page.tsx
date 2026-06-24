@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Crown, Plus, Edit, Trash2, Check, Star, Zap } from 'lucide-react';
-import AdminLayout from '@/components/Admin/AdminLayout';
 
 const mockMembers = [
   { id: 1, email: 'vip@example.com', level: 'gold', status: 'active', expiresAt: '2025-12-31', joinedAt: '2024-01-01' },
@@ -145,7 +144,5 @@ export default function MembershipPage() {
             </tbody>
           </table>
         </div>
-      </div>
-    </AdminLayout>
-  );
+      </div>);
 }

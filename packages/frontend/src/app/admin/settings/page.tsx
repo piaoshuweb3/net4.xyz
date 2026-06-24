@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Save, Settings, Bell, Shield, Database, Server, Key, FileText } from 'lucide-react';
-import AdminLayout from '@/components/Admin/AdminLayout';
 
 const settingsSections = [
   { id: 'general', label: '通用设置', icon: Settings },
@@ -311,7 +310,5 @@ export default function SettingsPage() {
             )}
           </div>
         </div>
-      </div>
-    </AdminLayout>
-  );
+      </div>);
 }

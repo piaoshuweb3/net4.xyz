@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Search, Plus, Edit, Trash2, UserCheck, UserX } from 'lucide-react';
-import AdminLayout from '@/components/Admin/AdminLayout';
 
 const mockUsers = [
   { id: 1, email: 'alex@example.com', address: '0x7a2f...3e4d', role: 'admin', status: 'active', createdAt: '2024-01-15' },
@@ -131,7 +130,5 @@ export default function UsersPage() {
             </button>
           </div>
         </div>
-      </div>
-    </AdminLayout>
-  );
+      </div>);
 }

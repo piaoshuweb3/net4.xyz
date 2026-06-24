@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Search, Download, DollarSign, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from 'lucide-react';
-import AdminLayout from '@/components/Admin/AdminLayout';
 
 const mockTransactions = [
   { id: 1, user: 'alex@example.com', type: 'deposit', amount: 10000, currency: 'USDT', status: 'completed', time: '2024-02-15 10:30' },
@@ -163,7 +162,5 @@ export default function FinancePage() {
             </button>
           </div>
         </div>
-      </div>
-    </AdminLayout>
-  );
+      </div>);
 }
