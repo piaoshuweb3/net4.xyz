@@ -20,6 +20,11 @@ const trustBadges = [
 export default function TrustSection() {
   const { t } = useTranslation();
   const trustBadges = [
+    { icon: Github, label: t('homepage.trustOpenSource'), href: 'https://github.com/piaoshuweb3/net4.xyz', desc: '全部代码开源可审计' },
+    { icon: Shield, label: t('homepage.trustAudit'), href: '#', desc: '由 CertiK 提供安全审计' },
+    { icon: FileCheck, label: t('homepage.trustWhitepaper'), href: 'https://net4.xyz/column/afc-whitepaper', desc: '完整经济模型与技术架构' },
+    { icon: Globe, label: t('homepage.trustGovernance'), href: '#', desc: '社区驱动的协议演进' },
+  ];
   return (
     <div className="space-y-12">
       {/* Trust Badges */}

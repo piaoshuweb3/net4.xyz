@@ -11,11 +11,11 @@ import LiveStatsTicker from '../Stats/LiveStatsTicker';
 import CTECycle from '../CTE/CTECycle';
 import TrustSection from '../Trust/TrustSection';
 import ScrollReveal from '../Effects/ScrollReveal';
+import { ChevronRight, Loader2, AlertCircle } from 'lucide-react';
+import apiService from '../../services/api';
 
 // 3D 地球 — 体积较大，lazy load
 const Web4Globe = lazy(() => import('../Globe/Web4Globe'));
-import { ChevronRight, Loader2, AlertCircle } from 'lucide-react';
-import apiService from '../../services/api';
 
 // 动态导入详情页组件（代码分割）
 const EcoDetailPage = lazy(() => import('../Ecosystem/EcoDetailPage'));
