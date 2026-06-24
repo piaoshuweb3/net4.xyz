@@ -1,6 +1,7 @@
 'use client';
 
 import { Shield, FileCheck, Github, Globe, ArrowUpRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const roadmap = [
   { phase: 'Phase 1', status: 'completed', label: '已上线', items: ['net4.xyz 门户上线', 'AFC 钱包服务', 'Web4 DNS 系统', '11 个生态子域'] },
@@ -17,13 +18,15 @@ const trustBadges = [
 ];
 
 export default function TrustSection() {
+  const { t } = useTranslation();
+  const trustBadges = [
   return (
     <div className="space-y-12">
       {/* Trust Badges */}
       <div>
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-white mb-2">信任与透明</h2>
-          <p className="text-gray-400 text-sm">Web3 世界的基石是透明和可验证性</p>
+          <h2 className="text-2xl font-bold text-white mb-2">{t('homepage.trustTitle')}</h2>
+          <p className="text-gray-400 text-sm">{t('homepage.trustSub')}</p>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {trustBadges.map(badge => (
@@ -48,8 +51,8 @@ export default function TrustSection() {
       {/* Roadmap */}
       <div>
         <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-white mb-2">发展路线图</h2>
-          <p className="text-gray-400 text-sm">从基础设施到全球生态的演进计划</p>
+          <h2 className="text-2xl font-bold text-white mb-2">{t('homepage.roadmapTitle')}</h2>
+          <p className="text-gray-400 text-sm">{t('homepage.roadmapSub')}</p>
         </div>
 
         <div className="relative">

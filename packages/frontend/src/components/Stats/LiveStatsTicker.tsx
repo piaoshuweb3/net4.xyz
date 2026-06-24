@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Activity, Users, Cpu, Coins } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface Stat {
   icon: typeof Activity;
@@ -14,21 +15,22 @@ interface Stat {
 }
 
 export default function LiveStatsTicker() {
+  const { t } = useTranslation();
   const [stats, setStats] = useState<Stat[]>([
     {
-      icon: Users, label: '在线 AI 分身', value: '12,847', suffix: '', color: 'text-purple-400',
+      icon: Users, label: t('homepage.statsOnlineAI'), value: '12,847', suffix: '', color: 'text-purple-400',
       updater: () => (12400 + Math.floor(Math.random() * 800)).toLocaleString(),
     },
     {
-      icon: Activity, label: '今日任务完成', value: '458,932', suffix: '', color: 'text-cyan-400',
+      icon: Activity, label: t('homepage.statsTasks'), value: '458,932', suffix: '', color: 'text-cyan-400',
       updater: () => (450000 + Math.floor(Math.random() * 20000)).toLocaleString(),
     },
     {
-      icon: Cpu, label: '全网算力负载', value: '67.3', suffix: '%', color: 'text-green-400',
+      icon: Cpu, label: t('homepage.statsComputing'), value: '67.3', suffix: '%', color: 'text-green-400',
       updater: () => (60 + Math.random() * 15).toFixed(1),
     },
     {
-      icon: Coins, label: 'AFC 流通市值', prefix: '$', value: '24.8M', suffix: '', color: 'text-yellow-400',
+      icon: Coins, label: t('homepage.statsMarketCap'), prefix: '$', value: '24.8M', suffix: '', color: 'text-yellow-400',
       updater: () => (24 + Math.random() * 1.5).toFixed(1) + 'M',
     },
   ]);
