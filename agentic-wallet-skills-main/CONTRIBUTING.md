@@ -1,1 +1,0 @@
-See [README.md#contributing](./README.md#contributing) for instructions on how to contribute to this project.

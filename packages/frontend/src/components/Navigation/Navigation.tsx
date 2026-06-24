@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 import WalletConnectButton from '../Wallet/WalletConnectButton';
+import Logo from '../Logo/Logo';
 
 interface NavItem {
   labelKey: string;
@@ -159,13 +160,8 @@ export default function Navigation({ onSectionChange }: { onSectionChange?: (sec
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-              <span className="text-white font-bold text-xl">N</span>
-            </div>
-            <span className="text-xl md:text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              net4.xyz
-            </span>
+          <Link href="/" className="flex items-center space-x-2 no-underline">
+            <Logo size={38} />
           </Link>
 
           {/* Desktop Navigation */}
