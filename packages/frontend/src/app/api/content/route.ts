@@ -120,4 +120,4 @@ async function pushToIPFS(item: ContentItem): Promise<{ ipfsCid: string | null }
   return { ipfsCid: null };
 }
 
-export const runtime = 'nodejs';
+export const dynamic = 'force-dynamic';
