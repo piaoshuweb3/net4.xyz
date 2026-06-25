@@ -83,6 +83,8 @@ export default function Navigation({ onSectionChange }: { onSectionChange?: (sec
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [pinnedDropdown, setPinnedDropdown] = useState<string | null>(null);
+  const closeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const navRef = useRef<HTMLElement>(null);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
@@ -128,6 +130,26 @@ export default function Navigation({ onSectionChange }: { onSectionChange?: (sec
       (firstButton as HTMLElement)?.focus();
     }
   }, [isMobileMenuOpen]);
+
+  const showDropdown = (key: string) => {
+    if (closeTimerRef.current) { clearTimeout(closeTimerRef.current); closeTimerRef.current = null; }
+    setActiveDropdown(key);
+  };
+
+  const hideDropdown = () => {
+    if (pinnedDropdown) return;
+    closeTimerRef.current = setTimeout(() => setActiveDropdown(null), 200);
+  };
+
+  const toggleDropdown = (key: string) => {
+    if (pinnedDropdown === key) {
+      setPinnedDropdown(null);
+      setActiveDropdown(null);
+    } else {
+      setPinnedDropdown(key);
+      showDropdown(key);
+    }
+  };
 
   const handleNavClick = (item: NavItem) => {
     if (item.href.startsWith('http')) {
@@ -181,11 +203,17 @@ export default function Navigation({ onSectionChange }: { onSectionChange?: (sec
               <div
                 key={item.labelKey}
                 className="relative"
-                onMouseEnter={() => item.children && setActiveDropdown(item.labelKey)}
-                onMouseLeave={() => setActiveDropdown(null)}
+                onMouseEnter={() => item.children && showDropdown(item.labelKey)}
+                onMouseLeave={() => item.children && hideDropdown()}
               >
                 <button
-                  onClick={() => handleNavClick(item)}
+                  onClick={() => {
+                    if (item.children) {
+                      toggleDropdown(item.labelKey);
+                    } else {
+                      handleNavClick(item);
+                    }
+                  }}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' || e.key === ' ') {
                       e.preventDefault();
@@ -204,11 +232,15 @@ export default function Navigation({ onSectionChange }: { onSectionChange?: (sec
                 </button>
                 
                 {item.children && activeDropdown === item.labelKey && (
-                  <div className={`cyber-dropdown ${item.labelKey === 'nav.ecosystem' ? 'cyber-dropdown--wide' : ''}`}>
+                  <div 
+                    className={`cyber-dropdown ${item.labelKey === 'nav.ecosystem' ? 'cyber-dropdown--wide' : ''}`}
+                    onMouseEnter={() => showDropdown(item.labelKey)}
+                    onMouseLeave={() => hideDropdown()}
+                  >
                     {item.children.map((child) => (
                       <button
                         key={child.labelKey}
-                        onClick={() => handleNavClick(child as NavItem)}
+                        onClick={() => { handleNavClick(child as NavItem); setPinnedDropdown(null); setActiveDropdown(null); }}
                         className="cyber-dropdown-item text-left"
                       >
                         {t(child.labelKey)}
