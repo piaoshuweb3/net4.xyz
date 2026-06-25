@@ -57,12 +57,22 @@ export default function PublicContent() {
                     <h2 className="text-xl font-bold text-white mt-1">{item.title}</h2>
                     {item.summary && <p className="text-sm text-gray-400 mt-1">{item.summary}</p>}
                   </div>
-                  <div className="flex items-center gap-3 text-xs text-gray-500 flex-shrink-0">
+                <div className="flex items-center gap-3 text-xs text-gray-500 flex-shrink-0">
                     <span>{item.author}</span>
                     <span>{new Date(item.createdAt).toLocaleDateString('zh-CN')}</span>
                     {item.ipfsCid && (
                       <a href={`https://gateway.pinata.cloud/ipfs/${item.ipfsCid}`} target="_blank" rel="noopener" className="flex items-center gap-1 text-cyan-400 hover:text-cyan-300">
                         查看原始 <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    {item.tags.includes('A2P') && (
+                      <a href="/whitepaper-a2p.html" target="_blank" className="flex items-center gap-1 text-purple-400 hover:text-purple-300">
+                        📄 全文 <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    {item.tags.includes('AA2P') && (
+                      <a href="/whitepaper-web4-v8.html" target="_blank" className="flex items-center gap-1 text-purple-400 hover:text-purple-300">
+                        📄 全文 <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
                   </div>
