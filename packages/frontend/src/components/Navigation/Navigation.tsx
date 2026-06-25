@@ -72,6 +72,8 @@ const getNavItems = (t: (key: string) => string): NavItem[] => [
 
 // 管理后台 — 仅钱包连接后可见
 const adminNavItem: NavItem = { labelKey: 'nav.admin', href: '/admin' };
+// 公开内容中心
+const contentNavItem: NavItem = { labelKey: 'nav.content', href: '/content' };
 
 export default function Navigation({ onSectionChange }: { onSectionChange?: (section: string | null) => void }) {
   const { t } = useTranslation();
@@ -85,8 +87,8 @@ export default function Navigation({ onSectionChange }: { onSectionChange?: (sec
 
   // Web3 连接 — 由 WalletConnectButton 组件统一处理
   const navItems = isConnected
-    ? [...getNavItems(t), adminNavItem]
-    : getNavItems(t);
+    ? [...getNavItems(t), contentNavItem, adminNavItem]
+    : [...getNavItems(t), contentNavItem];
 
   useEffect(() => {
     const handleScroll = () => {

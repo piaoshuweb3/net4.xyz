@@ -42,6 +42,7 @@ const zhCN = {
       web4Roadmap: 'Web4生态路线图',
       media: '播客 & 视频',
       admin: '⚙️ 管理后台',
+      content: '📰 内容中心',
     },
     wallet: {
       connect: '连接钱包',
@@ -698,6 +699,7 @@ const enUS = {
       web4Roadmap: 'Web4 Ecosystem Roadmap',
       media: 'Podcast & Video',
       admin: '⚙️ Admin Panel',
+      content: '📰 Content Hub',
     },
     wallet: {
       connect: 'Connect Wallet',
