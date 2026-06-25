@@ -26,6 +26,8 @@ const getNavItems = (t: (key: string) => string): NavItem[] => [
     children: [
       { labelKey: 'nav.aiAvatar', href: '#whitepaper', sectionId: 'whitepaper' },
       { labelKey: 'nav.web4Perception', href: '#whitepaper', sectionId: 'whitepaper' },
+      { labelKey: 'nav.a2p', href: '/whitepaper-a2p.html', external: true },
+      { labelKey: 'nav.web4v8', href: '/whitepaper-web4-v8.html', external: true },
     ]
   },
   { labelKey: 'nav.poueEngine', href: '#poue', sectionId: 'poue' },
