@@ -41,7 +41,7 @@ artifacts/
 
 # Foundry
 out/
-lib/
+/lib/
 
 # Docker
 docker/volumes/
